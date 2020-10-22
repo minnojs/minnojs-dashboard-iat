@@ -1,0 +1,254 @@
+.body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  font-family:"Century Gothic", sans-serif;	
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+?
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+  
+.fontStyle {
+  font-weight: bold;
+  font-family:"Century Gothic", sans-serif;	
+}
+
+
+input[type=button]{
+  background-color: #61cf77;
+  color: white;
+  padding: 4px 4px;
+  text-decoration: none;
+  margin: 2px 2px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 6px;
+  font-family:"Century Gothic", sans-serif;	
+}
+
+input[type=reset]{
+  background-color: #3c9c4f;
+  color: white;
+  padding: 6px 8px;
+  text-decoration: none;
+  margin: 2px 2px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 6px;
+  font-family:"Century Gothic", sans-serif;	
+  margin-top: 0.3em;
+  float: right;
+}
+
+input[type=submit]{
+  background-color: #3c9c4f;
+  color: white;
+  padding: 6px 13px;
+  text-decoration: none;
+  margin: 2px 2px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 6px;
+  font-family:"Century Gothic", sans-serif;	
+  margin-top: 0.3em;
+  margin-bottom: 1em;
+  float: right;
+}
+button.sumbitTextsParameters{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  width: 200px;
+  height: 35px;
+  background-color: rgb(78, 146, 93);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px ;
+  margin-top: 15px;
+  position: relative;
+  z-index: 1;
+  font-size: small;
+  right: 0%;
+  font-size: 15px;
+  cursor: pointer;
+
+  }
+tr.lines{
+    border-bottom:2px solid green;   
+}
+
+tr.border_lines{
+  padding-top:12px;
+  border-bottom:5px solid green;   
+}
+
+td.block-cell{
+  padding: 0.3em 5em 0.3em 0;
+}
+
+.keyText{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  display: inline-block;
+  margin:3px;
+  padding:5px;
+  font-size: 12px;
+  position: relative;
+  
+}
+
+
+.textOnError{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  display: inline-block;
+  margin: 5px;
+  padding: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  position: relative;
+}
+button.resetTextsParameters{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  width: 70px;
+  height: 35px;
+  background-color: rgb(78, 146, 93);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px ;
+  margin-top: 15px;
+  position: relative;
+  z-index: 1;
+  font-size: small;
+  right: 0%;
+  font-size: 15px;
+  cursor: pointer;
+
+  
+
+
+}
+button.CreateFile{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  width: 250px;
+  height: 50px;
+  background-color: rgb(78, 146, 93);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px ;
+  margin-top: 15px;
+  position: absolute;
+  z-index: 1;
+  font-size: small;
+  right: 50%;
+  font-size: 15px;
+  cursor: pointer;
+}
+button.ClearTextsParameters{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  width: 70px;
+  height: 35px;
+  background-color: rgb(78, 146, 93);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px ;
+  margin-top: 15px;
+  position: relative;
+  z-index: 1;
+  font-size: small;
+  right: 0%;
+  font-size: 15px;
+  cursor: pointer;
+
+  
+
+
+}
+.cellsStyle {
+    font-family:"Century Gothic", sans-serif;	
+    display: inline-block;
+    margin: 5px;
+    padding: 1.5em 1em 1.7em 0.5em;
+    font-size: 15px;
+    font-weight: bold;
+    position: relative;
+}
+
+.popup {
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 15px;
+  margin-bottom: 10px;
+  }
+  
+  /* The actual popup (appears on top) */
+  .popup .popuptext {
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px ;
+  position: absolute;
+  bottom: 50%;
+  z-index: 1;
+  left: 50%;
+  margin-left: 0px;
+  font-size: small;
+  }
+  
+  /* Popup arrow */
+  .popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  display: inline-block;
+  /* border-style: solid; */
+  border-color: #555 transparent transparent transparent;
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  
+  }
+  
+  /* Toggle this class when clicking on the popup container (hide and show the popup) */
+  .popup .show {
+  visibility: visible;
+  
+  }
+  
