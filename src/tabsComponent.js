@@ -1,10 +1,20 @@
 var tabsComponent = {
-    view: function(){
-        return m('.tab', [
-            m('button.tablinks', 'Task parameters'),
-            m('button.tablinks', 'Categories'),
-            m('button.tablinks', 'Attributes')
-        ])
+    controller: function(){
+        return {
+            tab: 1
+        }
+    },
+    view: function(ctrl){
+        return m('.container', [
+            m('.tab', [
+                m('button.tablinks', {onclick:function(){ctrl.tab = 1}}, 'Task parameters'),
+                m('button.tablinks', {onclick:function(){ctrl.tab = 2}}, 'Categories'),
+                m('button.tablinks', {onclick:function(){ctrl.tab = 3}}, 'Attributes')
+            ]),
+            m('.tabContent', [
+                ctrl.tab == 1 ? 'tab 1' : ctrl.tab == 2 ? 'tab 2' : 'tab 3'
+            ])
+        ]);
     }
 }
 
