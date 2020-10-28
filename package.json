@@ -4,7 +4,9 @@
   "description": "Dashboard component for creating minnoJS IATs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle": "rollup -c",
+    "bundle-watch": "rollup -c -w"
   },
   "keywords": [
     "MinnoJS",
