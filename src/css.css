@@ -190,13 +190,10 @@ button.CreateFile{
   text-align: center;
   border-radius: 6px;
   padding: 8px ;
-  margin-top: 15px;
-  position: absolute;
-  z-index: 1;
-  font-size: small;
-  right: 50%;
+  display: block;
   font-size: 15px;
-  cursor: pointer;
+  margin: 15px auto;
+  border-color:#fff;
 }
 
 button.ClearTextsParameters{
