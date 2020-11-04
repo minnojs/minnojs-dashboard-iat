@@ -29,7 +29,7 @@
 .tab button.active {
   background-color: #ccc;
 }
-?
+
 /* Style the tab content */
 .tabcontent {
   display: none;
@@ -43,6 +43,15 @@
   font-family:"Century Gothic", sans-serif;	
 }
 
+.td_task {
+  width: 25%;
+  padding: 30px;
+}
+
+.td_info {
+  width: 0.1%;
+  cursor: pointer;
+}
 
 input[type=button]{
   background-color: #61cf77;
@@ -56,7 +65,7 @@ input[type=button]{
   font-family:"Century Gothic", sans-serif;	
 }
 
-input[type=reset]{
+.reset_button{
   background-color: #3c9c4f;
   color: white;
   padding: 6px 8px;
@@ -68,6 +77,25 @@ input[type=reset]{
   font-family:"Century Gothic", sans-serif;	
   margin-top: 0.3em;
   float: right;
+}
+
+
+.info-box {
+  display: none;
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  width: 180px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px ;
+  position: absolute;
+  margin-left: 0px;
+  font-size: small;
+}
+
+*:hover + .info-box, .info-box:hover {
+  display: inline-block; 
 }
 
 input[type=submit]{
@@ -125,7 +153,6 @@ td.block-cell{
   
 }
 
-
 .textOnError{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   display: inline-block;
@@ -135,6 +162,7 @@ td.block-cell{
   font-weight: bold;
   position: relative;
 }
+
 button.resetTextsParameters{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   width: 70px;
@@ -151,11 +179,8 @@ button.resetTextsParameters{
   right: 0%;
   font-size: 15px;
   cursor: pointer;
-
-  
-
-
 }
+
 button.CreateFile{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   width: 250px;
@@ -173,6 +198,7 @@ button.CreateFile{
   font-size: 15px;
   cursor: pointer;
 }
+
 button.ClearTextsParameters{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   width: 70px;
@@ -189,11 +215,8 @@ button.ClearTextsParameters{
   right: 0%;
   font-size: 15px;
   cursor: pointer;
-
-  
-
-
 }
+
 .cellsStyle {
     font-family:"Century Gothic", sans-serif;	
     display: inline-block;
@@ -214,7 +237,7 @@ button.ClearTextsParameters{
   }
   
   /* The actual popup (appears on top) */
-  .popup .popuptext {
+.popup .popuptext {
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   visibility: hidden;
   width: 160px;
@@ -243,12 +266,10 @@ button.ClearTextsParameters{
   /* border-style: solid; */
   border-color: #555 transparent transparent transparent;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  
   }
   
   /* Toggle this class when clicking on the popup container (hide and show the popup) */
   .popup .show {
   visibility: visible;
-  
   }
   

@@ -1,3 +1,5 @@
+import taskComponent from './taskComponent.js';
+
 var tabsComponent = {
     controller: function(){
         return {
@@ -12,7 +14,7 @@ var tabsComponent = {
                 m('button.tablinks', {onclick:function(){ctrl.tab = 3}}, 'Attributes')
             ]),
             m('.tabContent', [
-                ctrl.tab == 1 ? 'tab 1' : ctrl.tab == 2 ? 'tab 2' : 'tab 3'
+                ctrl.tab == 1 ? m(taskComponent) : ctrl.tab == 2 ? 'tab 2' : 'tab 3'
             ])
         ]);
     }
