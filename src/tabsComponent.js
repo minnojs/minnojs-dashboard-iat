@@ -2,8 +2,6 @@ import taskComponent from './taskComponent.js';
 import parametersComponent from './parametersComponent.js';
 import outputComponent from './outputComponent.js';
 
-var settings = {parameters: {}};
-
 var components = {
     task: taskComponent,
     parameters: parametersComponent,
@@ -20,12 +18,16 @@ var tabs = [
 
 var tabsComponent = {
     controller: function(){
+        // set default tab
         return { tab: 'output' }
     },
-	view: function(ctrl){
+	view: function(ctrl, settings){
 		return m('.container', [
 			m('.tab', tabs.map(function(tab){
-				return m('button.tablinks', {class: ctrl.tab == tab.value ? 'active' : '', onclick:function(){ctrl.tab = tab.value}},tab.text);
+				return m('button.tablinks', {
+                    class: ctrl.tab == tab.value ? 'active' : '',
+                    onclick:function(){ctrl.tab = tab.value}
+                },tab.text);
 			})),
 			m('.tabContent', [
 				m.component(components[ctrl.tab], settings)

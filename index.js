@@ -112,6 +112,14 @@
     ///////to get the paramters here just need to go through the checkboxes similar clear/resrt function
     ///// and check the checked field and the url value.
 
+    var settings = {
+        parameters : {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:true, correctErrors:true,base_url:''},
+        category1: {
+        },
+        category2: {
+        }
+    };
+
     var parametersComponent = {
         controller:controller,
         view:view
@@ -126,12 +134,11 @@
         {name: 'correctErrors', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
     ];
 
-    function controller(settings){
-        var parameters = settings.parameters;
-    	reset();
+    function controller(settings$1){
+        var parameters = settings$1.parameters;
         return {reset:reset, clear:clear, set:set, get:get};
         
-        function reset(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:true, correctErrors:true,base_url:''}); }
+        function reset(){ Object.assign(parameters, settings.parameters);}
         function clear(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:false, correctErrors:false,base_url:''}); }
         function get(name){ return parameters[name]; }
         function set(name){ 
@@ -199,8 +206,6 @@
         }
     }
 
-    var settings = {parameters: {}};
-
     var components = {
         task: taskComponent,
         parameters: parametersComponent,
@@ -217,12 +222,16 @@
 
     var tabsComponent = {
         controller: function(){
+            // set default tab
             return { tab: 'output' }
         },
-    	view: function(ctrl){
+    	view: function(ctrl, settings){
     		return m('.container', [
     			m('.tab', tabs.map(function(tab){
-    				return m('button.tablinks', {class: ctrl.tab == tab.value ? 'active' : '', onclick:function(){ctrl.tab = tab.value;}},tab.text);
+    				return m('button.tablinks', {
+                        class: ctrl.tab == tab.value ? 'active' : '',
+                        onclick:function(){ctrl.tab = tab.value;}
+                    },tab.text);
     			})),
     			m('.tabContent', [
     				m.component(components[ctrl.tab], settings)
@@ -232,20 +241,27 @@
     };
 
     var Main = {
-        view: function(){
+        controller: function(settings$1){
+            return {settings: settings$1 ? settings$1 : clone(settings)}
+        },
+        view: function(ctrl){
             return m('.container', [
                 m('header.bg-success.text-white.p-4.mb-3', [
                     m('h1', 'Creating an IAT test')
                 ]),
-                m(tabsComponent)
+                m.component(tabsComponent, ctrl.settings)
             ]);
         }
     };
 
+    // WARNING!! this does not clone functions, regex, Dates or anything complex!!
+    // If you need any of that good stuff, you need a more complex function
+    function clone(obj){
+        return JSON.parse(JSON.stringify(obj));
+    }
+
     //m.mount(document.documentElement, Main);
     m.mount(document.getElementById('dashboard'), Main);
-
-    //testing
 
 }());
 //# sourceMappingURL=index.js.map

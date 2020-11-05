@@ -1,3 +1,5 @@
+import defaultSettings from './defaultSettings';
+
 var parametersComponent = {
     controller:controller,
     view:view
@@ -14,10 +16,9 @@ var rows = [
 
 function controller(settings){
     var parameters = settings.parameters;
-	reset();
     return {reset:reset, clear:clear, set:set, get:get};
     
-    function reset(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:true, correctErrors:true,base_url:''}); }
+    function reset(){ Object.assign(parameters, defaultSettings.parameters)}
     function clear(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:false, correctErrors:false,base_url:''}); }
     function get(name){ return parameters[name]; }
     function set(name){ 
