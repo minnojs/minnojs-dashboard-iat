@@ -1,17 +1,17 @@
-import taskComponent from './taskComponent.js';
 import parametersComponent from './parametersComponent.js';
 import outputComponent from './outputComponent.js';
+import blocksComponent from './blocksComponent.js';
 
 var components = {
-    task: taskComponent,
     parameters: parametersComponent,
     categories: { view: function(){ return m('div', 'Categories component'); } },
-    output: outputComponent
+	output: outputComponent,
+	blocks: blocksComponent
 }
 
 var tabs = [
-	{value: 'task', text: 'Task parameters old'},
 	{value: 'parameters', text: 'Task parameters'},
+	{value: 'blocks', text: 'Block parameters'},
 	{value: 'categories', text: 'Categories'},
 	{value: 'output', text: 'Output'}
 ];

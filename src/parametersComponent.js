@@ -50,7 +50,7 @@ function view(ctrl){
                 ])
             }
             ),
-            m('tr.lines', [
+            m('tr.border_lines', [
                 m('td.td_info',[
                     m('i.fa.fa-info-circle'),
                     m('.card.info-box.card-header', ['Please enter the directory url for the task\'s pictures'])

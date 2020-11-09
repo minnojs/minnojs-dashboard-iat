@@ -112,6 +112,11 @@ input[type=submit]{
   margin-bottom: 1em;
   float: right;
 }
+
+input[type=number]{
+  width: 3em;
+}
+
 button.sumbitTextsParameters{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   width: 200px;
@@ -139,9 +144,22 @@ tr.border_lines{
   border-bottom:5px solid green;   
 }
 
-td.block-cell{
+td.block_cell_label{
   padding: 0.3em 5em 0.3em 0;
 }
+
+td.block_cell_input{
+  padding-left: 5em;
+}
+
+td.block_cell_checkbox {
+  padding: 1.5em 5em 1.5em 5em;
+}
+
+td.block_cell_info {
+  padding: 1em 0 1em 0em;
+}
+
 
 .keyText{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
