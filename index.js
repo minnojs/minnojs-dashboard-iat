@@ -117,6 +117,19 @@
         category1: {
         },
         category2: {
+        },
+        text: {
+                textOnError:'<p align="center" style="font-size:0.6em"; font-family:arial">' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. '+'Press the other key to continue.<p/>',
+                leftKeyText:'Press "E" for ',
+                rightKeyText:"or",
+                orKeyText:'Press "I" for',
+                AttributesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font color="#0000ff">leftAttribute.</font>' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font color="#0000ff">rightAttribute</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
+                CategoriesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font color="#336600">leftCategory</font>. ' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font color="#336600">rightCategory</font>.<br/>' +'Items will appear one at a time.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
+                FirstCombinedBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Use the <b>E</b> key for <font color="#336600">leftCategory</font> and for <font color="#0000ff">leftAttribute</font>.<br/>' +'Use the <b>I</b> key for <font color="#336600">rightCategory</font> and for  <font color="#0000ff">rightAttribute</font>.<br/>' +'Each item belongs to only one category.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' + '<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
+                SecondCombinedBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'This is the same as the previous part.<br/>' +'Use the <b>E</b> key for <font color="#336600">leftCategory</font> and for <font color="#0000ff">leftAttribute</font>.<br/>' +'Use the <b>I</b> key for <font color="#336600">rightCategory</font> and for  <font color="#0000ff">rightAttribute</font>.<br/>' +'Each item belongs to only one category.<br/><br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
+                SwitchedCategoriesInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">'+'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'<b>Watch out, the labels have changed position!</b><br/>' +'Put the left finger on the <b>E</b> key for <font color="#336600">leftCategory</font>.<br/>' +'Put the right finger on the <b>I</b> key for <font color="#336600">rightCategory</font>.<br/><br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
+                PreDebriefingText:'Press space to continue to your feedback '
+        
         }
     };
 
@@ -161,7 +174,7 @@
                     return m('tr.lines', [
                         m('td.td_info',[
                             m('i.fa.fa-info-circle'),
-                            m('.card.info-box.card-header', [row.description])
+                            m('.card.info-box.card-header', [row.desc])
                         ]),
                         m('td.td_task', row.label),
                         m('td', [
@@ -206,17 +219,89 @@
         }
     }
 
+    var TextComponent = {
+        controller:controller$1,
+        view:view$1
+    };
+
+    var rows$1=[
+        {name: 'textOnError', label:'Text On Error', desc:'Text Shown on user Error'},
+        {name: 'leftKeyText', label:'Left Key Text', desc: 'Left Key Text'},
+        {name: 'rightKeyText', label:'Right Key Text', desc: 'Right Key Text'},
+        {name: 'orKeyText', label:'Or Key Text', desc: 'Or Key Text'},
+        {name: 'AttributesBlockInstructions', label: 'Attributes Block Instructions Text', desc: 'Attributes Block Instructions Text'},
+        {name: 'CategoriesBlockInstructions', label: 'Categories Block Instructions Text', desc: 'Categories Block Instructions Text'},
+        {name: 'FirstCombinedBlockInstructions', label: 'First Combined Block Instructions Text', desc: 'First Combined Block Instructions Text'},
+        {name: 'SecondCombinedBlockInstructions', label: 'Second Combined Block Instructions Text', desc: 'Second Combined Block Instructions Text'},
+        {name: 'SwitchedCategoriesInstructions', label: 'Switched Categories Instructions Text', desc: 'Switched Categories Instructions Text'},
+        {name: 'PreDebriefingText', label: 'Pre-Debriefing Text', desc: 'Pre-Debriefing Text'},
+    ];
+
+    function controller$1(settings$1){
+        var textparameters = settings$1.text;
+        return {reset:reset, clear:clear, set:set, get:get};
+        
+        function reset(){ Object.assign(textparameters, settings.text);}
+        function clear(){ Object.assign(textparameters, {textOnError:'',
+        leftKeyText:'',
+        rightKeyText:'',
+        orKeyText:'',
+        AttributesBlockInstructions:'',
+        CategoriesBlockInstructions:'',
+        FirstCombinedBlockInstructions:'',
+        SecondCombinedBlockInstructions:'',
+        SwitchedCategoriesInstructions:'',
+        PreDebriefingText:''
+    }); }
+        function get(name){ return textparameters[name]; }
+        function set(name){ 
+            return function(value){ return textparameters[name] = value; }
+        }
+    }
+
+      
+    function view$1(ctrl){
+        return m('.container', [
+            m('table.w3-table w3-bordered',{id : 'table'}, [
+                m('tr.border_lines', [
+                    m('td'), //for space
+                    m('td'), //for space
+                    m('td',[
+                        m('button.reset_button', {onclick: ctrl.reset},'Reset'),
+                        m('button.reset_button',{onclick: ctrl.clear}, 'Clear'),
+                    ])
+            ]),
+                rows$1.map(function(row) {
+                    return m('tr.lines', [
+                        m('td.td_info',[
+                            m('i.fa.fa-info-circle'),
+                            m('.card.info-box.card-header', [row.desc])
+                        ]),
+                        m('td.td_task', row.label),
+                        m('td', [
+                            m('textarea',{style: {width: '30rem' ,height: '4rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
+                        ])
+                    ])
+                }
+                ),
+        
+            ])
+        ]) 
+    }
+
     var components = {
         task: taskComponent,
         parameters: parametersComponent,
         categories: { view: function(){ return m('div', 'Categories component'); } },
-        output: outputComponent
+    	text:TextComponent,
+    	output: outputComponent
     };
 
     var tabs = [
     	{value: 'task', text: 'Task parameters old'},
     	{value: 'parameters', text: 'Task parameters'},
     	{value: 'categories', text: 'Categories'},
+    	{value: 'text', text: 'Text'},
     	{value: 'output', text: 'Output'}
     ];
 

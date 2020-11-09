@@ -223,7 +223,7 @@ button.ClearTextsParameters{
     font-weight: bold;
     position: relative;
 }
-
+/*
 .popup {
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   position: relative;
@@ -232,8 +232,9 @@ button.ClearTextsParameters{
   margin-right: 15px;
   margin-bottom: 10px;
   }
-  
+  */
   /* The actual popup (appears on top) */
+  /*
 .popup .popuptext {
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   visibility: hidden;
@@ -250,8 +251,9 @@ button.ClearTextsParameters{
   margin-left: 0px;
   font-size: small;
   }
-  
+  */
   /* Popup arrow */
+  /*
   .popup .popuptext::after {
   content: "";
   position: absolute;
@@ -259,13 +261,13 @@ button.ClearTextsParameters{
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
-  display: inline-block;
-  /* border-style: solid; */
+  display: inline-block;*/
+  /* border-style: solid; *//*
   border-color: #555 transparent transparent transparent;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   }
-  
-  /* Toggle this class when clicking on the popup container (hide and show the popup) */
+  */
+  /* Toggle this class when clicking on the popup container (hide and show the popup) *//*
   .popup .show {
   visibility: visible;
   }

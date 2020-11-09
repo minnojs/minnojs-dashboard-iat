@@ -41,7 +41,7 @@ function view(ctrl){
                 return m('tr.lines', [
                     m('td.td_info',[
                         m('i.fa.fa-info-circle'),
-                        m('.card.info-box.card-header', [row.description])
+                        m('.card.info-box.card-header', [row.desc])
                     ]),
                     m('td.td_task', row.label),
                     m('td', [
