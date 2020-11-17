@@ -6,123 +6,21 @@
 (function () {
     'use strict';
 
-    var taskComponent = {};
-    taskComponent.parameter = function(label,description, flag) {
-        this.label = m.prop(label);
-        this.description = m.prop(description);
-        this.checked = m.prop(flag);
-    };
-    taskComponent.list = Array;
-
-    taskComponent.labels = ["Touch Device", "Qualtrics","Enable Full Screen","Show Debriefing",
-                                "Show an Error Message", "Must correct wrong answers"];
-    taskComponent.descriptions = ["Will the task run on touch devices?", "Is this a Qualtrics version", 
-                                "Do you want to enable a full screen option?",
-                                "Do you want to show debriefing at the end?",
-                                "In the case of a mistake, do you want to display a message to the user?",
-                                "In the case of a mistake, the user cannot continue if he didn't coreect his answer"];                    
-
-    taskComponent.vm = (function() { //creating a complete list of parametrs and their features'
-        var vm = {};
-        vm.init = function() {
-            vm.list = new taskComponent.list();
-            for (var i = 0; i < taskComponent.labels.length; i++){
-                vm.label = m.prop(taskComponent.labels[i]);
-                vm.description = m.prop (taskComponent.descriptions[i]);
-                if (taskComponent.labels[i] == "Show an Error Message" || taskComponent.labels[i] == "Must correct wrong answers")
-                    vm.list.push(new taskComponent.parameter(vm.label(),vm.description(),true));          
-                else vm.list.push(new taskComponent.parameter(vm.label(),vm.description(),false));          
-            }
-            };
-        return vm;
-    }());
-
-    taskComponent.controller = function() {
-        taskComponent.vm.init();
-    };
-
-    function resetTaskParameters () {
-        var uncheck=document.getElementsByTagName('input');
-        for(var i=0;i<uncheck.length;i++)
-        {
-            if(uncheck[i].type=='checkbox')
-            {
-                if ( i < 4) //for the two fields that supposed to be checked
-                    uncheck[i].checked=false;
-                else {
-                    uncheck[i].checked=true;
-                }
-            }
-            else {
-                uncheck[i].value=""; //for image's url
-            }
-        }
-    }
-
-    function clearTaskParameters () {
-        var uncheck=document.getElementsByTagName('input');
-        for(var i=0;i<uncheck.length;i++)
-        {
-            if(uncheck[i].type=='checkbox')
-            {
-                uncheck[i].checked=false;
-            }
-            else {
-                uncheck[i].value=""; //for image's url
-            }
-        }
-    }
-
-    taskComponent.view = function(){
-            return m('.container', [
-                m('table.w3-table w3-bordered',{id : "table"}, [
-                    m("tr.border_lines", [
-                        m("td"), //for space
-                        m("td"), //for space
-                        m("td",[
-                        m("button.reset_button", {onclick: resetTaskParameters},'Reset'),
-                        m("button.reset_button",{onclick: clearTaskParameters}, 'Clear'),
-                        ])
-                    ]),
-                    taskComponent.vm.list.map(function(task, index) {
-                    return m("tr.lines", [
-                        m("td.td_info",[
-                        m('i.fa.fa-info-circle'),
-                        m('.card.info-box.card-header', [task.description()])
-                        ]),
-                        m("td.td_task", task.label()),
-                        m("td", [
-                        m("input[type=checkbox]", {onclick: m.withAttr("checked", task.checked), checked: task.checked()})
-                        ])
-                    ])
-                    }
-                ),
-                m("tr.lines", [
-                    m("td.td_info",[
-                        m('i.fa.fa-info-circle'),
-                        m('.card.info-box.card-header', ["Please enter the directory url for the task's pictures"])
-                        ]),
-                    m("td.td_task", "Image's URL"),
-                    m("td" ,[m("input",{id:"baseURL", style: {width: "30rem"}})])
-                ]),
-            ])
-        ]) 
-    };
-
-    ///////to get the paramters here just need to go through the checkboxes similar clear/resrt function
-    ///// and check the checked field and the url value.
-
     var settings = {
-        parameters : {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:true, correctErrors:true,base_url:''},
+        parameters : {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError :true, errorCorrection :true,base_url:''},
         category1: {
         },
         category2: {
         },
+        attribute1:{},
+        attribute2:{},
+        blockParameters:{},
         text: {
                 textOnError:'<p align="center" style="font-size:0.6em"; font-family:arial">' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. '+'Press the other key to continue.<p/>',
                 leftKeyText:'Press "E" for ',
                 rightKeyText:"or",
                 orKeyText:'Press "I" for',
+                finalText:'Press space to continue to the next task',
                 AttributesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font color="#0000ff">leftAttribute.</font>' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font color="#0000ff">rightAttribute</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
                 CategoriesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font color="#336600">leftCategory</font>. ' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font color="#336600">rightCategory</font>.<br/>' +'Items will appear one at a time.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
                 FirstCombinedBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Use the <b>E</b> key for <font color="#336600">leftCategory</font> and for <font color="#0000ff">leftAttribute</font>.<br/>' +'Use the <b>I</b> key for <font color="#336600">rightCategory</font> and for  <font color="#0000ff">rightAttribute</font>.<br/>' +'Each item belongs to only one category.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' + '<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
@@ -142,21 +40,20 @@
         {name: 'isTouch', label:'Touch Device', desc:'Will the task run on touch devices?'},
         {name: 'isQualtrics', label:'Qualtrics', desc: 'Is this a Qualtrics version'},
         {name: 'fullScreen', label:'Enable Full Screen', desc: 'Do you want to enable a full screen option?'},
-        {name: 'debriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
-        {name: 'showErrors', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
-        {name: 'correctErrors', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
+        {name: 'showDebriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
+        {name: 'remindError ', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
+        {name: 'errorCorrection ', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
     ];
+
 
     function controller(settings$1){
         var parameters = settings$1.parameters;
         return {reset:reset, clear:clear, set:set, get:get};
         
         function reset(){ Object.assign(parameters, settings.parameters);}
-        function clear(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:false, correctErrors:false,base_url:''}); }
+        function clear(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError :false, errorCorrection :false,base_url:''}); }
         function get(name){ return parameters[name]; }
-        function set(name){ 
-            return function(value){ return parameters[name] = value; }
-        }
+        function set(name){ return function(value){ return parameters[name] = value; }}
     }
 
     function view(ctrl){
@@ -198,19 +95,36 @@
     }
 
     var outputComponent = {
-        view: function(ctrl, settings){
-            return m('div', [
-                m('button.CreateFile', {onclick: createFile()}, 'Download script'),
-                m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console')
-            ]);
-        }
+        //controler:controler,
+        view:view$1
     };
+
+    function view$1(ctrl,settings){
+        return m('div', [
+            m('button.CreateFile', {onclick: createFile(settings)}, 'Download script'),
+            m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console'),
+            m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
+        ]);
+    }
+
 
     function createFile(settings){
         return function(){
-            console.log('Creating file for download - not implemented yet');
+            var output = toString(settings);
+            var textFileAsBlob = new Blob([output], {type:'text/plain'});
+            var downloadLink = document.createElement("a");
+            downloadLink.download = "newIAT.txt";
+            if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+            else {
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                downloadLink.onclick = destroyClickedElement;
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+                }
+            downloadLink.click();
+            }
         }
-    }
+
 
     function toConsole(settings){
         return function(){
@@ -219,9 +133,46 @@
         }
     }
 
+    function toConsole2(settings){
+        return function(){
+            var output=toString(settings);
+            window.output = output;
+            console.log(output);
+        }
+    }
+
+    function toString(settings){
+        return toScript(updateSettings(settings));
+    }
+
+    function updateSettings(settings){
+        var output={
+            category1: settings.category1,
+            category2: settings.category2,
+            attribute1: settings.attribute1,
+            attribute2: settings.attribute2,
+            base_url: settings.parameters.base_url,
+            remindError: settings.parameters.remindError,
+            errorCorrection: settings.parameters.errorCorrection
+        };
+        if(settings.parameters.isQualtrics){
+            output.isQualtrics=settings.parameters.isQualtrics,
+            output.showDebriefing=settings.parameters.showDebriefing,
+            output.fullscreen=settings.parameters.fullscreen,
+            output.isTouch=settings.parameters.isTouch;
+        }
+        Object.assign(output, settings.blockParameters);
+        Object.assign(output, settings.text);
+        return output;
+    }
+
+    function toScript(output){
+        return `define(['pipAPI',${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat9.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat8.js'}], function(APIConstructor, iatExtension)var API = new APIConstructor(); return iatExtension({${JSON.stringify(output,null,4)})};`
+    }
+
     var TextComponent = {
         controller:controller$1,
-        view:view$1
+        view:view$2
     };
 
     var rows$1=[
@@ -241,7 +192,7 @@
         var textparameters = settings$1.text;
         return {reset:reset, clear:clear, set:set, get:get};
         
-        function reset(){ Object.assign(textparameters, settings.text);}
+        function reset(){Object.assign(textparameters, settings.text);}
         function clear(){ Object.assign(textparameters, {textOnError:'',
         leftKeyText:'',
         rightKeyText:'',
@@ -260,7 +211,7 @@
     }
 
       
-    function view$1(ctrl){
+    function view$2(ctrl){
         return m('.container', [
             m('table.w3-table w3-bordered',{id : 'table'}, [
                 m('tr.border_lines', [
@@ -290,7 +241,6 @@
     }
 
     var components = {
-        task: taskComponent,
         parameters: parametersComponent,
         categories: { view: function(){ return m('div', 'Categories component'); } },
     	text:TextComponent,
@@ -298,7 +248,6 @@
     };
 
     var tabs = [
-    	{value: 'task', text: 'Task parameters old'},
     	{value: 'parameters', text: 'Task parameters'},
     	{value: 'categories', text: 'Categories'},
     	{value: 'text', text: 'Text'},

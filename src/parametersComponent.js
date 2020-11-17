@@ -9,21 +9,20 @@ var rows = [
     {name: 'isTouch', label:'Touch Device', desc:'Will the task run on touch devices?'},
     {name: 'isQualtrics', label:'Qualtrics', desc: 'Is this a Qualtrics version'},
     {name: 'fullScreen', label:'Enable Full Screen', desc: 'Do you want to enable a full screen option?'},
-    {name: 'debriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
-    {name: 'showErrors', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
-    {name: 'correctErrors', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
+    {name: 'showDebriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
+    {name: 'remindError ', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
+    {name: 'errorCorrection ', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
 ];
+
 
 function controller(settings){
     var parameters = settings.parameters;
     return {reset:reset, clear:clear, set:set, get:get};
     
     function reset(){ Object.assign(parameters, defaultSettings.parameters)}
-    function clear(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:false, correctErrors:false,base_url:''}); }
+    function clear(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError :false, errorCorrection :false,base_url:''}); }
     function get(name){ return parameters[name]; }
-    function set(name){ 
-        return function(value){ return parameters[name] = value; }
-    }
+    function set(name){ return function(value){ return parameters[name] = value; }}
 }
 
 function view(ctrl){

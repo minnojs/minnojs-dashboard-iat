@@ -22,7 +22,7 @@ function controller(settings){
     var textparameters = settings.text;
     return {reset:reset, clear:clear, set:set, get:get};
     
-    function reset(){ Object.assign(textparameters, defaultSettings.text)}
+    function reset(){Object.assign(textparameters, defaultSettings.text)}
     function clear(){ Object.assign(textparameters, {textOnError:'',
     leftKeyText:'',
     rightKeyText:'',
