@@ -18,8 +18,8 @@ function controller(settings){
     var parameters = settings.parameters;
     return {reset:reset, clear:clear, set:set, get:get};
     
-    function reset(){ Object.assign(parameters, defaultSettings.parameters)}
-    function clear(){ Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:false, correctErrors:false,base_url:''}); }
+    function reset(){Object.assign(parameters, defaultSettings.parameters)}
+    function clear(){Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:false, correctErrors:false,base_url:''}); }
     function get(name){ return parameters[name]; }
     function set(name){ 
         return function(value){ return parameters[name] = value; }
@@ -41,7 +41,7 @@ function view(ctrl){
                 return m('tr.lines', [
                     m('td.td_info',[
                         m('i.fa.fa-info-circle'),
-                        m('.card.info-box.card-header', [row.description])
+                        m('.card.info-box.card-header', [row.desc])
                     ]),
                     m('td.td_task', row.label),
                     m('td', [

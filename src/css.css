@@ -83,7 +83,7 @@ input[type=button]{
 .info-box {
   display: none;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  width: 180px;
+  width: 300px;
   background-color: #555;
   color: #fff;
   text-align: center;
@@ -171,6 +171,26 @@ td.block_cell_info {
   
 }
 
+h1.categoryHeadline {
+  font-size: 1.8em;
+  margin-top: 0.3em;
+  font-weight: bold;
+}
+
+.category_cell {
+  padding: 1.7em 0em 1.7em 0.5em;
+  font-size: 15px;
+  position: relative;
+}
+
+.design_text_cell {
+  width: 12%
+}
+
+.table.categories {
+table-layout: auto;
+}
+
 .textOnError{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   display: inline-block;
@@ -242,49 +262,4 @@ button.ClearTextsParameters{
     position: relative;
 }
 
-.popup {
-  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  margin-right: 15px;
-  margin-bottom: 10px;
-  }
-  
-  /* The actual popup (appears on top) */
-.popup .popuptext {
-  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  visibility: hidden;
-  width: 160px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px ;
-  position: absolute;
-  bottom: 50%;
-  z-index: 1;
-  left: 50%;
-  margin-left: 0px;
-  font-size: small;
-  }
-  
-  /* Popup arrow */
-  .popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  display: inline-block;
-  /* border-style: solid; */
-  border-color: #555 transparent transparent transparent;
-  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  }
-  
-  /* Toggle this class when clicking on the popup container (hide and show the popup) */
-  .popup .show {
-  visibility: visible;
-  }
   
