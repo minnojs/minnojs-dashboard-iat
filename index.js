@@ -7,7 +7,7 @@
     'use strict';
 
     var settings = {
-        parameters : {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:true, correctErrors:true,base_url:''},
+        parameters : {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError:true, errorCorrection:true,base_url:''},
         category1: {name: "Black people", title: {media: { word : "Black people"}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4}, 
                     stimulusMedia: [{word: "Tayron"}, {word: "Malik"},{word: "Terrell"},{word: "Jazamin"},{word: "Tiara"},{word: "Shanice"}],
                     stimulusCss : {color:'#336600', 'font-size':'1.8em'}
@@ -55,21 +55,20 @@
         {name: 'isTouch', label:'Touch Device', desc:'Will the task run on touch devices?'},
         {name: 'isQualtrics', label:'Qualtrics', desc: 'Is this a Qualtrics version'},
         {name: 'fullScreen', label:'Enable Full Screen', desc: 'Do you want to enable a full screen option?'},
-        {name: 'debriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
-        {name: 'showErrors', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
-        {name: 'correctErrors', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
+        {name: 'showDebriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
+        {name: 'remindError', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
+        {name: 'errorCorrection', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
     ];
+
 
     function controller(settings$1){
         var parameters = settings$1.parameters;
         return {reset:reset, clear:clear, set:set, get:get};
         
         function reset(){Object.assign(parameters, settings.parameters);}
-        function clear(){Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, debriefing:false, showErrors:false, correctErrors:false,base_url:''}); }
-        function get(name){ return parameters[name]; }
-        function set(name){ 
-            return function(value){ return parameters[name] = value; }
-        }
+        function clear(){Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError:false, errorCorrection:false,base_url:''}); }
+        function get(name){return parameters[name]; }
+        function set(name){ return function(value){ return parameters[name] = value; }}
     }
 
     function view(ctrl){
@@ -111,19 +110,36 @@
     }
 
     var outputComponent = {
-        view: function(ctrl, settings){
-            return m('div', [
-                m('button.CreateFile', {onclick: createFile()}, 'Download script'),
-                m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console')
-            ]);
-        }
+        //controler:controler,
+        view:view$1
     };
+
+    function view$1(ctrl,settings){
+        return m('div', [
+            m('button.CreateFile', {onclick: createFile(settings)}, 'Download script'),
+            m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console'),
+            m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
+        ]);
+    }
+
 
     function createFile(settings){
         return function(){
-            console.log('Creating file for download - not implemented yet');
+            var output = toString(settings);
+            var textFileAsBlob = new Blob([output], {type:'text/plain'});
+            var downloadLink = document.createElement("a");
+            downloadLink.download = "newIAT.txt";
+            if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+            else {
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                downloadLink.onclick = destroyClickedElement;
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+                }
+            downloadLink.click();
+            }
         }
-    }
+
 
     function toConsole(settings){
         return function(){
@@ -132,9 +148,46 @@
         }
     }
 
+    function toConsole2(settings){
+        return function(){
+            var output=toString(settings);
+            window.output = output;
+            console.log(output);
+        }
+    }
+
+    function toString(settings){
+        return toScript(updateSettings(settings));
+    }
+
+    function updateSettings(settings){
+        var output={
+            category1: settings.category1,
+            category2: settings.category2,
+            attribute1: settings.attribute1,
+            attribute2: settings.attribute2,
+            base_url: settings.parameters.base_url,
+            remindError: settings.parameters.remindError,
+            errorCorrection: settings.parameters.errorCorrection
+        };
+        if(settings.parameters.isQualtrics){
+            output.isQualtrics=settings.parameters.isQualtrics,
+            output.showDebriefing=settings.parameters.showDebriefing,
+            output.fullscreen=settings.parameters.fullscreen,
+            output.isTouch=settings.parameters.isTouch;
+        }
+        Object.assign(output, settings.blockParameters);
+        Object.assign(output, settings.text);
+        return output;
+    }
+
+    function toScript(output){
+        return `define(['pipAPI',${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat9.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat8.js'}], function(APIConstructor, iatExtension)var API = new APIConstructor(); return iatExtension({${JSON.stringify(output,null,4)})};`
+    }
+
     var TextComponent = {
         controller:controller$1,
-        view:view$1
+        view:view$2
     };
 
     var rows$1=[
@@ -154,7 +207,7 @@
         var textparameters = settings$1.text;
         return {reset:reset, clear:clear, set:set, get:get};
         
-        function reset(){ Object.assign(textparameters, settings.text);}
+        function reset(){Object.assign(textparameters, settings.text);}
         function clear(){ Object.assign(textparameters, {textOnError:'',
         leftKeyText:'',
         rightKeyText:'',
@@ -173,7 +226,7 @@
     }
 
       
-    function view$1(ctrl){
+    function view$2(ctrl){
         return m('.container', [
             m('table.w3-table w3-bordered',{id : 'table'}, [
                 m('tr.border_lines', [
@@ -204,7 +257,7 @@
 
     var blocksComponent = {
         controller:controller$2,
-        view:view$2
+        view:view$3
     };
 
     var rows$2 = [
@@ -236,7 +289,7 @@
             }
         }
     }
-    function view$2(ctrl){
+    function view$3(ctrl){
         return m('.container' , [
             m('table.w3-table w3-bordered', [
                 m('tr.border_lines', [
@@ -303,7 +356,7 @@
 
     var elementComponent = {
         controller:controller$3,
-        view:view$3,
+        view:view$4,
     };
 
     function controller$3(object, settings){
@@ -429,7 +482,7 @@
         }
     }
 
-    function view$3(ctrl) {
+    function view$4(ctrl) {
         return m('table.w3-table w3-bordered', [
             m('tr.lines', [
                     m('td.td_info',[
@@ -515,7 +568,7 @@
 
     var categoriesComponent = {
         controller:controller$4,
-        view:view$4
+        view:view$5
     };
 
     function controller$4(settings$1){
@@ -533,7 +586,7 @@
         }
     }
 
-    function view$4(ctrl,settings) {
+    function view$5(ctrl,settings) {
         return m('.container', [
             m('table.w3-table w3-bordered', [
                 m('tr', [
@@ -552,7 +605,7 @@
 
     var attributesComponent = {
         controller:controller$5,
-        view:view$5
+        view:view$6
     };
 
     function controller$5(settings$1){
@@ -570,7 +623,7 @@
         }
     }
 
-    function view$5(ctrl,settings) {
+    function view$6(ctrl,settings) {
         return m('.container', [
             m('table.w3-table w3-bordered', [
                 m('tr', [

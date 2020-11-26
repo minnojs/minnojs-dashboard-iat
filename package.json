@@ -15,7 +15,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "mithril": "^0.2.8",
-    "rollup": "^2.32.1"
+    "mithril": "^2.0.4",
+    "rollup": "^2.33.1"
   }
 }
