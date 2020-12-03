@@ -1,5 +1,5 @@
 var settings = {
-    parameters : {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError:true, errorCorrection:true,base_url:''},
+    parameters : {isTouch:false, isQualtrics:false, fullscreen:false, showDebriefing:false, remindError:true, errorCorrection:true,base_url:''},
     category1: {name: "Black people", title: {media: { word : "Black people"}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4}, 
                 stimulusMedia: [{word: "Tayron"}, {word: "Malik"},{word: "Terrell"},{word: "Jazamin"},{word: "Tiara"},{word: "Shanice"}],
                 stimulusCss : {color:'#336600', 'font-size':'1.8em'}

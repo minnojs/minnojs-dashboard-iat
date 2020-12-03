@@ -261,4 +261,19 @@ button.ClearTextsParameters{
     font-weight: bold;
     position: relative;
 }
+
+.uploadDiv {
+    position: absolute;
+    width: 300px;
+    height: 130px;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -60px 20px 30px -150px;
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+
+}
+
   

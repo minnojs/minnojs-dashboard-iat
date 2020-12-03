@@ -4,8 +4,11 @@ import TextComponent from './TextComponent.js';
 import blocksComponent from './blocksComponent.js';
 import categoriesComponent from './categoriesComponent.js';
 import attributesComponent from './attributesComponent';
+import importComponent from './importComponent.js';
+
 
 var components = {
+	import: importComponent,
     parameters: parametersComponent,
 	text:TextComponent,
 	output: outputComponent,
@@ -20,7 +23,8 @@ var tabs = [
 	{value: 'categories', text: 'Categories'},
 	{value: 'attributes', text: 'Attributes'},
 	{value: 'text', text: 'Text'},
-	{value: 'output', text: 'Output'}
+	{value: 'output', text: 'Output'},
+	{value: 'import', text: 'Import'}
 ];
 
 var tabsComponent = {

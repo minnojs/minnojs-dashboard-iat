@@ -1,19 +1,49 @@
-import defaultSettings from './defaultSettings';
 
 var outputComponent = {
-    //controler:controler,
+    //controller:controller,
     view:view
 };
+
 
 function view(ctrl,settings){
     return m('div', [
         m('button.CreateFile', {onclick: createFile(settings)}, 'Download script'),
+        m('button.CreateFile', {onclick: createJSONFile(settings)}, 'Download JSON File'),
         m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console'),
-        m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
+        //m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
     ]);
 }
 
 export default outputComponent;
+
+
+
+function createJSONFile(settings){
+    return function(){
+        var output = updateSettings(settings);
+        var textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
+        var downloadLink = document.createElement("a");
+        downloadLink.download = "newIAT.json";
+        if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+        else{
+            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+            downloadLink.onclick = destroyClickedElement;
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            }
+        downloadLink.click();
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText);
+                console.log("data====>",myObj);
+            }
+        };
+        xhttp.open("GET", "src/newIAT (7).json", true);
+        //xhttp.open("GET", "jsonExample.json", true);
+        xhttp.send();
+        }
+}
 
 
 function createFile(settings){
@@ -30,8 +60,10 @@ function createFile(settings){
             document.body.appendChild(downloadLink);
             }
         downloadLink.click();
+        //console.log(JSON.parse('C:\Users\elinor\COMP167\jsonExample.json'));
         }
-    }
+}
+
 
 
 function toConsole(settings){
@@ -69,7 +101,7 @@ function updateSettings(settings){
         output.fullscreen=settings.parameters.fullscreen,
         output.isTouch=settings.parameters.isTouch
     }
-    Object.assign(output, settings.blockParameters);
+    Object.assign(output, settings.blocks);
     Object.assign(output, settings.text);
     return output;
 }

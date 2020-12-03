@@ -7,7 +7,7 @@
     'use strict';
 
     var settings = {
-        parameters : {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError:true, errorCorrection:true,base_url:''},
+        parameters : {isTouch:false, isQualtrics:false, fullscreen:false, showDebriefing:false, remindError:true, errorCorrection:true,base_url:''},
         category1: {name: "Black people", title: {media: { word : "Black people"}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4}, 
                     stimulusMedia: [{word: "Tayron"}, {word: "Malik"},{word: "Terrell"},{word: "Jazamin"},{word: "Tiara"},{word: "Shanice"}],
                     stimulusCss : {color:'#336600', 'font-size':'1.8em'}
@@ -54,7 +54,7 @@
     var rows = [
         {name: 'isTouch', label:'Touch Device', desc:'Will the task run on touch devices?'},
         {name: 'isQualtrics', label:'Qualtrics', desc: 'Is this a Qualtrics version'},
-        {name: 'fullScreen', label:'Enable Full Screen', desc: 'Do you want to enable a full screen option?'},
+        {name: 'fullscreen', label:'Enable Full Screen', desc: 'Do you want to enable a full screen option?'},
         {name: 'showDebriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
         {name: 'remindError', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
         {name: 'errorCorrection', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
@@ -110,16 +110,47 @@
     }
 
     var outputComponent = {
-        //controler:controler,
+        //controller:controller,
         view:view$1
     };
+
 
     function view$1(ctrl,settings){
         return m('div', [
             m('button.CreateFile', {onclick: createFile(settings)}, 'Download script'),
+            m('button.CreateFile', {onclick: createJSONFile(settings)}, 'Download JSON File'),
             m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console'),
-            m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
+            //m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
         ]);
+    }
+
+
+
+    function createJSONFile(settings){
+        return function(){
+            var output = updateSettings(settings);
+            var textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
+            var downloadLink = document.createElement("a");
+            downloadLink.download = "newIAT.json";
+            if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+            else {
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                downloadLink.onclick = destroyClickedElement;
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+                }
+            downloadLink.click();
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    var myObj = JSON.parse(this.responseText);
+                    console.log("data====>",myObj);
+                }
+            };
+            xhttp.open("GET", "src/newIAT (7).json", true);
+            //xhttp.open("GET", "jsonExample.json", true);
+            xhttp.send();
+            }
     }
 
 
@@ -137,22 +168,16 @@
                 document.body.appendChild(downloadLink);
                 }
             downloadLink.click();
+            //console.log(JSON.parse('C:\Users\elinor\COMP167\jsonExample.json'));
             }
-        }
+    }
+
 
 
     function toConsole(settings){
         return function(){
             window.settings = settings;
             console.log(settings);
-        }
-    }
-
-    function toConsole2(settings){
-        return function(){
-            var output=toString(settings);
-            window.output = output;
-            console.log(output);
         }
     }
 
@@ -176,7 +201,7 @@
             output.fullscreen=settings.parameters.fullscreen,
             output.isTouch=settings.parameters.isTouch;
         }
-        Object.assign(output, settings.blockParameters);
+        Object.assign(output, settings.blocks);
         Object.assign(output, settings.text);
         return output;
     }
@@ -640,7 +665,61 @@
         ])
     }
 
+    var importComponent = {
+        controller:controller$6,
+        view:view$7
+    };
+
+    function view$7(ctrl){
+        return m('div.uploadDiv', [
+            m('i.fa.fa-info-circle', {style: {padding: '5px'}}),
+            m('.card.info-box.card-header', ["You can upload a JSON file and update it's contnet through the editor and then download a new one"]),
+            m('label', 'Upload a JSON file: ', {style:{'text-align': 'center'}}),
+            m('input[type=file]',{id:"uploadFile", style: {'text-align': 'center'}, onchange: ctrl.handleFile})
+        ]);
+    }
+
+    function controller$6(settings) {
+        let fileInput = m.prop('');
+        return {fileInput:fileInput, handleFile:handleFile, updateSettings:updateSettings};
+
+        function handleFile(){
+            var importedFile = document.getElementById("uploadFile").files[0];
+            var reader = new FileReader();
+            reader.readAsText(importedFile); 
+            reader.onload = function() {
+            var fileContent = JSON.parse(reader.result);
+            console.log("from file", fileContent);
+            console.log("settings", settings);
+            updateSettings(fileContent);
+            };
+            reader.onerror = function() {
+                console.log(reader.error);
+            };
+        }
+        function updateSettings(input) {
+            settings.category1 = input.category1;
+            settings.category2 = input.category2;
+            settings.attribute1 = input.attribute1;
+            settings.attribute2 = input.attribute2;
+            settings.parameters.base_url = input.base_url;
+            settings.parameters.remindError = input.remindError;
+            settings.parameters.errorCorrection;
+            if(input.isQualtrics){
+                settings.parameters.isQualtrics = input.isQualtrics;
+                settings.parameters.showDebriefing = input.showDebriefing;
+                settings.parameters.fullscreen = input.fullscreen;
+                settings.parameters.isTouch = input.isTouch;
+            }
+            Object.assign(settings.blocks, input.blockParameters);
+            Object.assign(settings.text, input.text);
+
+            //console.log("after UPDATE", settings);
+        }
+    }
+
     var components = {
+    	import: importComponent,
         parameters: parametersComponent,
     	text:TextComponent,
     	output: outputComponent,
@@ -655,7 +734,8 @@
     	{value: 'categories', text: 'Categories'},
     	{value: 'attributes', text: 'Attributes'},
     	{value: 'text', text: 'Text'},
-    	{value: 'output', text: 'Output'}
+    	{value: 'output', text: 'Output'},
+    	{value: 'import', text: 'Import'}
     ];
 
     var tabsComponent = {

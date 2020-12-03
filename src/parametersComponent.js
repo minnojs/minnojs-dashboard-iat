@@ -8,7 +8,7 @@ var parametersComponent = {
 var rows = [
     {name: 'isTouch', label:'Touch Device', desc:'Will the task run on touch devices?'},
     {name: 'isQualtrics', label:'Qualtrics', desc: 'Is this a Qualtrics version'},
-    {name: 'fullScreen', label:'Enable Full Screen', desc: 'Do you want to enable a full screen option?'},
+    {name: 'fullscreen', label:'Enable Full Screen', desc: 'Do you want to enable a full screen option?'},
     {name: 'showDebriefing', label:'Show Debriefing', desc: 'Do you want to show debriefing at the end?'},
     {name: 'remindError', label: 'Show an Error Message', desc: 'In the case of a mistake, do you want to display a message to the user?'},
     {name: 'errorCorrection', label: 'Must correct wrong answers', desc: 'In the case of a mistake, the user cannot continue if he didn\'t coreect his answer'},
