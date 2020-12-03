@@ -711,8 +711,29 @@
                 settings.parameters.fullscreen = input.fullscreen;
                 settings.parameters.isTouch = input.isTouch;
             }
-            Object.assign(settings.blocks, input.blockParameters);
-            Object.assign(settings.text, input.text);
+            settings.blocks.blockCategories_nTrials = input.blockCategories_nTrials,
+            settings.blocks.blockCategories_nMiniBlocks = input.blockCategories_nMiniBlocks,
+            settings.blocks.blockAttributes_nTrials = input.blockAttributes_nTrials,
+            settings.blocks.blockAttributes_nMiniBlocks = input.blockAttributes_nMiniBlocks,
+            settings.blocks.blockFirstCombined_nTrials = input.blockFirstCombined_nTrials,
+            settings.blocks.blockFirstCombined_nMiniBlocks = input.blockFirstCombined_nMiniBlocks,
+            settings.blocks.blockSecondCombined_nTrials = input.blockSecondCombined_nTrials,
+            settings.blocks.blockSecondCombined_nMiniBlocks = input.blockSecondCombined_nMiniBlocks,
+            settings.blocks.blockSwitch_nTrials = input.blockSwitch_nTrials,
+            settings.blocks.blockSwitch_nMiniBlocks = input.blockSwitch_nMiniBlocks,
+            settings.blocks.randomBlockOrder = input.randomBlockOrder,
+            settings.blocks.randomAttSide = input.randomAttSide,
+            
+            setting.text.textOnError = input.textOnError,
+            setting.text.leftKeyText = input.leftKeyText,
+            setting.text.rightKeyText = input.rightKeyText,
+            setting.text.orKeyText = input.orKeyText,
+            setting.text.AttributesBlockInstructions = input.AttributesBlockInstructions,
+            setting.text.CategoriesBlockInstructions = input.CategoriesBlockInstructions,
+            setting.text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions,
+            setting.text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions,
+            setting.text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
+            setting.text.PreDebriefingText = input.PreDebriefingText;
 
             //console.log("after UPDATE", settings);
         }
