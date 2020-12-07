@@ -10,7 +10,6 @@ function view(ctrl,settings){
         m('button.CreateFile', {onclick: createFile(settings)}, 'Download script'),
         m('button.CreateFile', {onclick: createJSONFile(settings)}, 'Download JSON File'),
         m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console'),
-        //m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
     ]);
 }
 
@@ -36,10 +35,10 @@ function createJSONFile(settings){
         xhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200) {
                 var myObj = JSON.parse(this.responseText);
-                console.log("data====>",myObj);
+                //console.log("data====>",myObj);
             }
         };
-        xhttp.open("GET", "src/newIAT (7).json", true);
+        //xhttp.open("GET", "src/newIAT (7).json", true);
         xhttp.send();
         }
 }
@@ -50,7 +49,7 @@ function createFile(settings){
         var output = toString(settings);
         var textFileAsBlob = new Blob([output], {type:'text/plain'});
         var downloadLink = document.createElement("a");
-        downloadLink.download = "newIAT.txt";
+        downloadLink.download = "IAT.js";
         if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
         else{
             downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
@@ -70,15 +69,6 @@ function toConsole(settings){
         console.log(settings);
     }
 }
-
-function toConsole2(settings){
-    return function(){
-        var output=toString(settings);
-        window.output = output;
-        console.log(output);
-    }
-}
-
 function toString(settings){
     return toScript(updateSettings(settings));
 }

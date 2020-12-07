@@ -132,7 +132,6 @@
             m('button.CreateFile', {onclick: createFile(settings)}, 'Download script'),
             m('button.CreateFile', {onclick: createJSONFile(settings)}, 'Download JSON File'),
             m('button.CreateFile', {onclick: toConsole(settings)}, 'Print to Console'),
-            //m('button.CreateFile', {onclick: toConsole2(settings)}, 'Print to Console-newSetting')
         ]);
     }
 
@@ -156,10 +155,10 @@
             xhttp.onreadystatechange = function() {
                 if(this.readyState == 4 && this.status == 200) {
                     var myObj = JSON.parse(this.responseText);
-                    console.log("data====>",myObj);
+                    //console.log("data====>",myObj);
                 }
             };
-            xhttp.open("GET", "src/newIAT (7).json", true);
+            //xhttp.open("GET", "src/newIAT (7).json", true);
             xhttp.send();
             }
     }
@@ -170,7 +169,7 @@
             var output = toString(settings);
             var textFileAsBlob = new Blob([output], {type:'text/plain'});
             var downloadLink = document.createElement("a");
-            downloadLink.download = "newIAT.txt";
+            downloadLink.download = "IAT.js";
             if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
             else {
                 downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
@@ -190,7 +189,6 @@
             console.log(settings);
         }
     }
-
     function toString(settings){
         return toScript(updateSettings(settings));
     }
@@ -376,7 +374,7 @@
                 ])
             ])
         ],
-        m('.card card-body', {style: {position: 'absolute', width: '20rem', left: '62%',top: '35%'}}, [
+        m('.card card-body', {style: {position: 'absolute', width: '20rem', left: '62%',top: '38%'}}, [
             m('table.w3-table w3-bordered',[
                 m('tr.border_lines', [
                     m('td.block_cell_info','Please Notice:')
