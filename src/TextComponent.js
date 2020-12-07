@@ -8,8 +8,8 @@ var TextComponent = {
 var rows=[
     {name: 'textOnError', label:'Text On Error', desc:'Text Shown on user Error'},
     {name: 'leftKeyText', label:'Left Key Text', desc: 'Left Key Text'},
-    {name: 'rightKeyText', label:'Right Key Text', desc: 'Right Key Text'},
     {name: 'orKeyText', label:'Or Key Text', desc: 'Or Key Text'},
+    {name: 'rightKeyText', label:'Right Key Text', desc: 'Right Key Text'},
     {name: 'AttributesBlockInstructions', label: 'Attributes Block Instructions Text', desc: 'Attributes Block Instructions Text'},
     {name: 'CategoriesBlockInstructions', label: 'Categories Block Instructions Text', desc: 'Categories Block Instructions Text'},
     {name: 'FirstCombinedBlockInstructions', label: 'First Combined Block Instructions Text', desc: 'First Combined Block Instructions Text'},
@@ -19,10 +19,12 @@ var rows=[
 ];
 
 function controller(settings){
-    var textparameters = settings.text;
+    var isTouch = settings.parameters.isTouch;
+    var textparameters;
+    isTouch ? textparameters = settings.touch_text : textparameters = settings.text;
     return {reset:reset, clear:clear, set:set, get:get};
     
-    function reset(){Object.assign(textparameters, defaultSettings.text)}
+    function reset(){isTouch ? Object.assign(textparameters, defaultSettings.touch_text) : Object.assign(textparameters, defaultSettings.text)}
     function clear(){ Object.assign(textparameters, {textOnError:'',
     leftKeyText:'',
     rightKeyText:'',

@@ -40,7 +40,6 @@ function createJSONFile(settings){
             }
         };
         xhttp.open("GET", "src/newIAT (7).json", true);
-        //xhttp.open("GET", "jsonExample.json", true);
         xhttp.send();
         }
 }
@@ -60,7 +59,6 @@ function createFile(settings){
             document.body.appendChild(downloadLink);
             }
         downloadLink.click();
-        //console.log(JSON.parse('C:\Users\elinor\COMP167\jsonExample.json'));
         }
 }
 
@@ -93,19 +91,25 @@ function updateSettings(settings){
         attribute2: settings.attribute2,
         base_url: settings.parameters.base_url,
         remindError: settings.parameters.remindError,
-        errorCorrection: settings.parameters.errorCorrection
+        errorCorrection: settings.parameters.errorCorrection,
+        isTouch: settings.parameters.isTouch
     }
     if(settings.parameters.isQualtrics){
         output.isQualtrics=settings.parameters.isQualtrics,
         output.showDebriefing=settings.parameters.showDebriefing,
-        output.fullscreen=settings.parameters.fullscreen,
-        output.isTouch=settings.parameters.isTouch
+        output.fullscreen=settings.parameters.fullscreen
     }
+
     Object.assign(output, settings.blocks);
-    Object.assign(output, settings.text);
+    if(settings.parameters.isTouch) Object.assign(output, settings.touch_text);
+    else Object.assign(output, settings.text); 
     return output;
 }
 
 function toScript(output){
-    return `define(['pipAPI',${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat9.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat8.js'}], function(APIConstructor, iatExtension)var API = new APIConstructor(); return iatExtension({${JSON.stringify(output,null,4)})};`
+
+    return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat9.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat8.js'}'], function(APIConstructor, iatExtension) {var API = new APIConstructor(); return iatExtension(${JSON.stringify(output,null,4)})});`
+
 }
+
+

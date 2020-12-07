@@ -33,14 +33,26 @@
         text: {
             textOnError:'<p align="center" style="font-size:0.6em"; font-family:arial">' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. '+'Press the other key to continue.<p/>',
             leftKeyText:'Press "E" for ',
-            rightKeyText:"or",
-            orKeyText:'Press "I" for',
+            rightKeyText:'Press "I" for',
+            orKeyText:'or',
             AttributesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font color="#0000ff">leftAttribute.</font>' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font color="#0000ff">rightAttribute</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
             CategoriesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font color="#336600">leftCategory</font>. ' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font color="#336600">rightCategory</font>.<br/>' +'Items will appear one at a time.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
             FirstCombinedBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Use the <b>E</b> key for <font color="#336600">leftCategory</font> and for <font color="#0000ff">leftAttribute</font>.<br/>' +'Use the <b>I</b> key for <font color="#336600">rightCategory</font> and for  <font color="#0000ff">rightAttribute</font>.<br/>' +'Each item belongs to only one category.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' + '<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
             SecondCombinedBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'This is the same as the previous part.<br/>' +'Use the <b>E</b> key for <font color="#336600">leftCategory</font> and for <font color="#0000ff">leftAttribute</font>.<br/>' +'Use the <b>I</b> key for <font color="#336600">rightCategory</font> and for  <font color="#0000ff">rightAttribute</font>.<br/>' +'Each item belongs to only one category.<br/><br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
             SwitchedCategoriesInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">'+'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'<b>Watch out, the labels have changed position!</b><br/>' +'Put the left finger on the <b>E</b> key for <font color="#336600">leftCategory</font>.<br/>' +'Put the right finger on the <b>I</b> key for <font color="#336600">rightCategory</font>.<br/><br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
             PreDebriefingText:'Press space to continue to your feedback '
+        },
+        touch_text : {
+            textOnError:'<p align="center" style="font-size:"1.4em"; font-family:arial">' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. '+'Touch the other side to continue.<p/>',
+            leftKeyText:'Press "E" for ',
+            rightKeyText:'Press "I" for',
+            orKeyText:'or',
+            AttributesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font color="#0000ff">leftAttribute.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font color="#0000ff">rightAttribute</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
+            CategoriesBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
+            FirstCombinedBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
+            SecondCombinedBlockInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
+            SwitchedCategoriesInstructions:'<div><p align="center" style="font-size:20px; font-family:arial">' +'<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial"><br/>'+'Watch out, the labels have changed position!<br/>'+'Put a left finger over the <b>left</b> green area for items that belong to the category <font color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p align="center">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
+            PreDebriefingText:'Touch the bottom green area to continue to the next task.'
         }
         
         
@@ -66,7 +78,7 @@
         return {reset:reset, clear:clear, set:set, get:get};
         
         function reset(){Object.assign(parameters, settings.parameters);}
-        function clear(){Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError:false, errorCorrection:false,base_url:''}); }
+        function clear(){Object.assign(parameters, {isTouch:false, isQualtrics:false, fullscreen:false, showDebriefing:false, remindError:false, errorCorrection:false,base_url:''}); }
         function get(name){return parameters[name]; }
         function set(name){ return function(value){ return parameters[name] = value; }}
     }
@@ -148,7 +160,6 @@
                 }
             };
             xhttp.open("GET", "src/newIAT (7).json", true);
-            //xhttp.open("GET", "jsonExample.json", true);
             xhttp.send();
             }
     }
@@ -168,7 +179,6 @@
                 document.body.appendChild(downloadLink);
                 }
             downloadLink.click();
-            //console.log(JSON.parse('C:\Users\elinor\COMP167\jsonExample.json'));
             }
     }
 
@@ -193,21 +203,25 @@
             attribute2: settings.attribute2,
             base_url: settings.parameters.base_url,
             remindError: settings.parameters.remindError,
-            errorCorrection: settings.parameters.errorCorrection
+            errorCorrection: settings.parameters.errorCorrection,
+            isTouch: settings.parameters.isTouch
         };
         if(settings.parameters.isQualtrics){
             output.isQualtrics=settings.parameters.isQualtrics,
             output.showDebriefing=settings.parameters.showDebriefing,
-            output.fullscreen=settings.parameters.fullscreen,
-            output.isTouch=settings.parameters.isTouch;
+            output.fullscreen=settings.parameters.fullscreen;
         }
+
         Object.assign(output, settings.blocks);
-        Object.assign(output, settings.text);
+        if(settings.parameters.isTouch) Object.assign(output, settings.touch_text);
+        else Object.assign(output, settings.text); 
         return output;
     }
 
     function toScript(output){
-        return `define(['pipAPI',${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat9.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat8.js'}], function(APIConstructor, iatExtension)var API = new APIConstructor(); return iatExtension({${JSON.stringify(output,null,4)})};`
+
+        return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat9.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat8.js'}'], function(APIConstructor, iatExtension) {var API = new APIConstructor(); return iatExtension(${JSON.stringify(output,null,4)})});`
+
     }
 
     var TextComponent = {
@@ -218,8 +232,8 @@
     var rows$1=[
         {name: 'textOnError', label:'Text On Error', desc:'Text Shown on user Error'},
         {name: 'leftKeyText', label:'Left Key Text', desc: 'Left Key Text'},
-        {name: 'rightKeyText', label:'Right Key Text', desc: 'Right Key Text'},
         {name: 'orKeyText', label:'Or Key Text', desc: 'Or Key Text'},
+        {name: 'rightKeyText', label:'Right Key Text', desc: 'Right Key Text'},
         {name: 'AttributesBlockInstructions', label: 'Attributes Block Instructions Text', desc: 'Attributes Block Instructions Text'},
         {name: 'CategoriesBlockInstructions', label: 'Categories Block Instructions Text', desc: 'Categories Block Instructions Text'},
         {name: 'FirstCombinedBlockInstructions', label: 'First Combined Block Instructions Text', desc: 'First Combined Block Instructions Text'},
@@ -229,10 +243,12 @@
     ];
 
     function controller$1(settings$1){
-        var textparameters = settings$1.text;
+        var isTouch = settings$1.parameters.isTouch;
+        var textparameters;
+        isTouch ? textparameters = settings$1.touch_text : textparameters = settings$1.text;
         return {reset:reset, clear:clear, set:set, get:get};
         
-        function reset(){Object.assign(textparameters, settings.text);}
+        function reset(){isTouch ? Object.assign(textparameters, settings.touch_text) : Object.assign(textparameters, settings.text);}
         function clear(){ Object.assign(textparameters, {textOnError:'',
         leftKeyText:'',
         rightKeyText:'',
@@ -360,7 +376,7 @@
                 ])
             ])
         ],
-        m('.card card-body', {style: {position: 'absolute', width: '20rem', left: '780px',top: '200px'}}, [
+        m('.card card-body', {style: {position: 'absolute', width: '20rem', left: '62%',top: '35%'}}, [
             m('table.w3-table w3-bordered',[
                 m('tr.border_lines', [
                     m('td.block_cell_info','Please Notice:')
@@ -378,6 +394,7 @@
         ])
         )
     }
+    //{style: {position: 'absolute', width: '20rem', left: '780px',top: '200px'}}
 
     var elementComponent = {
         controller:controller$3,
@@ -689,8 +706,6 @@
             reader.readAsText(importedFile); 
             reader.onload = function() {
             var fileContent = JSON.parse(reader.result);
-            console.log("from file", fileContent);
-            console.log("settings", settings);
             updateSettings(fileContent);
             };
             reader.onerror = function() {
@@ -705,11 +720,12 @@
             settings.parameters.base_url = input.base_url;
             settings.parameters.remindError = input.remindError;
             settings.parameters.errorCorrection;
+            settings.parameters.isTouch = input.isTouch;
+
             if(input.isQualtrics){
                 settings.parameters.isQualtrics = input.isQualtrics;
                 settings.parameters.showDebriefing = input.showDebriefing;
                 settings.parameters.fullscreen = input.fullscreen;
-                settings.parameters.isTouch = input.isTouch;
             }
             settings.blocks.blockCategories_nTrials = input.blockCategories_nTrials,
             settings.blocks.blockCategories_nMiniBlocks = input.blockCategories_nMiniBlocks,
@@ -722,20 +738,33 @@
             settings.blocks.blockSwitch_nTrials = input.blockSwitch_nTrials,
             settings.blocks.blockSwitch_nMiniBlocks = input.blockSwitch_nMiniBlocks,
             settings.blocks.randomBlockOrder = input.randomBlockOrder,
-            settings.blocks.randomAttSide = input.randomAttSide,
-            
-            setting.text.textOnError = input.textOnError,
-            setting.text.leftKeyText = input.leftKeyText,
-            setting.text.rightKeyText = input.rightKeyText,
-            setting.text.orKeyText = input.orKeyText,
-            setting.text.AttributesBlockInstructions = input.AttributesBlockInstructions,
-            setting.text.CategoriesBlockInstructions = input.CategoriesBlockInstructions,
-            setting.text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions,
-            setting.text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions,
-            setting.text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
-            setting.text.PreDebriefingText = input.PreDebriefingText;
+            settings.blocks.randomAttSide = input.randomAttSide;
+            if (input.isTouch){
+                settings.touch_text.textOnError = input.textOnError,
+                settings.touch_text.leftKeyText = input.leftKeyText,
+                settings.touch_text.rightKeyText = input.rightKeyText,
+                settings.touch_text.orKeyText = input.orKeyText,
+                settings.touch_text.AttributesBlockInstructions = input.AttributesBlockInstructions,
+                settings.touch_text.CategoriesBlockInstructions = input.CategoriesBlockInstructions,
+                settings.touch_text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions,
+                settings.touch_text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions,
+                settings.touch_text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
+                settings.touch_text.PreDebriefingText = input.PreDebriefingText;
+            }
+            else {
+                settings.text.textOnError = input.textOnError,
+                settings.text.leftKeyText = input.leftKeyText,
+                settings.text.rightKeyText = input.rightKeyText,
+                settings.text.orKeyText = input.orKeyText,
+                settings.text.AttributesBlockInstructions = input.AttributesBlockInstructions,
+                settings.text.CategoriesBlockInstructions = input.CategoriesBlockInstructions,
+                settings.text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions,
+                settings.text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions,
+                settings.text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
+                settings.text.PreDebriefingText = input.PreDebriefingText;
+            }
 
-            //console.log("after UPDATE", settings);
+
         }
     }
 

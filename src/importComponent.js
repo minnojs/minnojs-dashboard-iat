@@ -23,8 +23,6 @@ function controller(settings) {
         reader.readAsText(importedFile); 
         reader.onload = function() {
         var fileContent = JSON.parse(reader.result);
-        console.log("from file", fileContent);
-        console.log("settings", settings);
         updateSettings(fileContent);
         };
         reader.onerror = function() {
@@ -39,11 +37,12 @@ function controller(settings) {
         settings.parameters.base_url = input.base_url;
         settings.parameters.remindError = input.remindError;
         settings.parameters.errorCorrection
+        settings.parameters.isTouch = input.isTouch;
+
         if(input.isQualtrics){
             settings.parameters.isQualtrics = input.isQualtrics;
             settings.parameters.showDebriefing = input.showDebriefing;
             settings.parameters.fullscreen = input.fullscreen;
-            settings.parameters.isTouch = input.isTouch;
         }
         settings.blocks.blockCategories_nTrials = input.blockCategories_nTrials,
         settings.blocks.blockCategories_nMiniBlocks = input.blockCategories_nMiniBlocks,
@@ -56,20 +55,33 @@ function controller(settings) {
         settings.blocks.blockSwitch_nTrials = input.blockSwitch_nTrials,
         settings.blocks.blockSwitch_nMiniBlocks = input.blockSwitch_nMiniBlocks,
         settings.blocks.randomBlockOrder = input.randomBlockOrder,
-        settings.blocks.randomAttSide = input.randomAttSide,
-        
-        setting.text.textOnError = input.textOnError,
-        setting.text.leftKeyText = input.leftKeyText,
-        setting.text.rightKeyText = input.rightKeyText,
-        setting.text.orKeyText = input.orKeyText,
-        setting.text.AttributesBlockInstructions = input.AttributesBlockInstructions,
-        setting.text.CategoriesBlockInstructions = input.CategoriesBlockInstructions,
-        setting.text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions,
-        setting.text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions,
-        setting.text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
-        setting.text.PreDebriefingText = input.PreDebriefingText;
+        settings.blocks.randomAttSide = input.randomAttSide
+        if (input.isTouch){
+            settings.touch_text.textOnError = input.textOnError,
+            settings.touch_text.leftKeyText = input.leftKeyText,
+            settings.touch_text.rightKeyText = input.rightKeyText,
+            settings.touch_text.orKeyText = input.orKeyText,
+            settings.touch_text.AttributesBlockInstructions = input.AttributesBlockInstructions,
+            settings.touch_text.CategoriesBlockInstructions = input.CategoriesBlockInstructions,
+            settings.touch_text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions,
+            settings.touch_text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions,
+            settings.touch_text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
+            settings.touch_text.PreDebriefingText = input.PreDebriefingText;
+        }
+        else {
+            settings.text.textOnError = input.textOnError,
+            settings.text.leftKeyText = input.leftKeyText,
+            settings.text.rightKeyText = input.rightKeyText,
+            settings.text.orKeyText = input.orKeyText,
+            settings.text.AttributesBlockInstructions = input.AttributesBlockInstructions,
+            settings.text.CategoriesBlockInstructions = input.CategoriesBlockInstructions,
+            settings.text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions,
+            settings.text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions,
+            settings.text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
+            settings.text.PreDebriefingText = input.PreDebriefingText;
+        }
 
-        //console.log("after UPDATE", settings);
+
     }
 }
 

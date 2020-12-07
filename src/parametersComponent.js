@@ -20,7 +20,7 @@ function controller(settings){
     return {reset:reset, clear:clear, set:set, get:get};
     
     function reset(){Object.assign(parameters, defaultSettings.parameters)}
-    function clear(){Object.assign(parameters, {isTouch:false, isQualtrics:false, fullScreen:false, showDebriefing:false, remindError:false, errorCorrection:false,base_url:''}); }
+    function clear(){Object.assign(parameters, {isTouch:false, isQualtrics:false, fullscreen:false, showDebriefing:false, remindError:false, errorCorrection:false,base_url:''}); }
     function get(name){return parameters[name]; }
     function set(name){ return function(value){ return parameters[name] = value; }}
 }

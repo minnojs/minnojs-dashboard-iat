@@ -80,7 +80,7 @@ function view(ctrl){
             ])
         ])
     ],
-    m('.card card-body', {style: {position: 'absolute', width: '20rem', left: '780px',top: '200px'}}, [
+    m('.card card-body', {style: {position: 'absolute', width: '20rem', left: '62%',top: '35%'}}, [
         m('table.w3-table w3-bordered',[
             m('tr.border_lines', [
                 m('td.block_cell_info','Please Notice:')
@@ -100,3 +100,5 @@ function view(ctrl){
 };
 
 export default blocksComponent;
+
+//{style: {position: 'absolute', width: '20rem', left: '780px',top: '200px'}}
