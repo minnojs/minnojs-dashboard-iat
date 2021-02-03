@@ -1,4 +1,6 @@
-.body {font-family: Arial;}
+.body {
+  font-family: Arial;
+}
 
 /* Style the tab */
 .tab {
@@ -38,11 +40,6 @@
   border-top: none;
 }
   
-.fontStyle {
-  font-weight: bold;
-  font-family:"Century Gothic", sans-serif;	
-}
-
 .td_task {
   width: 25%;
   padding: 30px;
@@ -83,7 +80,7 @@ input[type=button]{
 .info-box {
   display: none;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  width: 300px;
+  width: 250px;
   background-color: #555;
   color: #fff;
   text-align: center;
@@ -93,6 +90,7 @@ input[type=button]{
   margin-left: 0px;
   font-size: small;
 }
+
 
 *:hover + .info-box, .info-box:hover {
   display: inline-block; 
@@ -117,24 +115,6 @@ input[type=number]{
   width: 3em;
 }
 
-button.sumbitTextsParameters{
-  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  width: 200px;
-  height: 35px;
-  background-color: rgb(78, 146, 93);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px ;
-  margin-top: 15px;
-  position: relative;
-  z-index: 1;
-  font-size: small;
-  right: 0%;
-  font-size: 15px;
-  cursor: pointer;
-
-  }
 tr.lines{
     border-bottom:2px solid green;   
 }
@@ -144,31 +124,17 @@ tr.border_lines{
   border-bottom:5px solid green;   
 }
 
-td.block_cell_label{
-  padding: 0.3em 5em 0.3em 0;
-}
-
-td.block_cell_input{
-  padding-left: 5em;
+td.block_cell{
+    width: 28%;
+    padding: 30px;
 }
 
 td.block_cell_checkbox {
-  padding: 1.5em 5em 1.5em 5em;
+  padding: 1.5em 0em 1.5em 0em;
 }
 
 td.block_cell_info {
   padding: 1em 0 1em 0em;
-}
-
-
-.keyText{
-  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  display: inline-block;
-  margin:3px;
-  padding:5px;
-  font-size: 12px;
-  position: relative;
-  
 }
 
 h1.categoryHeadline {
@@ -187,38 +153,6 @@ h1.categoryHeadline {
   width: 12%
 }
 
-.table.categories {
-table-layout: auto;
-}
-
-.textOnError{
-  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  display: inline-block;
-  margin: 5px;
-  padding: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  position: relative;
-}
-
-button.resetTextsParameters{
-  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  width: 70px;
-  height: 35px;
-  background-color: rgb(78, 146, 93);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px ;
-  margin-top: 15px;
-  position: relative;
-  z-index: 1;
-  font-size: small;
-  right: 0%;
-  font-size: 15px;
-  cursor: pointer;
-}
-
 button.CreateFile{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   width: 250px;
@@ -234,33 +168,21 @@ button.CreateFile{
   border-color:#fff;
 }
 
-button.ClearTextsParameters{
+button.CreateJSONFile{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  width: 70px;
-  height: 35px;
-  background-color: rgb(78, 146, 93);
+  width: 230px;
+  height: 50px;
+  background-color: #61cf77;
   color: #fff;
   text-align: center;
   border-radius: 6px;
-  padding: 8px ;
-  margin-top: 15px;
-  position: relative;
-  z-index: 1;
-  font-size: small;
-  right: 0%;
-  font-size: 15px;
-  cursor: pointer;
+  padding: 6px ;
+  display: block;
+  font-size: 13.5px;
+  margin: 15px auto;
+  border-color:#fff;
 }
 
-.cellsStyle {
-    font-family:"Century Gothic", sans-serif;	
-    display: inline-block;
-    margin: 5px;
-    padding: 1.5em 1em 1.7em 0.5em;
-    font-size: 15px;
-    font-weight: bold;
-    position: relative;
-}
 
 .uploadDiv {
     position: absolute;

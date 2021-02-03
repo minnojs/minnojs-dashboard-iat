@@ -7,7 +7,7 @@ var importComponent = {
 function view(ctrl){
     return m('div.uploadDiv', [
         m('i.fa.fa-info-circle', {style: {padding: '5px'}}),
-        m('.card.info-box.card-header', ["You can upload a JSON file and update it's contnet through the editor and then download a new one"]),
+        m('.card.info-box.card-header', ["If you saved a JSON file from a previous session, you can upload that file here to edit the parameters."]),
         m('label', 'Upload a JSON file: ', {style:{'text-align': 'center'}}),
         m('input[type=file]',{id:"uploadFile", style: {'text-align': 'center'}, onchange: ctrl.handleFile})
     ]);
@@ -23,11 +23,8 @@ function controller(settings) {
         reader.readAsText(importedFile); 
         reader.onload = function() {
         var fileContent = JSON.parse(reader.result);
-        updateSettings(fileContent);
-        };
-        reader.onerror = function() {
-            console.log(reader.error);
-        };
+        updateSettings(fileContent);};
+        reader.onerror = function() {console.log(reader.error);};
     }
     function updateSettings(input) {
         settings.category1 = input.category1;
@@ -38,7 +35,6 @@ function controller(settings) {
         settings.parameters.remindError = input.remindError;
         settings.parameters.errorCorrection
         settings.parameters.isTouch = input.isTouch;
-
         if(input.isQualtrics){
             settings.parameters.isQualtrics = input.isQualtrics;
             settings.parameters.showDebriefing = input.showDebriefing;
@@ -80,10 +76,7 @@ function controller(settings) {
             settings.text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions,
             settings.text.PreDebriefingText = input.PreDebriefingText;
         }
-
-
     }
 }
 
 export default importComponent;
-
