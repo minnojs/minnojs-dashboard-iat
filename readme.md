@@ -1,9 +1,9 @@
 ## MinnoJS IAT dashboard
 
-This repository provides a GUI for the creation of MinnoJS IATs.
-It is closely based of of [https://galmaimon.github.io/](https://galmaimon.github.io/).
+This repository provides a GUI for the creation of MinnoJS IATs and BIATs.
 
-In order to see it in action visit [https://minnojs.github.io/minnojs-dashboard-iat/](https://minnojs.github.io/minnojs-dashboard-iat/).
+In order to see it the IAT GUI in action visit [here](https://minnojs.github.io/minnojs-dashboard-iat/iat_index.html).
 
-In order to see it in action visit [https://minnojs.github.io/minnojs-dashboard-iat/](https://minnojs.github.io/minnojs-dashboard-iat/iat_index.html).
+In order to see it the BIAT GUI in action visit [here](https://minnojs.github.io/minnojs-dashboard-iat/biat_index.html).
+
 
