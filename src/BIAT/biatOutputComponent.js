@@ -6,45 +6,33 @@ var outputComponent = {
 function view(ctrl,settings){
     return m('.container',[
         m('.row justify-content-md-center',[
-            m('.col-md-lg-1', m('button.CreateFile', {onclick: createFile(settings,'JS')}, 'Download Script')),
-        m('.col col-lg-1', [                
-            m('i.fa.fa-info-circle'),
-            m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
-        ])
-    ]), 
-    m('.row justify-content-md-center',[
-       m('.col-md-lg-1', m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')}, 'Download JSON')),
-    m('.col col-lg-1', [
-        m('i.fa.fa-info-circle'),
-        m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
-    ]),
-    ]),
-    m('.row justify-content-md-center',[
-        m('.col col-lg-4', [
-            m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser')
+            m('.col-auto'),
+            m('col-auto',[
+            m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
+                m('button.CreateFile', {onclick: createFile(settings,'JS')},[
+                    m('i.fas fa-file-download'), ' Download Script']),
+                m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')},[
+                    m('i.fas fa-file-download'), ' Download JSON']),
+                m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser')
+            ])
+            ]),
+            m('.col-auto',{style:{'padding':'1.7em 0em 5em 1em',float:'left'}},[
+                m('row',[
+                m('i.fa.fa-info-circle'),
+                m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
+                ]),
+                m('.row',[
+                    m('.col-auto',{style:{'padding-top':'3.45em'}},[
+                    m('i.fa.fa-info-circle'),
+                    m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
+                ])
+                ])
+            ]),
         ]),
-        m('.col col-lg-1')
-    ]),
         m('div',{id: 'textDiv', style: {visibility: 'hidden', 'padding' :'0 0 0 3.5em'}},
-        m('textarea', {id:'textArea', value:'', style: {width : '60rem', height: '25rem'}}))
+        m('textarea.form-control', {id:'textArea', value:'', style: {width : '60rem', height: '25rem'}}))
+    ])
 
-]) 
-    // return m('div', [
-    //     m('div',{style: {position: "absolute",top:'34%',left:'38.5%'}},[
-    //         m('i.fa.fa-info-circle'),
-    //         m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
-    //     ]),
-    //     m('button.CreateFile', {onclick: createFile(settings,'JS')}, 'Download Script'),
-    //     m('div',{style: {position: "absolute",top:'45%',left:'39%'}},[
-    //         m('i.fa.fa-info-circle'),
-    //         m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
-    //     ]),
-    //     m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')}, 'Download JSON'),
-    //     m('button.CreateJSONFile', {onclick: toConsole(settings)}, 'Print to Console'),
-    //     m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser'),
-    //     m('div',{id: 'textDiv', style: {visibility: 'hidden', 'padding' :'0 0 0 3.5em'}},
-    //         m('textarea', {id:'textArea', value:'', style: {width : '60rem', height: '25rem'}}))
-    // ]);
 }
 
 export default outputComponent;

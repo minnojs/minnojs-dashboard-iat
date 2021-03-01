@@ -33,14 +33,18 @@ function controller(settings, defaultSettings, clearElement){
 
 function view(ctrl,settings, defaultSettings, clearElement) {
     return m('.container', [
-        m('table.w3-table w3-bordered', [
-            m('tr', [
-                m('h1.categoryHeadline',"First Category"),
-                m('td',{style: {position: 'absolute', right: '95px', top: "180px"}},[
-                        m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-                        m('button.reset_button',{onclick: ctrl.clear}, 'Clear')
+        m('.row top-buffer',[
+            m('col', m('h1.categoryHeadline',"First Category")),
+            m('.col',{style:{'margin-bottom':'7px'}},[
+            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+                m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+                    m('i.fas fa-undo fa-sm'), ' Reset'
+                ]),
+                m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+                    m('i.far fa-trash-alt fa-sm'), ' Clear'
                 ])
-            ]),
+            ])
+        ])
         ]),
         m.component(elementComponent, {key: "categories"} ,settings, 
         defaultSettings.categories[0].stimulusMedia, defaultSettings.categories[0].title.startStimulus,{key: 0}),
@@ -51,11 +55,12 @@ function view(ctrl,settings, defaultSettings, clearElement) {
             var startStimulus = index === 1 ? defaultSettings.categories[index].title.startStimulus : clearElement[0].title.startStimulus;
             return m('div',[           
                 m('h1.categoryHeadline', {key: ctrl.cur_index} , ctrl.headlines[index] + " Category"),
+                m('.row top-buffer'),
                 m.component(elementComponent, {key: "categories"} ,settings, stimulusMedia, startStimulus, {key: index}),
         ])
         }),
-        m('div', {style: {visibility: ctrl.visibleFlag()}},
-            m('button.reset_button',{onclick: ctrl.addCategory}, 'Add Category'))
+        m('div', {style: {'padding-top': '0.5em', visibility: ctrl.visibleFlag()}},
+            m('button.btn btn-info btn-lg btn-block',{onclick: ctrl.addCategory}, [m('i.fas fa-plus')],' Add Category'))
     ])
 };
 

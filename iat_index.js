@@ -115,62 +115,65 @@
 	}
 
 	function view(ctrl){
-	    return m('.container', [
-	        m('table.w3-table w3-bordered',[
-	            m('tr.border_lines', [
-	                m('td'), //for space
-	                m('td'), //for space
-	                m('td',[
-	                    m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-	                    m('button.reset_button',{onclick: ctrl.clear}, 'Clear'),
-	                ])
-	            ]),
-	            m('tr.lines', [
-	                m('td.td_info',[
+	    return m('.container' , [
+	       m('.row top-buffer',[
+	           m('.col',{style:{'margin-bottom':'7px'}},[
+	           m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	               m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+	                   m('i.fas fa-undo fa-sm'), ' Reset'
+	               ]),
+	               m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+	                   m('i.far fa-trash-alt fa-sm'), ' Clear'
+	               ])
+	           ])
+	       ])
+	       ]),
+	            m('.row top-buffer', [
+	                m('.col-auto info-buffer',[
 	                    m('i.fa.fa-info-circle'),
 	                    m('.card.info-box.card-header', [ctrl.rows[0].desc])
 	                ]),
-	                m('td.td_task', ctrl.rows[0].label),
-	                m('td', [
-	                    m('select',{onchange: m.withAttr('value', ctrl.set(ctrl.rows[0].name)), value: ctrl.get(ctrl.rows[0].name)},[
+	                m('.col-3 param-buffer', ctrl.rows[0].label),
+	                m('.col-8 param-buffer', [
+	                    m('select.custom-select',{onchange: m.withAttr('value', ctrl.set(ctrl.rows[0].name)), value: ctrl.get(ctrl.rows[0].name)},[
 	                    m('option', 'Keyboard'),
 	                    m('option', 'Touch')
 	                ])])
 	            ]),
-	            m('tr.lines', [
-	                m('td.td_info',[
+	            m('.row top-buffer', [
+	                m('.col-auto info-buffer',[
 	                    m('i.fa.fa-info-circle'),
 	                    m('.card.info-box.card-header', [ctrl.rows[1].desc])
 	                ]),
-	                m('td.td_task', ctrl.rows[1].label),
-	                m('td', [
-	                    m('select',{onchange: m.withAttr('value', ctrl.set(ctrl.rows[1].name)), value: ctrl.get(ctrl.rows[1].name)},[
+	                m('.col-3 param-buffer', ctrl.rows[1].label),
+	                m('.col-8 param-buffer', [
+	                    m('select.custom-select',{onchange: m.withAttr('value', ctrl.set(ctrl.rows[1].name)), value: ctrl.get(ctrl.rows[1].name)},[
 	                    m('option', 'Regular'),
 	                    m('option', 'Qualtrics')
 	                ])])
 	            ]),
 	            ctrl.rows.slice(2,-1).map(function(row) {
-	                return m('tr.lines', [
-	                    m('td.td_info',[
+	                return m('.row top-buffer', [
+	                    m('.col-auto info-buffer',[
 	                        m('i.fa.fa-info-circle'),
 	                        m('.card.info-box.card-header', [row.desc])
 	                    ]),
-	                    m('td.td_task', row.label),
-	                    m('td',
+	                    m('.col-3 param-buffer', row.label),
+	                    m('.col-8 param-buffer',
 	                        m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
 	                ])}
 	            ),
-	            m('tr.border_lines', [
-	                m('td.td_info',[
+	            m('.row top-buffer', [
+	                m('.col-auto info-buffer',[
 	                    m('i.fa.fa-info-circle'),
 	                    m('.card.info-box.card-header',{style:{width: '500px'}}, ['If your task has any images, enter here the path to that images folder. It can be a full url, or a relative URL to the folder that will host this script'])
 	                ]),
-	                m('td.td_task', 'Image\'s URL'),
-	                m('td',
-	                    m('input',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
+	                m('.col-3 param-buffer', 'Image\'s URL'),
+	                m('.col-8 param-buffer',
+	                    m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
 	            ]),
-	        ])
-	    ]) 
+	            m('.row top-buffer')
+	    ])
 	}
 
 	var outputComponent = {
@@ -180,44 +183,33 @@
 	function view$1(ctrl,settings){
 	    return m('.container',[
 	        m('.row justify-content-md-center',[
-	            m('.col-md-lg-1', m('button.CreateFile', {onclick: createFile(settings,'JS')}, 'Download Script')),
-	        m('.col col-lg-1', [                
-	            m('i.fa.fa-info-circle'),
-	            m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
-	        ])
-	    ]), 
-	    m('.row justify-content-md-center',[
-	       m('.col-md-lg-1', m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')}, 'Download JSON')),
-	    m('.col col-lg-1', [
-	        m('i.fa.fa-info-circle'),
-	        m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
-	    ]),
-	    ]),
-	    m('.row justify-content-md-center',[
-	        m('.col col-lg-4', [
-	            m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser')
+	            m('.col-auto'),
+	            m('col-auto',[
+	            m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
+	                m('button.CreateFile', {onclick: createFile(settings,'JS')},[
+	                    m('i.fas fa-file-download'), ' Download Script']),
+	                m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')},[
+	                    m('i.fas fa-file-download'), ' Download JSON']),
+	                m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser')
+	            ])
+	            ]),
+	            m('.col-auto',{style:{'padding':'1.7em 0em 5em 1em',float:'left'}},[
+	                m('row',[
+	                m('i.fa.fa-info-circle'),
+	                m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
+	                ]),
+	                m('.row',[
+	                    m('.col-auto',{style:{'padding-top':'3.45em'}},[
+	                    m('i.fa.fa-info-circle'),
+	                    m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
+	                ])
+	                ])
+	            ]),
 	        ]),
-	        m('.col col-lg-1')
-	    ]),
 	        m('div',{id: 'textDiv', style: {visibility: 'hidden', 'padding' :'0 0 0 3.5em'}},
-	        m('textarea', {id:'textArea', value:'', style: {width : '60rem', height: '25rem'}}))
+	        m('textarea.form-control', {id:'textArea', value:'', style: {width : '60rem', height: '25rem'}}))
 	    ])
-	    // return m('div',[
-	    //     m('div',{style: {position: "absolute",top:'34%',left:'38.5%'}},[
-	    //         m('i.fa.fa-info-circle'),
-	    //         m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
-	    //     ]),
-	    //     m('button.CreateFile', {onclick: createFile(settings,'JS')}, 'Download Script'),
-	    //     m('div',{style: {position: "absolute",top:'45%',left:'39%'}},[
-	    //         m('i.fa.fa-info-circle'),
-	    //         m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
-	    //     ]),
-	    //     m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')}, 'Download JSON'),
-	    //     m('button.CreateJSONFile', {onclick: toConsole(settings)}, 'Print to Console'),
-	    //     m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser'),
-	    //     m('div',{id: 'textDiv', style: {visibility: 'hidden', 'padding' :'0 0 0 3.5em'}},
-	    //         m('textarea', {id:'textArea', value:'', style: {width : '60rem', height: '25rem'}}))
-	    // ]);
+
 	}
 
 	function createFile(settings, fileType){
@@ -300,31 +292,33 @@
 	}
 
 	function view$2(ctrl){
-	    return m('.container', [
-	        m('table.w3-table w3-bordered',{id : 'table'}, [
-	            m('tr.border_lines', [
-	                m('td'), m('td'), //for space
-	                m('td',[
-	                    m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-	                    m('button.reset_button',{onclick: ctrl.clear}, 'Clear'),
+	    return m('.container' , [
+	        m('.row top-buffer',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+	                    m('i.fas fa-undo fa-sm'), ' Reset'
+	                ]),
+	                m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+	                    m('i.far fa-trash-alt fa-sm'), ' Clear'
 	                ])
-	        ]),
-	            ctrl.rows.map(function(row) {
-	                return m('tr.lines', [
-	                    m('td.td_info',[
-	                        m('i.fa.fa-info-circle'),
-	                        m('.card.info-box.card-header', {style:{width: '510px'}},[row.desc])
-	                    ]),
-	                    m('td.td_task', {style:{width: '30%'}},row.label),
-	                    m('td', [
-	                        m('textarea',{style: {width: '30rem' ,height: '4rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
-	                    ])
-	                ])
-	            }
-	            ),
-	    
+	            ])
 	        ])
-	    ]) 
+	        ]),
+	       ctrl.rows.map(function(row) {
+	            return m('.row top-buffer', [
+	                m('.col-auto info-buffer',[
+	                    m('i.fa.fa-info-circle'),
+	                    m('.card.info-box.card-header', {style:{width: '510px'}},[row.desc])
+	                ]),
+	                m('.col-3 param-buffer', {style:{width: '30%'}},row.label),
+	                m('.col-8 param-buffer', [
+	                    m('textarea.form-control',{style: {width: '30rem' ,height: '5.5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
+	                ])
+	            ])
+	       }),
+	       m('.row top-buffer')
+	    ])
 	}
 
 	var blocksComponent = {
@@ -344,79 +338,76 @@
 	        return function(value){return blocks[name] = Math.round(value);}
 	    }
 	}
+
 	function view$3(ctrl){
-	    return m('.container' , [
-	        m('table.w3-table w3-bordered', [
-	            m('tr.border_lines', [
-	                m('td'), //for space
-	                m('td'), //for space
-	                m('td',[
-	                    m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-	                    m('button.reset_button',{onclick: ctrl.clear}, 'Clear'),
+	         return m('.container' , [
+	            m('.row top-buffer',[
+	                m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ])
 	                ])
+	            ])
 	            ]),
 	            ctrl.rows.slice(0,-1).map(function(row) {
-	                return m('tr.lines', [
-	                    m('td.td_info',[
+	                return m('.row top-buffer', [
+	                    m('.col-auto block-buffer',[
 	                        m('i.fa.fa-info-circle'),
 	                        m('.card.info-box.card-header', [row.desc])
 	                    ]),
-	                    m('td.block_cell', row.label),
-	                    m('td',[
-	                        m('table.w3-table w3-bordered', [
-	                        m('tr',[
-	                        m('td', 'Number of trials: '),
-	                        m('td', [
-	                            m('input[type=number]',{onchange: m.withAttr("value", ctrl.set(row.numTrialBlocks, 'number')), value: ctrl.get(row.numTrialBlocks)})
+	                    m('.col-3 block-buffer', row.label),
+	                    m('.col-8',[
+	                        m('.row', [
+	                        m('.col-4 block-buffer', 'Number of trials: '),
+	                        m('.col block-buffer', [
+	                            m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr("value", ctrl.set(row.numTrialBlocks, 'number')), value: ctrl.get(row.numTrialBlocks)})
 	                        ])
 	                        ]),
-	                            m('tr',[
-	                                m('td', "Number of mini-blocks: "), 
-	                                m('td', [
-	                                    m('input[type=number]',{onchange: m.withAttr("value", ctrl.set(row.numMiniBlocks, 'number')), value: ctrl.get(row.numMiniBlocks)})
-	                                ])
-	                               ])
+	                        m('.row',[
+	                            m('.col-4 block-buffer', "Number of mini-blocks: "), 
+	                            m('.col block-buffer', [
+	                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr("value", ctrl.set(row.numMiniBlocks, 'number')), value: ctrl.get(row.numMiniBlocks)})
+	                            ])
+	                        ])
 	                        ])
 	                    ])
-	                    ])
+	                    
 	                }
 	            ),
-	            m('tr.lines', [
-	                m('td.td_info',[
+	            m('.row top-buffer', [
+	                m('.col-auto block-buffer',[
 	                    m('i.fa.fa-info-circle'),
 	                    m('.card.info-box.card-header', ['If not randomized: the First Category (in the Categories page) will appear on the left in Blocks 1,3, and 4.'])
 	                ]),
-	                m('td.block_cell', 'Randomly choose categories location in Block 1: '),
-	                m('td.block_cell_checkbox' ,
-	                    m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set('randomBlockOrder','checkbox')), checked: ctrl.get('randomBlockOrder')}))
+	                m('.col-sm-3 block-buffer','Randomly choose categories location in Block 1: '),
+	                m('.col block-buffer',m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set('randomBlockOrder','checkbox')), checked: ctrl.get('randomBlockOrder')})),
 	            ]),
-	            m('tr.border_lines', [
-	                m('td.td_info',[
+	                m('.row top-buffer', [
+	                m('.col-auto block-buffer',[
 	                    m('i.fa.fa-info-circle'),
 	                    m('.card.info-box.card-header', ['If not randomized: the First Category (in the Attributes page) will appear on the left.'])
 	                ]),
-	                m('td.block_cell', 'Randomly choose attributes location in the task: ',{style: {padding: "1.5em 5em 1.5em 0"}}),
-	                m('td.block_cell_checkbox' ,
+	                m('.col-sm-3 block-buffer', 'Randomly choose attributes location in the task: ',{style: {padding: "1.5em 5em 1.5em 0"}}),
+	                m('.col block-buffer' ,
 	                    m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set('randomAttSide', 'checkbox')), checked: ctrl.get('randomAttSide')}))
-	            ])
-	        ])
-	    ],
-	    m('.card card-body', {style: {position: 'absolute', width: '25rem', left: '59%',top: '42%', 'border-radius': '25px', border: '2px solid #73AD21'}}, [
-	        m('table.w3-table w3-bordered',[
-	            m('tr.border_lines', 
-	                m('td.block_cell_info','More information:')),
-	            m('tr.lines', [
-	                m('td.block_cell_info','By default, we separate each block into mini-blocks of four trials. In Blocks 3, 4, 6, and 7, '+
-	                'exactly one item from each of the four groups (attributes and categories) appears in each mini-block. In Blocks 1, 2, and 5, '+
-	                'two trials of each group (category or attribute) will appear in each mini-block. Tony Greenwald recommended using that feature, '+
-	                'to avoid same-key runs, based on internal testing in his lab. In Project Implicit, our tests so far found no effect of this feature on the validity of any IAT.'+
-	                ' To cancel this feature, set Number of mini-blocks to 1, in each block.')
 	            ]),
-	            m('tr.lines',
-	                m('td.block_cell_info','To cancel a block, set the number of trials to 0 (useful for 5-blocks IATS).'))
-	        ])
+	            m('.row top-buffer'),
+	            m('.alert alert-info', {role:'alert', style: {position: 'absolute', width: '25rem', left: '59%',top: '50%',  border: '2px solid #bcdae2'}},[
+	                m('h4','More information:'),
+	                m('p','By default, we separate each block into mini-blocks of four trials. In Blocks 3, 4, 6, and 7, '+
+	                                'exactly one item from each of the four groups (attributes and categories) appears in each mini-block. In Blocks 1, 2, and 5, '+
+	                                'two trials of each group (category or attribute) will appear in each mini-block. Tony Greenwald recommended using that feature, '+
+	                                'to avoid same-key runs, based on internal testing in his lab. In Project Implicit, our tests so far found no effect of this feature on the validity of any IAT.'+
+	                                ' To cancel this feature, set Number of mini-blocks to 1, in each block.'),
+	                m('hr'),
+	                m('p','To cancel a block, set the number of trials to 0 (useful for 5-blocks IATs).')
+	            ])
+
 	    ])
-	    )
 	}
 
 	var elementComponent = {
@@ -498,21 +489,8 @@
 	        var event = event.path[0].id; //button name, to know the kind of the stimulus added
 	        if(new_stimuli === null || new_stimuli === '') 
 	            return alert("Please fill the stimulus field");
-	        if(isExists(new_stimuli)) 
-	            return alert('This value is already exists, please enter a different one');
 	        element.stimulusMedia.push( (event === 'addWord') ? {word : new_stimuli} : {image : new_stimuli});
 	        fields.newStimulus(''); //reset the field               
-	    }
-	    function isExists(new_stimuli){
-	        var stimuli = element['stimulusMedia'];
-	        if (stimuli.length == 0) return false;
-	        for (var i = 0; i < stimuli.length; i++) {
-	            if (stimuli[i].word == undefined) 
-	                if(stimuli[i].image == new_stimuli) return true;
-	                else continue;
-	            if(stimuli[i].word.localeCompare(new_stimuli) == 0) return true
-	        }
-	        return false;
 	    }
 	    function updateSelectedStimuli(select){
 	        var list = element.stimulusMedia.filter(function(val,i){return select.target.options[i].selected});
@@ -530,71 +508,79 @@
 	}
 
 	function view$4(ctrl) {
-	    return m('table.w3-table w3-bordered', [
-	        m('tr.lines', [
-	                m('td.td_info',[
+	    return m('.container', [
+	        m('.row top-buffer', [
+	                m('.col-auto info-buffer',[
 	                    m('i.fa.fa-info-circle'),
 	                    m('.card.info-box.card-header', ['Will appear in the data and in the default feedback message'])
 	                ]),
-	                m('td.category_cell', ctrl.fields.elementType()+' name as will appear in the data:'),
-	                m('td', [
-	                    m('input',{style: {width: '16rem'}, value:ctrl.get('name'), onchange:m.withAttr('value', ctrl.set('name'))})
+	                m('.col-3 element-buffer', ctrl.fields.elementType()+' name as will appear in the data:'),
+	                m('.col-6 element-buffer', [
+	                    m('input[type=text].form-control',{style: {width: '18rem'}, value:ctrl.get('name'), onchange:m.withAttr('value', ctrl.set('name'))})
 	                ]),
-	                m('td'), m('td'), m('td') //for space
 	            ]),
-	            m('tr.lines', [
-	                m('td.td_info',[
+	            m('.row row-element-buffer', [
+	                m('.col-auto info-buffer',[
 	                    m('i.fa.fa-info-circle'),
 	                    m('.card.info-box.card-header', ['Name of the ' +ctrl.fields.elementType()+' presented in the task'])
 	                ]),
-	                m('td.category_cell', ctrl.fields.elementType()+' title as will appear to the user: '),
-	                m('td', [
-	                    m('input',{style: {width: '16rem'}, value: ctrl.get('title'), onchange:m.withAttr('value', ctrl.set('title', 'media', 'word'))})
+	                m('.col-md-3 element-buffer', ctrl.fields.elementType()+' title as will appear to the user: '),
+	                m('.col-md-4 element-buffer', [
+	                    m('input[type=text].form-control',{style: {width: '18rem'}, value: ctrl.get('title'), onchange:m.withAttr('value', ctrl.set('title', 'media', 'word'))})
 	                ]),
-	                m('td.design_text_cell', ctrl.fields.elementType()+"'s type:",
+	                m('.col-sm-2', ctrl.fields.elementType()+"'s type:",
 	                [
-	                    m('select',{value: ctrl.get('title','media','word') == undefined || ctrl.get('title','media','word') == '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
+	                    m('select.custom-select',{value: ctrl.get('title','media','word') == undefined || ctrl.get('title','media','word') == '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
 	                        ctrl.fields.titleType(ctrl.get('title','media','word') == undefined || ctrl.get('title','media','word') == '' ? 'image' : 'word'),
 	                        ctrl.fields.titleHidden(ctrl.fields.titleType() == 'word' ? 'visible' : 'hidden'),
 	                        m('option', 'word'),
 	                        m('option', 'image')
 	                    ])
 	                ]),
-	                m('td.design_text_cell',[
-	                    m("span", {style: {visibility:ctrl.fields.titleHidden()}}, "Font's color: "),
-	                    m('input[type=color]',{style: {visibility:ctrl.fields.titleHidden()}, value: ctrl.get('title','css','color'), onchange:m.withAttr('value', ctrl.set('title','css','color'))})
+	                m('.col-2',[
+	                    m('.row',[
+	                        m('.col',[
+	                            m("span", {style: {visibility:ctrl.fields.titleHidden()}}, "Font's color: "),
+	                            m('input[type=color]',{style: {'border-radius':'3px',visibility:ctrl.fields.titleHidden()}, value: ctrl.get('title','css','color'), onchange:m.withAttr('value', ctrl.set('title','css','color'))})
+	                        ])
+	                    ]),m('br'),
+	                    m('.row',[
+	                    m('.col',[
+	                        m("span", {style: {visibility:ctrl.fields.titleHidden()}}, "Font's size: "),
+	                        m('input[type=number]', {style: {'border-radius':'4px','border':'1px solid #E2E3E2',visibility:ctrl.fields.titleHidden()}, value:ctrl.get('title','css','font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set('title','css','font-size'))})
+	                    ])
+	                ])
+	                ])
+	            ]),
+	            m('.row',[
+	                m('.col-auto info-buffer',{style:{'padding-top': '1.6em'}},[
+	                    m('i.fa.fa-info-circle'),
+	                    m('.card.info-box.card-header', ['Enter text (word) or image name (image). Set the path to the folder of images in the General Parameters page'])
 	                ]),
-	                m('td.design_text_cell',[
-	                    m("span", {style: {visibility:ctrl.fields.titleHidden()}}, "Font's size: "),
-	                    m('input[type=number]', {style: {visibility:ctrl.fields.titleHidden()}, value:ctrl.get('title','css','font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set('title','css','font-size'))})
+	                m('.col',[
+	                    m('br'),
+	                    m('input[type=text].form-control', {style:{width:'15em'},placeholder:"Enter Stimulus content here", 'aria-label':'Enter Stimulus content', 'aria-describedby':'basic-addon2', value: ctrl.fields.newStimulus(), oninput: m.withAttr("value", ctrl.fields.newStimulus)}),
+	                    m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
+
+	                        m('button[type=button].btn btn-outline-secondary',{disabled:ctrl.fields.newStimulus().length==0, id:"addWord", onclick:ctrl.addStimulus},[
+	                            m('i.fas fa-plus'), 'Add Word'
+	                        ]),
+	                        m('button[type=button].btn btn-outline-secondary', {disabled:ctrl.fields.newStimulus().length==0, id:"addImage", onclick: ctrl.addStimulus},[
+	                            m('i.fas fa-plus'), 'Add Image'
+	                        ])
+	                    ])
 	                ]),
 	            ]),
-	            m('tr',[
-	                m('td',[
-	                    m('div',[
+	            m('.row',[
+	                m('.col-auto info-buffer',{style:{'padding-top': '1.6em'}},[
 	                    m('i.fa.fa-info-circle'),
-	                    m('.card.info-box.card-header', ['Enter text (word) or image name (image). Set the path to the folder of images in the General Parameters page'])])
-	                ]),
-	                m('td',[
+	                    m('.card.info-box.card-header', ['To select multiple stimuli, please press the ctrl key while selecting the desired stimuli'])
+	                ]),          
+	                m('.col',[
+	                m('.form-group',[
 	                    m('br'),
-	                    m('span',"Enter Stimulus content: "),
-	                    m('br'),
-	                    m('input[type=text', {style: {width: '15rem'}, pattern: "([A-z0-9À-ž\s]){2,}", value: ctrl.fields.newStimulus(), oninput: m.withAttr("value", ctrl.fields.newStimulus)}),
-	                    m('br'),
-	                    m('input[type=button]', {id:"addWord", value: 'Add Word', onclick:ctrl.addStimulus}),
-	                    m('input[type=button]', {id:"addImage", value: 'Add Image', onclick: ctrl.addStimulus})
-	                ]),
-	            ]),
-	            m('tr.border_lines',[
-	                m('td',[
-	                    m('div',{style: {position: "relative",top:'80px'}}, [
-	                    m('i.fa.fa-info-circle'),
-	                    m('.card.info-box.card-header', ['To select multiple stimuli, please press the ctrl key while selecting the desired stimuli'])])
-	                ]),                
-	                m('td',[
-	                    m('span',"Stimuli: "),
-	                    m('br'),
-	                    m('select', {multiple : "multiple", size : "8" ,style: {width: '15rem'}, onchange:(e) => ctrl.updateSelectedStimuli(e)},[
+	                    m('span',{style:{'font-size': '20px'}},"Stimuli: "),
+	                    m('select.form-control', {multiple : "multiple", size : "8" ,style: {width: '15rem'}, onchange:(e) => ctrl.updateSelectedStimuli(e)},[
 	                        ctrl.get('stimulusMedia').some(object => object.word) ? ctrl.fields.stimuliHidden('visible') : ctrl.fields.stimuliHidden('hidden'),
 	                        ctrl.get('stimulusMedia').map(function(object){
 	                            var value = object.word ? object.word : object.image;
@@ -602,22 +588,23 @@
 	                            return m('option', {value:value, selected : ctrl.fields.selectedStimuli().includes(object)}, option);
 	                        })
 	                    ]),
-	                    m('',{style: {visibility:ctrl.fields.stimuliHidden(), position: "relative", top: "-170px", left: "255px", marginBottom: "-150px"}},[
-	                        m('span',"Stimuli font's design:"),m('br'),
+	                    m('.div',{style: {visibility:ctrl.fields.stimuliHidden(), position: "relative", top: "-170px", left: "255px", marginBottom: "-150px"}},[
+	                        m('span', {style:{'text-decoration': 'underline'}} ,"Stimuli font's design:"),m('br'),
 	                        m('label',"Font color: "),m('br'),
-	                        m('input[type=color]', {value: ctrl.get('stimulusCss','color'), onchange:m.withAttr('value', ctrl.set('stimulusCss','color'))}),
+	                        m('input[type=color]', {style:{'border-radius':'3px'},value: ctrl.get('stimulusCss','color'), onchange:m.withAttr('value', ctrl.set('stimulusCss','color'))}),
 	                        m('br'), m('label', "Font's size:"), m('br'),
-	                        m('input[type=number]', {value:ctrl.get('stimulusCss','font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set('stimulusCss','font-size'))})
+	                        m('input[type=number]', {style: {'border-radius':'4px','border':'1px solid #E2E3E2'},value:ctrl.get('stimulusCss','font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set('stimulusCss','font-size'))})
 	                    ]),
 	                    m('br'),
-	                    m('input[type=button]', {value:'Remove Chosen Stimuli', disabled: ctrl.fields.selectedStimuli().length===0, onclick:ctrl.removeChosenStimuli}),
-	                    m('br'),
-	                    m('input[type=button]', {value: 'Remove All Stimuli', onclick:ctrl.removeAllStimuli}),
-	                    m('input[type=button]', {value: 'Reset Stimuli List', onclick:ctrl.resetStimuliList}),
-	                    m('br'), m('br')
+	                    m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
+	                        m('button.btn btn btn-warning', {disabled: ctrl.fields.selectedStimuli().length===0, onclick:ctrl.removeChosenStimuli},'Remove Chosen Stimuli'),
+	                        m('button.btn btn btn-warning', {onclick:ctrl.removeAllStimuli},'Remove All Stimuli'),
+	                        m('button.btn btn btn-warning', {onclick: ctrl.resetStimuliList},'Reset Stimuli List'),
+	                    ])
 	                ]),
-	                m('td'), 
-	                m('td'), m('td'), m('td') //for space
+
+	                m('.row border_lines')
+	            ])
 	            ])
 	    ])
 
@@ -642,17 +629,22 @@
 
 	function view$5(ctrl,settings, defaultSettings) {
 	    return m('.container', [
-	        m('table.w3-table w3-bordered', [
-	            m('tr', [
-	                m('h1.categoryHeadline',"First Category"),
-	                m('td',{style: {position: 'absolute', right: '95px', top: "180px"}},[
-	                        m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-	                        m('button.reset_button',{onclick: ctrl.clear}, 'Clear')
+	        m('.row top-buffer',[
+	            m('col', m('h1.categoryHeadline',"First Category")),
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+	                    m('i.fas fa-undo fa-sm'), ' Reset'
+	                ]),
+	                m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+	                    m('i.far fa-trash-alt fa-sm'), ' Clear'
 	                ])
-	            ]),
+	            ])
+	        ])
 	        ]),
 	        m.component(elementComponent, {key: "category1"} ,settings, defaultSettings.category1.stimulusMedia),
 	        m('h1.categoryHeadline',"Second Category"),
+	        m('.row top-buffer'),
 	        m.component(elementComponent, {key:"category2"}, settings, defaultSettings.category2.stimulusMedia)
 	    ])
 	}
@@ -675,17 +667,22 @@
 
 	function view$6(ctrl,settings, defaultSettings) {
 	    return m('.container', [
-	        m('table.w3-table w3-bordered', [
-	            m('tr', [
-	                m('h1.categoryHeadline',"First Attribute"),
-	                m('td',{style: {position: 'absolute', right: '95px', top: "180px"}},[
-	                        m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-	                        m('button.reset_button',{onclick: ctrl.clear}, 'Clear')
+	        m('.row top-buffer',[
+	            m('col', m('h1.categoryHeadline',"First Attribute")),
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+	                    m('i.fas fa-undo fa-sm'), ' Reset'
+	                ]),
+	                m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+	                    m('i.far fa-trash-alt fa-sm'), ' Clear'
 	                ])
-	            ]),
+	            ])
+	        ])
 	        ]),
 	        m.component(elementComponent,{key: "attribute1"} ,settings, defaultSettings.attribute1.stimulusMedia),
 	        m('h1.categoryHeadline',"Second Attribute"),
+	        m('.row top-buffer'),
 	        m.component(elementComponent,{key:"attribute2"}, settings, defaultSettings.attribute2.stimulusMedia)
 	    ])
 	}
@@ -696,11 +693,17 @@
 	};
 
 	function view$7(ctrl){
-	    return m('div.uploadDiv', [
-	        m('i.fa.fa-info-circle', {style: {padding: '5px'}}),
-	        m('.card.info-box.card-header', ["If you saved a JSON file from a previous session, you can upload that file here to edit the parameters."]),
-	        m('label', 'Upload a JSON file: ', {style:{'text-align': 'center'}}),
-	        m('input[type=file]',{id:"uploadFile", style: {'text-align': 'center'}, onchange: ctrl.handleFile})
+	    return m('.container',[ 
+	        m('br'),
+	        m('.row justify-content-md-center',[
+	        m('.card border-info mb-3',{style:{'max-width': '25rem'}}, [
+	            m('.card-header','Upload a JSON file: ' ),
+	            m('.card-body text-info',[
+	                m('p.card-title','If you saved a JSON file from a previous session, you can upload that file here to edit the parameters.'),
+	                m('input[type=file].form-control',{id:"uploadFile", style: {'text-align': 'center'}, onchange: ctrl.handleFile})
+	            ])
+	        ])
+	        ])
 	    ]);
 	}
 
@@ -856,11 +859,11 @@
 	var iat = {
 	    controller: function(settings$1){ return {settings: settings$1 ? settings$1 : clone(settings)}},
 	    view: function(ctrl){
-	        return m('.container', [
-	            m('header.bg-success.text-white.p-4.mb-3', 
-	                m('h1', 'Create my IAT script')),
+	        return m('.container', 
+	            m('.header.p-3 mb-2 bg-info text-white',
+	                m('h1.display-4', 'Create my IAT script')),
 	            m.component(tabsComponent, tabs, ctrl.settings, settings)
-	        ]);
+	        );
 	    }
 	};
 

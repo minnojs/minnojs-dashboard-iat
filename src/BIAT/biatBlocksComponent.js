@@ -18,14 +18,18 @@ function controller(settings, defaultSettings, rows){
 }
 function view(ctrl, settings){
     return m('.container' , [
-        m('table.w3-table w3-bordered', [
-            m('tr.border_lines', [
-                m('td'), m('td'), //for space
-                m('td',[
-                    m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-                    m('button.reset_button',{onclick: ctrl.clear}, 'Clear'),
+        m('.row top-buffer',[
+            m('.col',{style:{'margin-bottom':'7px'}},[
+            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+                m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+                    m('i.fas fa-undo fa-sm'), ' Reset'
+                ]),
+                m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+                    m('i.far fa-trash-alt fa-sm'), ' Clear'
                 ])
-            ]),
+            ])
+        ])
+        ]),
             //create numbers inputs
             ctrl.rows.slice(0,4).map(function(row) {
                 //if user chooses not to have a prcatice block set it's parameter to 0
@@ -33,32 +37,32 @@ function view(ctrl, settings){
                     settings.blocks.nPracticeBlockTrials = '0';
                     return null;
                 }
-                return m('tr.lines', [
-                    m('td.td_info',[
+                return m('.row top-buffer', [
+                    m('.col-auto info-buffer',[
                         m('i.fa.fa-info-circle'),
                         m('.card.info-box.card-header', [row.desc])
                     ]),
-                    m('td.td_task', row.label),
-                    m('td.block_cell_checkbox',
-                        m('input[type=number]',{onchange: m.withAttr("value", ctrl.set(row.name, 'number')), value: ctrl.get(row.name)}))
+                    m('.col-3 param-buffer', row.label),
+                    m('.col-8 param-buffer',
+                        m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr("value", ctrl.set(row.name, 'number')), value: ctrl.get(row.name)}))
                 ])
             }),
             //create select inputs
             ctrl.rows.slice(4,-1).map(function(row) {
-                return m('tr.lines', [
-                    m('td.td_info',[
+                return m('.row top-buffer', [
+                    m('.col-auto info-buffer',[
                         m('i.fa.fa-info-circle'),
                         m('.card.info-box.card-header', [row.desc])
                     ]),
-                    m('td.td_task', row.label),
-                    m('td.block_cell_checkbox', 
-                    m('select',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '7rem'}},[
+                    m('.col-3 param-buffer', row.label),
+                    m('.col-8 param-buffer', 
+                    m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem'}},[
                         row.options.map(function(option){return m('option', option);})
                     ]))
                 ])
-            })
+            }),
+            m('.row top-buffer')
         ])
-    ])
 };
 
 export default blocksComponent;

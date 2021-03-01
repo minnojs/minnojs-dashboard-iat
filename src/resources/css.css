@@ -1,6 +1,12 @@
 .body {
   font-family: Arial;
+  overflow-x:hidden;
+
 }
+
+/* html {
+  overflow-y: overlay;
+} */
 
 /* Style the tab */
 .tab {
@@ -40,10 +46,10 @@
   border-top: none;
 }
   
-.td_task {
+/* .td_task {
   width: 25%;
   padding: 30px;
-}
+} */
 
 .td_info {
   width: 0.1%;
@@ -89,11 +95,12 @@ input[type=button]{
   position: absolute;
   margin-left: 0px;
   font-size: small;
+  z-index: 3000;
 }
 
 
 *:hover + .info-box, .info-box:hover {
-  display: inline-block; 
+  display: block; 
 }
 
 input[type=submit]{
@@ -116,12 +123,12 @@ input[type=number]{
 }
 
 tr.lines{
-    border-bottom:2px solid green;   
+    border-bottom:2px solid #bcdae2;   
 }
 
-tr.border_lines{
+.border_lines{
   padding-top:12px;
-  border-bottom:5px solid green;   
+  border-bottom:5px solid #bcdae2;   
 }
 
 td.block_cell{
@@ -193,9 +200,50 @@ button.CreateJSONFile{
     left: 50%;
     margin: -60px 20px 30px -150px;
     border-radius: 25px;
-    border: 2px solid #73AD21;
+    border: 2px solid #bcdae2;
     padding: 20px;
 
 }
+
+.top-buffer
+ { 
+  /* //margin-top:15px; */
+  border-bottom:1px solid #ccc; 
+  padding-top:12px; 
+}
+
+.block-buffer{
+    padding: 5px;
+
+}
+
+.biat-block-buffer{
+  padding:15px;
+}
+
+.param-buffer{
+  padding: 13px;
+
+}
+
+.info-buffer{
+  padding: 0.8em 0em 0.8em 0.5em;
+}
+
+.element-buffer{
+  padding: 1em 0em 0.8em 0.5em;
+  font-size: 15px;
+  position: relative;
+}
+
+.row-element-buffer
+ { 
+  border-bottom:1px solid #ccc; 
+}
+
+.design-text-buffer {
+  padding: 0em 1em 0em 1em;
+}
+
 
   

@@ -19,7 +19,7 @@ var parametersDesc = [
 ];
 
 var blocksDesc = [
-    {name: 'nMiniBlocks', label: "Mini Blocks", desc: "Set to 1 if don't need mini blocks. 0 will break the task."},
+    {name: 'nMiniBlocks', label: "Mini Blocks", desc: "Each block can be separated to a number of mini-blocks, to reduce repetition of the same response in consecutive trials. The default, 1, means that we don't actually use mini blocks."},
     {name: 'nTrialsPerMiniBlock', label: "Trials in Mini Blocks", desc: '50% on the right, 50% left, 50% attributes, 50% categories.'},
     {name: 'nPracticeBlockTrials', label: 'Trials in Practice Block', desc:'Should be at least 8 trials'},
     {name: 'nCategoryAttributeBlocks', label: 'Blocks per focal category-attribute combination', desc: 'Number of blocks per focal category-attribute combination'},

@@ -10,9 +10,9 @@ var biat = {
     },
     view: function(ctrl){
         return m('.container', 
-                m('header.bg-success.text-white.p-4.mb-3',
-                    m('h1', 'Create my BIAT script')),
-            m.component(tabsComponent, tabs, ctrl.settings, defaultSettings)
+        m('.header.p-3 mb-2 bg-info text-white',
+            m('h1.display-4', 'Create my BIAT script')),
+        m.component(tabsComponent, tabs, ctrl.settings, defaultSettings)
         );
     }
 };

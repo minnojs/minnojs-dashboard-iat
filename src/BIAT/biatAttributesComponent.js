@@ -18,18 +18,23 @@ function controller(settings, defaultSettings, clearElement){
 
 function view(ctrl,settings, defaultSettings) {
     return m('.container', [
-        m('table.w3-table w3-bordered', [
-            m('tr', [
-                m('h1.categoryHeadline',"First Attribute"),
-                m('td',{style: {position: 'absolute', right: '95px', top: "180px"}},[
-                        m('button.reset_button', {onclick: ctrl.reset},'Reset'),
-                        m('button.reset_button',{onclick: ctrl.clear}, 'Clear')
+        m('.row top-buffer',[
+            m('col', m('h1.categoryHeadline',"First Attribute")),
+            m('.col',{style:{'margin-bottom':'7px'}},[
+            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+                m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+                    m('i.fas fa-undo fa-sm'), ' Reset'
+                ]),
+                m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+                    m('i.far fa-trash-alt fa-sm'), ' Clear'
                 ])
-            ]),
+            ])
+        ])
         ]),
         m.component(elementComponent,{key: "attribute1"} ,settings, 
         defaultSettings.attribute1.stimulusMedia, defaultSettings.attribute1.title.startStimulus),
         m('h1.categoryHeadline',"Second Attribute"),
+        m('.row top-buffer'),
         m.component(elementComponent,{key:"attribute2"}, settings,
         defaultSettings.attribute2.stimulusMedia, defaultSettings.attribute2.title.startStimulus)
     ])

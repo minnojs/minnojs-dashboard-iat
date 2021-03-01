@@ -5,13 +5,20 @@ var importComponent = {
 };
 
 function view(ctrl){
-    return m('div.uploadDiv', [
-        m('i.fa.fa-info-circle', {style: {padding: '5px'}}),
-        m('.card.info-box.card-header', ["You can upload a JSON file and update it's contnet through the editor and then download a new one"]),
-        m('label', 'Upload a JSON file: ', {style:{'text-align': 'center'}}),
-        m('input[type=file]',{id:"uploadFile", style: {'text-align': 'center'}, onchange: ctrl.handleFile})
+    return m('.container',[ 
+        m('br'),
+        m('.row justify-content-md-center',[
+        m('.card border-info mb-3',{style:{'max-width': '25rem'}}, [
+            m('.card-header','Upload a JSON file: ' ),
+            m('.card-body text-info',[
+                m('p.card-title','If you saved a JSON file from a previous session, you can upload that file here to edit the parameters.'),
+                m('input[type=file].form-control',{id:"uploadFile", style: {'text-align': 'center'}, onchange: ctrl.handleFile})
+            ])
+        ])
+        ])
     ]);
 }
+
 
 function controller(settings) {
     let fileInput = m.prop('');
