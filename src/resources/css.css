@@ -4,10 +4,6 @@
 
 }
 
-/* html {
-  overflow-y: overlay;
-} */
-
 /* Style the tab */
 .tab {
   overflow: hidden;
@@ -46,43 +42,6 @@
   border-top: none;
 }
   
-/* .td_task {
-  width: 25%;
-  padding: 30px;
-} */
-
-.td_info {
-  width: 0.1%;
-  cursor: pointer;
-}
-
-input[type=button]{
-  background-color: #61cf77;
-  color: white;
-  padding: 4px 4px;
-  text-decoration: none;
-  margin: 2px 2px;
-  cursor: pointer;
-  font-size: 15px;
-  border-radius: 6px;
-  font-family:"Century Gothic", sans-serif;	
-}
-
-.reset_button{
-  background-color: #3c9c4f;
-  color: white;
-  padding: 6px 8px;
-  text-decoration: none;
-  margin: 2px 2px;
-  cursor: pointer;
-  font-size: 15px;
-  border-radius: 6px;
-  font-family:"Century Gothic", sans-serif;	
-  margin-top: 0.3em;
-  float: right;
-}
-
-
 .info-box {
   display: none;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
@@ -103,45 +62,17 @@ input[type=button]{
   display: block; 
 }
 
-input[type=submit]{
-  background-color: #3c9c4f;
-  color: white;
-  padding: 6px 13px;
-  text-decoration: none;
-  margin: 2px 2px;
-  cursor: pointer;
-  font-size: 15px;
-  border-radius: 6px;
-  font-family:"Century Gothic", sans-serif;	
-  margin-top: 0.3em;
-  margin-bottom: 1em;
-  float: right;
-}
+
 
 input[type=number]{
   width: 3em;
 }
 
-tr.lines{
-    border-bottom:2px solid #bcdae2;   
-}
+
 
 .border_lines{
   padding-top:12px;
   border-bottom:5px solid #bcdae2;   
-}
-
-td.block_cell{
-    width: 28%;
-    padding: 30px;
-}
-
-td.block_cell_checkbox {
-  padding: 1.5em 0em 1.5em 0em;
-}
-
-td.block_cell_info {
-  padding: 1em 0 1em 0em;
 }
 
 h1.categoryHeadline {
@@ -150,15 +81,6 @@ h1.categoryHeadline {
   font-weight: bold;
 }
 
-.category_cell {
-  padding: 1.7em 0em 1.7em 0.5em;
-  font-size: 15px;
-  position: relative;
-}
-
-.design_text_cell {
-  width: 12%
-}
 
 button.CreateFile{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
@@ -190,24 +112,8 @@ button.CreateJSONFile{
   border-color:#fff;
 }
 
-
-.uploadDiv {
-    position: absolute;
-    width: 300px;
-    height: 130px;
-    z-index: 15;
-    top: 50%;
-    left: 50%;
-    margin: -60px 20px 30px -150px;
-    border-radius: 25px;
-    border: 2px solid #bcdae2;
-    padding: 20px;
-
-}
-
 .top-buffer
  { 
-  /* //margin-top:15px; */
   border-bottom:1px solid #ccc; 
   padding-top:12px; 
 }
