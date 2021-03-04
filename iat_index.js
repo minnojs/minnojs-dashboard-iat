@@ -794,9 +794,9 @@
 					"our platform for running web studies. You can install that platform on your own server, use a more simple ",
 					m('a',{href: "https://minnojs.github.io/minnojs-blog/csv-server/"}, "php server for Minno, "),
 					"or run ",
-					m('a',{href: links[type]}, "this script directly from Qualtrics."),
+					m('a',{href: links[type]}, "this script directly from Qualtrics.")
 					)
-	            )
+				)
 			]);
 		}
 	};
