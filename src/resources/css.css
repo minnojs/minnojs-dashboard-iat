@@ -3,7 +3,11 @@
   overflow-x:hidden;
 
 }
+.space {
+  padding-top: 7px;
+  padding-bottom: 7px;
 
+}
 /* Style the tab */
 .tab {
   overflow: hidden;
@@ -150,6 +154,8 @@ button.CreateJSONFile{
 .design-text-buffer {
   padding: 0em 1em 0em 1em;
 }
+
+
 
 
   

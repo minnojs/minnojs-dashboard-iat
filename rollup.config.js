@@ -13,6 +13,12 @@ const bannerBIAT = `/**
 */
 `;
 
+const bannerSTIAT = `/**
+* @preserve minnojs-stiat-dashboard v${version}
+* @license Apache-2.0 (${(new Date()).getFullYear()})
+*/
+`;
+
 
 const configIAT = {
     input: 'src/IAT/iat.index.standalone.js',
@@ -36,5 +42,16 @@ const configBIAT = {
     }
 };
 
+const configSTIAT = {
+    input: 'src/STIAT/stiat.index.standalone.js',
+    output: {
+        file: 'stiat_index.js',
+        format: 'iife', 
+        name: 'stiatDashboard',
+        sourcemap:true,
+        banner: bannerSTIAT
+    }
+};
+
 // at some time we might want to outputs, one as a standalone, one as a plugin
-export default [ configIAT, configBIAT ];
+export default [ configIAT, configBIAT, configSTIAT ];

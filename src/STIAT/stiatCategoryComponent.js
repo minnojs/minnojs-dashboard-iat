@@ -1,4 +1,4 @@
-import elementComponent from './elementComponent.js';
+import elementComponent from '../IAT/elementComponent.js';
 
 let categoriesComponent = {
     controller:controller,
@@ -20,7 +20,7 @@ function controller(settings, defaultSettings, clearElement){
 function view(ctrl,settings, defaultSettings) {
     return m('.container', [
         m('.row top-buffer',[
-            m('col', m('h1.categoryHeadline','First Category')),
+            m('col', m('h1.categoryHeadline','Category')),
             m('.col',{style:{'margin-bottom':'7px'}},[
                 m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
                     m('button.btn btn btn-danger', {onclick: ctrl.reset},[
@@ -32,10 +32,7 @@ function view(ctrl,settings, defaultSettings) {
                 ])
             ])
         ]),
-        m.component(elementComponent, {key: 'category1'} ,settings, defaultSettings.category1.stimulusMedia),
-        m('h1.categoryHeadline','Second Category'),
-        m('.row top-buffer'),
-        m.component(elementComponent, {key:'category2'}, settings, defaultSettings.category2.stimulusMedia)
+        m.component(elementComponent, {key: 'category'} ,settings, defaultSettings.category.stimulusMedia),
     ]);
 }
 

@@ -1,7 +1,7 @@
 /**
- * @preserve minnojs-iat-dashboard v1.0.0
- * @license Apache-2.0 (2021)
- */
+* @preserve minnojs-stiat-dashboard v1.0.0
+* @license Apache-2.0 (2021)
+*/
 
 (function () {
 	'use strict';
@@ -35,52 +35,107 @@
 	};
 
 	let settings = {
-	    parameters : {isTouch:false, isQualtrics:false, fullscreen:false, showDebriefing:false, remindError:true, errorCorrection:true,base_url:''},
-	    category1: {name: 'Black people', title: {media: { word : 'Black people'}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4},
+	    parameters : {isQualtrics:false, base_url:''},
+	    category: {name: 'Black people', title: {media: { word : 'Black people'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
 	        stimulusMedia: [{word: 'Tayron'}, {word: 'Malik'},{word: 'Terrell'},{word: 'Jazamin'},{word: 'Tiara'},{word: 'Shanice'}],
-	        stimulusCss : {color:'#336600', 'font-size':'1.8em'}
+	        css : {color:'#31b404', 'font-size':'2em'}
 	    },
-	    category2: {name: 'White people', title: {media: { word : 'White people'}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4},
-	        stimulusMedia: [{word: 'Jake'}, {word: 'Conor'},{word: 'Bradley'},{word: 'Allison'},{word: 'Emma'},{word: 'Emily'}],
-	        stimulusCss : {color:'#336600', 'font-size':'1.8em'}
+	    attribute1: {name: 'Unpleasant', title: {media: { word : 'Unpleasant'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
+	        stimulusMedia: [{word: 'Bomb'}, {word: 'Abuse'},{word: 'Sadness'},{word: 'Pain'},{word: 'Poison'},{word: 'Grief'}],
+	        css : {color:'#31b404', 'font-size':'2em'}
 	    },
-	    attribute1: {name: 'Bad Words', title: {media: { word : 'Bad Words'}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4},
-	        stimulusMedia: [{word: 'Awful'}, {word: 'Failure'},{word: 'Agony'},{word: 'Hurt'},{word: 'Horrible'},{word: 'Terrible'}
-	            ,{word: 'Nasty'},{word: 'Evil'}],
-	        stimulusCss : {color:'#336600', 'font-size':'2.3em'}
+	    attribute2: {name: 'Pleasant', title: {media: { word : 'Pleasant'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
+	        stimulusMedia: [{word: 'Paradise'}, {word: 'Pleasure'},{word: 'Cheer'},{word: 'Wonderful'},{word: 'Splendid'},{word: 'Love'}],
+	        css : {color:'#31b404', 'font-size':'2em'}
 	    },
-	    attribute2: {name: 'Good Words', title: {media: { word : 'Good Words'}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4},
-	        stimulusMedia: [{word: 'Laughter'}, {word: 'Happy'},{word: 'Glorious'},{word: 'Joy'},{word: 'Wonderful'},{word: 'Peace'}
-	            ,{word: 'Pleasure'}, {word: 'Love'}],
-	        stimulusCss : {color:'#336600', 'font-size':'2.3em'}
-	    },
-	    blocks: {blockCategories_nTrials: 20,blockCategories_nMiniBlocks:5, blockAttributes_nTrials:20,blockAttributes_nMiniBlocks:5,
-	        blockFirstCombined_nTrials:20, blockFirstCombined_nMiniBlocks:5, blockSecondCombined_nTrials:40, blockSecondCombined_nMiniBlocks:10,
-	        blockSwitch_nTrials:28, blockSwitch_nMiniBlocks:7, randomBlockOrder: true, randomAttSide : false
-	    },
+	    trialsByBlock : 
+	    [//Each object in this array defines a block
+	        {
+	            instHTML : '', 
+	            block : 1,
+	            miniBlocks : 1, 
+	            singleAttTrials : 10, 
+	            sharedAttTrials : 10, 
+	            categoryTrials : 0 
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 2, 
+	            miniBlocks : 2, 
+	            singleAttTrials : 10, 
+	            sharedAttTrials : 7, 
+	            categoryTrials : 7
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 3, 
+	            miniBlocks : 2, 
+	            singleAttTrials : 10, 
+	            sharedAttTrials : 7, 
+	            categoryTrials : 7
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 4, 
+	            miniBlocks : 2, 
+	            singleAttTrials : 10, 
+	            sharedAttTrials : 7, 
+	            categoryTrials : 7
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 5, 
+	            miniBlocks : 2, 
+	            singleAttTrials : 10, 
+	            sharedAttTrials : 7, 
+	            categoryTrials : 7
+	        }
+	    ],
+	    blockOrder : 'random', //can be startRight/startLeft/random
+	    switchSideBlock : 4, //By default, we switch on block 4 (i.e., after blocks 2 and 3 showed the first pairing condition).
 	    text: {
-	        textOnError:'<p style="font-size:0.6em;font-family:arial serif;text-align:center;">' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. '+'Press the other key to continue.<p/>',
-	        leftKeyText:'Press "E" for ',
+	        leftKeyText:'Press "E" for',
 	        rightKeyText:'Press "I" for',
 	        orKeyText:'or',
-	        AttributesBlockInstructions:'<div><p  style="font-size:20px;font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font-color="#0000ff">leftAttribute.</font>' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font-color="#0000ff">rightAttribute</font>.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p style="text-align:center;">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
-	        CategoriesBlockInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger on the <b>E</b> key for items that belong to the category <font-color="#336600">leftCategory</font>. ' +'<br/>Put a right finger on the <b>I</b> key for items that belong to the category <font-color="#336600">rightCategory</font>.<br/>' +'Items will appear one at a time.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p style="text-align:center;">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
-	        FirstCombinedBlockInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Use the <b>E</b> key for <font-color="#336600">leftCategory</font> and for <font-color="#0000ff">leftAttribute</font>.<br/>' +'Use the <b>I</b> key for <font-color="#336600">rightCategory</font> and for  <font-color="#0000ff">rightAttribute</font>.<br/>' +'Each item belongs to only one category.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Press the other key to continue.<br/>' + '<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p style="text-align:center;">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
-	        SecondCombinedBlockInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'This is the same as the previous part.<br/>' +'Use the <b>E</b> key for <font-color="#336600">leftCategory</font> and for <font-color="#0000ff">leftAttribute</font>.<br/>' +'Use the <b>I</b> key for <font-color="#336600">rightCategory</font> and for  <font-color="#0000ff">rightAttribute</font>.<br/>' +'Each item belongs to only one category.<br/><br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p style="text-align:center;">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
-	        SwitchedCategoriesInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">'+'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'<b>Watch out, the labels have changed position!</b><br/>' +'Put the left finger on the <b>E</b> key for <font-color="#336600">leftCategory</font>.<br/>' +'Put the right finger on the <b>I</b> key for <font-color="#336600">rightCategory</font>.<br/><br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>' +'<p style="text-align:center;">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
-	        PreDebriefingText:'Press space to continue to your feedback '
-	    },
-	    touch_text : {
-	        textOnError:'<p style="font-size:1.4em;font-family:arial serif">' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. '+'Touch the other side to continue.<p/>',
-	        leftKeyText:'Press "E" for ',
-	        rightKeyText:'Press "I" for',
-	        orKeyText:'or',
-	        AttributesBlockInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font-color="#0000ff">leftAttribute.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font-color="#0000ff">rightAttribute</font>.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p style="text-align:center;">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
-	        CategoriesBlockInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font-color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font-color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p style="text-align:center;">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
-	        FirstCombinedBlockInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font-color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font-color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p style="text-align:center;">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
-	        SecondCombinedBlockInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +'Put a left finger over the <b>left</b> green area for items that belong to the category <font-color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font-color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p style="text-align:center;">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
-	        SwitchedCategoriesInstructions:'<div><p style="font-size:20px; font-family:arial serif;text-align:center;">' +'<font-color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' +'<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial"><br/>'+'Watch out, the labels have changed position!<br/>'+'Put a left finger over the <b>left</b> green area for items that belong to the category <font-color="#0000ff">leftCategory.</font>' +'<br/>Put a right finger over the <b>right</b> green area for items that belong to the category <font-color="#0000ff">rightCategory</font>.<br/><br/>' +'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +'Touch the other side to continue.<br/>' +'<u>Go as fast as you can</u> while being accurate.<br/><br/></p>'+'<p style="text-align:center;">Touch the <b>green area</b> when you are ready to start.</font></p></div>',
-	        PreDebriefingText:'Touch the bottom green area to continue to the next task.'
+	        remindErrorText : '<p style="font-size:0.6em;font-family:arial sans-serif; text-align:center;">' +
+	            'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +
+	            'Press the other key to continue.<p/>',
+	        finalText : 'You have completed this task<br/><br/>Press SPACE to continue.', 
+	        instTemplatePractice : '<div><p align="center" style="font-size:20px; font-family:arial">' +
+	            '<font color="#000000"><u>Part blockNum of nBlocks</u><br/><br/></p>' + 
+	            '<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +
+	            'Put a left finger on the <b>E</b> key for items that belong to the category ' + 
+	            '<font color="#31b404">attribute1</font>.<br/>' + 
+	            'Put a right finger on the <b>I</b> key for items that belong to the category ' + 
+	            '<font color="#31b404">attribute2</font>.<br/>' + 
+	            'Items will appear one at a time.<br/><br/>' + 
+	            'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' + 
+	            'Press the other key to continue.<br/><br/>' + 
+	            '<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>', 
+	        instTemplateCategoryRight : '<div><p align="center" style="font-size:20px; font-family:arial">' +
+	            '<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' + 
+	            '<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +
+	            'Put a left finger on the <b>E</b> key for items that belong to the category ' + 
+	            '<font color="#31b404">attribute1</font>.<br/>' + 
+	            'Put a right finger on the <b>I</b> key for items that belong to the category ' + 
+	            '<font color="#31b404">attribute2</font> ' +
+	            'and for items that belong to the category <font color="#31b404">thecategory</font>.<br/>' + 
+	            'Items will appear one at a time.<br/><br/>' + 
+	            'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' + 
+	            'Press the other key to continue.<br/><br/>' + 
+	            '<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>', 
+	        instTemplateCategoryLeft : '<div><p align="center" style="font-size:20px; font-family:arial">' +
+	            '<font color="#000000"><u>Part blockNum of nBlocks </u><br/><br/></p>' + 
+	            '<p style="font-size:20px; text-align:left; vertical-align:bottom; margin-left:10px; font-family:arial">' +
+	            'Put a left finger on the <b>E</b> key for items that belong to the category ' + 
+	            '<font color="#31b404">attribute1</font> ' +
+	            'and for items that belong to the category <font color="#31b404">thecategory</font>.<br/>' + 
+	            'Put a right finger on the <b>I</b> key for items that belong to the category ' + 
+	            '<font color="#31b404">attribute2</font>.<br/>' + 
+	            'Items will appear one at a time.<br/><br/>' + 
+	            'If you make a mistake, a red <font color="#ff0000"><b>X</b></font> will appear. ' + 
+	            'Press the other key to continue.<br/><br/>' + 
+	            '<p align="center">Press the <b>space bar</b> when you are ready to start.</font></p></div>', 
 	    }
 	};
 
@@ -158,20 +213,21 @@
 	}
 
 	let outputComponent = {
-	    view:view$1
+	    view:view$1,
+	    controller:controller$1,
 	};
 
-	function view$1(ctrl,settings){
+	function view$1(ctrl){
 	    return m('.container',[
 	        m('.row justify-content-md-center',[
 	            m('.col-auto'),
 	            m('col-auto',[
 	                m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
-	                    m('button.CreateFile', {onclick: createFile(settings,'JS')},[
+	                    m('button.CreateFile', {onclick: ctrl.createFile('JS')},[
 	                        m('i.fas fa-file-download'), ' Download Script']),
-	                    m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')},[
+	                    m('button.CreateJSONFile', {onclick: ctrl.createFile('JSON')},[
 	                        m('i.fas fa-file-download'), ' Download JSON']),
-	                    m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser')
+	                    m('button.CreateJSONFile', {onclick: ctrl.printToPage()}, 'Print to Browser')
 	                ])
 	            ]),
 	            m('.col-auto',{style:{'padding':'1.7em 0em 5em 1em',float:'left'}},[
@@ -193,79 +249,91 @@
 
 	}
 
-	function createFile(settings, fileType){
-	    return function(){
-	        let output,textFileAsBlob;
-	        let downloadLink = document.createElement('a');
-	        if (fileType === 'JS') {
-	            output = toString(settings);
-	            textFileAsBlob = new Blob([output], {type:'text/plain'});
-	            downloadLink.download = 'IAT.js'; }
-	        else {
-	            output = updateSettings(settings);
-	            textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
-	            downloadLink.download = 'IAT.json'; }
-	        if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
-	        else {
-	            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-	            downloadLink.style.display = 'none';
-	            document.body.appendChild(downloadLink);
-	        }
-	        downloadLink.click();
-	    };
-	}
+	function controller$1(settings){
+	    updateMediaSettings();
+	    return {createFile:createFile, printToPage:printToPage, toString:toString,
+	        updateSettings:updateSettings, toScript:toScript};
 
-	// function toConsole(settings){
-	//     return function(){
-	//         window.settings = settings;
-	//         console.log(settings);
-	//     }
-	// }
-
-	function printToPage(settings){
-	    return function() {
-	        let para = document.getElementById('textDiv');
-	        para.style.visibility = 'visible';
-	        let text_area = document.getElementById('textArea');
-	        text_area.value = toString(settings);
-	    };
-	}
-
-	function toString(settings){
-	    return toScript(updateSettings(settings));
-	}
-
-	function updateSettings(settings){
-	    let output={
-	        category1: settings.category1,
-	        category2: settings.category2,
-	        attribute1: settings.attribute1,
-	        attribute2: settings.attribute2,
-	        base_url: settings.parameters.base_url,
-	        remindError: settings.parameters.remindError,
-	        errorCorrection: settings.parameters.errorCorrection,
-	        isTouch: settings.parameters.isTouch
-	    };
-	    if(settings.parameters.isQualtrics){
-	        output.isQualtrics=settings.parameters.isQualtrics;
-	        output.showDebriefing=settings.parameters.showDebriefing;
-	        output.fullscreen=settings.parameters.fullscreen;
+	    function createFile(fileType){
+	        return function(){
+	            let output,textFileAsBlob;
+	            let downloadLink = document.createElement('a');
+	            if (fileType === 'JS') {
+	                output = toString();
+	                textFileAsBlob = new Blob([output], {type:'text/plain'});
+	                downloadLink.download = 'STIAT.js'; }
+	            else {
+	                output = updateSettings();
+	                textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
+	                downloadLink.download = 'STIAT.json'; }
+	            if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+	            else {
+	                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+	                downloadLink.style.display = 'none';
+	                document.body.appendChild(downloadLink);
+	            }
+	            downloadLink.click();
+	        };
 	    }
-	    Object.assign(output, settings.blocks);
-	    settings.parameters.isTouch ? Object.assign(output, settings.touch_text) : Object.assign(output, settings.text); 
-	    return output;
-	}
-
-	function toScript(output){
-	    return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat9.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat8.js'}'], function(APIConstructor, iatExtension) {var API = new APIConstructor(); return iatExtension(${JSON.stringify(output,null,4)})});`;
+	    
+	    // function toConsole(settings){
+	    //     return function(){
+	    //         window.settings = settings;
+	    //         console.log(settings);
+	    //     }
+	    // }
+	    
+	    function printToPage(){
+	        return function() {
+	            let para = document.getElementById('textDiv');
+	            para.style.visibility = 'visible';
+	            let text_area = document.getElementById('textArea');
+	            text_area.value = toString();
+	        };
+	    }
+	    
+	    function toString(){
+	        return toScript(updateSettings());
+	    }
+	    
+	    function updateMediaSettings(){
+	        settings.category.media = settings.category.stimulusMedia;
+	        delete settings.category.stimulusMedia;
+	        settings.attribute1.media = settings.attribute1.stimulusMedia;
+	        delete settings.attribute1.stimulusMedia;
+	        settings.attribute2.media = settings.attribute2.stimulusMedia;
+	        delete settings.attribute2.stimulusMedia;
+	    }
+	    
+	    function updateSettings(){
+	        let output={
+	            category: settings.category,
+	            attribute1: settings.attribute1,
+	            attribute2: settings.attribute2,
+	            base_url: settings.parameters.base_url,
+	            remindError: settings.parameters.remindError,
+	            trialsByBlock: settings.trialsByBlock,
+	            blockOrder: settings.blockOrder,
+	            switchSideBlock: settings.switchSideBlock
+	        };
+	        if(settings.parameters.isQualtrics){
+	            output.isQualtrics=settings.parameters.isQualtrics;
+	        }
+	        Object.assign(output, settings.text); 
+	        return output;
+	    }
+	    
+	    function toScript(output){
+	        return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/stiat/qualtrics/qstiat6.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/stiat/stiat6.js'}'], function(APIConstructor, stiatExtension) {var API = new APIConstructor(); return stiatExtension(${JSON.stringify(output,null,4)});});`;
+	    }
 	}
 
 	let textComponent = {
-	    controller:controller$1,
+	    controller:controller$2,
 	    view:view$2
 	};
 
-	function controller$1(settings, defaultSettings, rows){
+	function controller$2(settings, defaultSettings, rows){
 	    //let textparameters = settings.text
 	    var textparameters;
 	    var isTouch = settings.parameters.isTouch;
@@ -309,26 +377,105 @@
 	    ]);
 	}
 
+	function clone(obj){
+	    return JSON.parse(JSON.stringify(obj));
+	}
+
 	let blocksComponent = {
-	    controller:controller$2,
+	    controller:controller$3,
 	    view:view$3
 	};
 
-	function controller$2(settings, defaultSettings, rows){
-	    let blocks = settings.blocks;
-	    return {reset:reset, clear:clear, set:set, get:get, rows: rows};
+	function controller$3(settings, defaultSettings, clearBlock){
+	    var blocks = settings.trialsByBlock;
+	    let addFlag =  m.prop(blocks.length < 30 ? 'visible' : 'hidden');
+	    let removeFlag = m.prop('hidden');
+	    let chooseFlag = m.prop('hidden');
+	    let choosenBlocksList = [];
+	    let chooseClicked = m.prop(false);
+	    return {reset:reset, clear:clear, set:set, get:get, blocks:blocks, getParameters: getParameters, 
+	        setParameters:setParameters, addFlag:addFlag, removeFlag:removeFlag, 
+	        chooseFlag:chooseFlag, addBlock:addBlock, removeBlocks:removeBlocks,
+	        choosenBlocksList:choosenBlocksList, updateChoosenBlocks: updateChoosenBlocks, chooseBlocks:chooseBlocks};
 	    
-	    function reset(){Object.assign(blocks, defaultSettings.blocks);}
-	    function clear(){Object.assign(blocks, rows.slice(-1)[0]);}
-	    function get(name){ return blocks[name]; }
-	    function set(name, type){ 
-	        if (type === 'checkbox') return function(value){return blocks[name] = value; };
-	        return function(value){return blocks[name] = Math.round(value);};
+	    function reset(){
+	        Object.assign(blocks, clone(defaultSettings.trialsByBlock));
+	        if(blocks.length>5){
+	            blocks.length=5;
+	        }
+	        settings.switchSideBlock = defaultSettings.switchSideBlock;
+	        settings.blockOrder = defaultSettings.blockOrder;
+	        choosenBlocksList.length = 0;
+	        addFlag('visible');
+	    }
+	    function clear(){
+	        blocks.forEach(element => {
+	            element.instHTML = '',
+	            element.miniBlocks = 0,
+	            element.singleAttTrials = 0, 
+	            element.sharedAttTrials = 0, 
+	            element.categoryTrials = 0; 
+	        });
+	        Object.assign(settings.switchSideBlock, 0);
+	    }
+	    function get(name, index){ return blocks[index][name]; }
+	    function set(name, index, type){ 
+	        if (type === 'text') return function(value){return blocks[index][name] = value; };
+	        return function(value){return blocks[index][name] = Math.round(value);};
+	    }
+	    function getParameters(name){ return settings[name]; }
+	    function setParameters(name, type){ 
+	        if (type === 'select') return function(value){return settings[name] = value; };
+	        return function(value){return settings[name] = Math.round(value);};
+	    }
+	    function updateChoosenBlocks(e, index){
+	        if (choosenBlocksList.includes(index) && !e.target.checked){
+	            var i = choosenBlocksList.indexOf(index);
+	            if (i !== -1) {
+	            choosenBlocksList.splice(i, 1);
+	            }
+	            return;
+	        } 
+	        if (e.target.checked) choosenBlocksList.push(index);
+	    }
+	    function chooseBlocks(){
+	        chooseFlag('visible');
+	        if(!chooseClicked()){  //show the alert only for the first time the choose button has been clicked
+	            alert('To choose blocks to remove, please tik the checkbox near the wanted block, and to remove them click the \'Remove Choosen Blocks\' button below');
+	            chooseClicked(true);
+	        }
+	    }
+	    function addBlock(){
+	        blocks.push(clone(clearBlock[0]));
+	        blocks.slice(-1)[0]['block'] = blocks.length;
+	        if (blocks.length === 30) addFlag('hidden'); //limit blocks to 30
+
+	    }
+	    function removeBlocks(){
+	        if (blocks.length < 4) {
+	            alert('Minimum number of blocks needs to be 3'); 
+	            choosenBlocksList.length = 0;
+	            return;
+	        }
+	        if ((blocks.length - choosenBlocksList.length) < 3){
+	            alert('Minimum number of blocks needs to be 3, please choose less blocks to remove');
+	            choosenBlocksList.length = 0;
+	            return;
+	        }
+	        choosenBlocksList.sort();
+	        for (let i = choosenBlocksList.length - 1; i >=0; i--) {
+	            blocks.splice(choosenBlocksList[i],1);
+	        }
+	        for (let i = 0; i < blocks.length; i++) {
+	            blocks[i]['block'] = i+1;
+	        }
+	        choosenBlocksList.length = 0;
+	        chooseFlag('hidden');
 	    }
 	}
 
 	function view$3(ctrl){
-	    return m('.container' ,{style:{height: '500px'}}, [
+	    return m('.container' , [
 	        m('.row top-buffer',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
@@ -341,55 +488,110 @@
 	                ])
 	            ])
 	        ]),
-	        ctrl.rows.slice(0,-1).map(function(row) {
-	            return m('.row top-buffer', [
-	                m('.col-auto block-buffer',[
-	                    m('i.fa.fa-info-circle'),
-	                    m('.card.info-box.card-header', [row.desc])
-	                ]),
-	                m('.col-3 block-buffer', row.label),
-	                row.name ? //case of randomBlockOrder & randomAttSide
-	                m('.col block-buffer' ,
-	                m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name, 'checkbox')), checked: ctrl.get(row.name)}))
-	                :
-	                m('.col-8',[
-	                    m('.row', [
-	                        m('.col-4 block-buffer', 'Number of trials: '),
-	                        m('.col block-buffer', [
-	                            m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.numTrialBlocks, 'number')), value: ctrl.get(row.numTrialBlocks)})
-	                        ])
+	        m('.row.space top-buffer', [
+	            m('.col-sm-2.space',[
+	                m('i.fa.fa-info-circle'),
+	                m('.card.info-box.card-header', ['Change to \'startRight\' if you want to start with category on the right in the first block, \'startLeft\' if you want to start with category on the left in the first block or \'random\' if you want to randomize the order.']),
+	                m('span', [' ', 'Blocks order'])
+	            ]),
+	            m('.col-md-10',
+	                m('select.form-control',{value: ctrl.getParameters('blockOrder'), onchange:m.withAttr('value',ctrl.setParameters('blockOrder','select')), style: {width: '8.3rem', height:'2.7rem'}},[
+	                    m('option', 'random'),
+	                    m('option', 'startRight'),
+	                    m('option', 'startLeft'),
+	                ]))        
+	        ]),
+	        m('.row.space top-buffer', [
+	            m('.col-sm-2.space',[
+	                m('i.fa.fa-info-circle'),
+	                m('.card.info-box.card-header', ['By default, we switch on block 4 (i.e., after blocks 2 and 3 showed the first pairing condition).']),
+	                m('span', [' ', 'Switch side block'])
+	            ]),
+	            m('.col-sm-9',
+	                m('input[type=number].form-control',{value: ctrl.getParameters('switchSideBlock'), onchange:m.withAttr('value',ctrl.setParameters('switchSideBlock')), style: {width: '4em'}}))   
+	        ]),
+	        ctrl.blocks.map(function(block) {
+	            let index = ctrl.blocks.indexOf(block);
+	            return m('div',[
+	                m('.row.space top-buffer', [
+	                    m('.col-sm-2',[
+	                        m('input[type=checkbox]', {checked : ctrl.choosenBlocksList.includes(index), style:{visibility: ctrl.chooseFlag()}, onclick: (e) => ctrl.updateChoosenBlocks(e, index)}),
+	                        m('span', [' ','Block '+parseInt(index+1)])
 	                    ]),
-	                    m('.row',[
-	                        m('.col-4 block-buffer', 'Number of mini-blocks: '),
-	                        m('.col block-buffer', [
-	                            m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.numMiniBlocks, 'number')), value: ctrl.get(row.numMiniBlocks)})
+	                    m('.col-md-10',[
+	                        m('.row.space', [
+	                            m('.col-sm-3.space',[
+	                                m('i.fa.fa-info-circle'),
+	                                m('.card.info-box.card-header', ['Empty field means we will create the instructions from a deafault template. ']),
+	                                m('span', [' ', 'Block\'s Instructions:'])
+	                            ]),
+	                            m('.col-sm-9', [
+	                                m('textarea.form-control',{style: {width: '15rem' ,height: '4rem'},onchange: m.withAttr('value', ctrl.set('instHTML', index, 'text')), value: ctrl.get('instHTML', index)})
+	                            ])
+	                        ]),
+	                        m('.row.space',[
+	                            m('.col-sm-3.space',[
+	                                m('i.fa.fa-info-circle'),
+	                                m('.card.info-box.card-header', ['Higher number reduces repetition of same group/response. Set to 1 if you don\'t need mini blocks. 0 will break the task.']),
+	                                m('span', [' ', 'Number of mini-blocks: '])
+	                            ]),
+	                            m('.col-sm-9', [
+	                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('miniBlocks', index,'number')), value: ctrl.get('miniBlocks', index)})
+	                            ])
+	                        ]),
+	                        m('.row.space',[
+	                            m('.col-sm-3.space',[
+	                                m('i.fa.fa-info-circle'),
+	                                m('.card.info-box.card-header', ['Number of trials of the attribute that does not share key with the category (in a mini block).']),
+	                                m('span', [' ', 'Number of single attribute trials: '])
+	                            ]),
+	                            m('.col-sm-9', [
+	                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('singleAttTrials', index,'number')), value: ctrl.get('singleAttTrials', index)})
+	                            ])
+	                        ]),
+	                        m('.row.space',[
+	                            m('.col-sm-3.space',[
+	                                m('i.fa.fa-info-circle'),
+	                                m('.card.info-box.card-header', ['Number of trials of the attribute that shares key with the category (in a mini block).']),
+	                                m('span', [' ', 'Number of shared key attribute trials: '])
+	                            ]),
+	                            m('.col-sm-9', [
+	                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('sharedAttTrials', index,'number')), value: ctrl.get('sharedAttTrials', index)})
+	                            ])
+	                        ]),
+	                        m('.row.space',[
+	                            m('.col-sm-3.space',[
+	                                m('i.fa.fa-info-circle'),
+	                                m('.card.info-box.card-header', ['Number of trials of the category (in a mini-block). If 0, the label does not appear.']),
+	                                m('span', [' ', 'Number of category trials: '])
+	                            ]),
+	                            m('.col-sm-9', [
+	                                m('input[type=number].form-control',{style:{width:'4em'}, onchange: m.withAttr('value', ctrl.set('categoryTrials', index,'number')), value: ctrl.get('categoryTrials', index)})
+	                            ])
 	                        ])
 	                    ])
 	                ])
 	            ]);
 	                    
-	        }
-	        ),
-	        m('.alert alert-info', {role:'alert', style: {position: 'relative', width: '25rem', left: '62%',top: '-650px',  border: '2px solid #bcdae2'}},[
-	            m('h4','More information:'),
-	            m('p','By default, we separate each block into mini-blocks of four trials. In Blocks 3, 4, 6, and 7, '+
-	                                'exactly one item from each of the four groups (attributes and categories) appears in each mini-block. In Blocks 1, 2, and 5, '+
-	                                'two trials of each group (category or attribute) will appear in each mini-block. Tony Greenwald recommended using that feature, '+
-	                                'to avoid same-key runs, based on internal testing in his lab. In Project Implicit, our tests so far found no effect of this feature on the validity of any IAT.'+
-	                                ' To cancel this feature, set Number of mini-blocks to 1, in each block.'),
-	            m('hr'),
-	            m('p','To cancel a block, set the number of trials to 0 (useful for 5-blocks IATs).')
+	        }),
+	        m('.row.space justify-content-md-center',[
+	            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
+	                m('button.btn btn btn-info',{onclick: ctrl.addBlock, style:{'padding-right':'60px','padding-left':'60px' ,visibility: ctrl.addFlag()}}, [m('i.fas fa-plus')],' Add Block'),
+	                m('button.btn btn btn-warning',{onclick: ctrl.chooseBlocks},[
+	                    m('i.fas fa-check'), ' Choose Blocks to Remove']),
+	                m('button.btn btn btn-danger',{onclick: ctrl.removeBlocks},[
+	                    m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
 	        ])
-
+	    ])
 	    ]);
 	}
 
 	let elementComponent = {
-	    controller:controller$3,
+	    controller:controller$4,
 	    view:view$4,
 	};
 
-	function controller$3(object,settings, stimuliList){
+	function controller$4(object,settings, stimuliList){
 	    let element = settings[object.key];
 	    let fields = {
 	        newStimulus : m.prop(''),
@@ -586,11 +788,11 @@
 	}
 
 	let categoriesComponent = {
-	    controller:controller$4,
+	    controller:controller$5,
 	    view:view$5
 	};
 
-	function controller$4(settings, defaultSettings, clearElement){
+	function controller$5(settings, defaultSettings, clearElement){
 	    return {reset:reset, clear:clear};
 	    function reset(){
 	        Object.assign(settings.category1,  JSON.parse(JSON.stringify(defaultSettings.category1)));
@@ -605,7 +807,7 @@
 	function view$5(ctrl,settings, defaultSettings) {
 	    return m('.container', [
 	        m('.row top-buffer',[
-	            m('col', m('h1.categoryHeadline','First Category')),
+	            m('col', m('h1.categoryHeadline','Category')),
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
 	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
@@ -617,19 +819,16 @@
 	                ])
 	            ])
 	        ]),
-	        m.component(elementComponent, {key: 'category1'} ,settings, defaultSettings.category1.stimulusMedia),
-	        m('h1.categoryHeadline','Second Category'),
-	        m('.row top-buffer'),
-	        m.component(elementComponent, {key:'category2'}, settings, defaultSettings.category2.stimulusMedia)
+	        m.component(elementComponent, {key: 'category'} ,settings, defaultSettings.category.stimulusMedia),
 	    ]);
 	}
 
 	let attributesComponent = {
-	    controller:controller$5,
+	    controller:controller$6,
 	    view:view$6
 	};
 
-	function controller$5(settings, defaultSettings, clearElement){
+	function controller$6(settings, defaultSettings, clearElement){
 	    return {reset:reset, clear:clear};
 	    function reset(){
 	        Object.assign(settings.attribute1,  JSON.parse(JSON.stringify(defaultSettings.attribute1)));
@@ -663,7 +862,7 @@
 	}
 
 	let importComponent = {
-	    controller:controller$6,
+	    controller:controller$7,
 	    view:view$7
 	};
 
@@ -682,7 +881,7 @@
 	    ]);
 	}
 
-	function controller$6(settings) {
+	function controller$7(settings) {
 	    let fileInput = m.prop('');
 	    return {fileInput:fileInput, handleFile:handleFile, updateSettings:updateSettings};
 
@@ -695,56 +894,37 @@
 	            updateSettings(fileContent);
 	        };
 	    }
+	    function updateMediaSettings(input){
+	        input.category.stimulusMedia = input.category.media;
+	        delete input.category.media;
+	        input.attribute1.stimulusMedia = input.attribute1.media;
+	        delete input.attribute1.media;
+	        input.attribute2.stimulusMedia = input.attribute2.media;
+	        delete input.attribute2.media;
+	    }
 	    function updateSettings(input) {
-	        settings.category1 = input.category1;
-	        settings.category2 = input.category2;
+	        console.log("before", );
+	        updateMediaSettings(input);
+	        console.log("after");
+	        settings.category = input.category;
 	        settings.attribute1 = input.attribute1;
 	        settings.attribute2 = input.attribute2;
 	        settings.parameters.base_url = input.base_url;
-	        settings.parameters.remindError = input.remindError;
-	        settings.parameters.errorCorrection = input.errorCorrection;
-	        settings.parameters.isTouch = input.isTouch;
-	        if(input.isQualtrics){
-	            settings.parameters.isQualtrics = input.isQualtrics;
-	            settings.parameters.showDebriefing = input.showDebriefing;
-	            settings.parameters.fullscreen = input.fullscreen;
-	        }
-	        settings.blocks.blockCategories_nTrials = input.blockCategories_nTrials;
-	        settings.blocks.blockCategories_nMiniBlocks = input.blockCategories_nMiniBlocks;
-	        settings.blocks.blockAttributes_nTrials = input.blockAttributes_nTrials;
-	        settings.blocks.blockAttributes_nMiniBlocks = input.blockAttributes_nMiniBlocks;
-	        settings.blocks.blockFirstCombined_nTrials = input.blockFirstCombined_nTrials;
-	        settings.blocks.blockFirstCombined_nMiniBlocks = input.blockFirstCombined_nMiniBlocks;
-	        settings.blocks.blockSecondCombined_nTrials = input.blockSecondCombined_nTrials;
-	        settings.blocks.blockSecondCombined_nMiniBlocks = input.blockSecondCombined_nMiniBlocks;
-	        settings.blocks.blockSwitch_nTrials = input.blockSwitch_nTrials;
-	        settings.blocks.blockSwitch_nMiniBlocks = input.blockSwitch_nMiniBlocks;
-	        settings.blocks.randomBlockOrder = input.randomBlockOrder;
-	        settings.blocks.randomAttSide = input.randomAttSide;
-	        if (input.isTouch){
-	            settings.touch_text.textOnError = input.textOnError;
-	            settings.touch_text.leftKeyText = input.leftKeyText;
-	            settings.touch_text.rightKeyText = input.rightKeyText;
-	            settings.touch_text.orKeyText = input.orKeyText;
-	            settings.touch_text.AttributesBlockInstructions = input.AttributesBlockInstructions;
-	            settings.touch_text.CategoriesBlockInstructions = input.CategoriesBlockInstructions;
-	            settings.touch_text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions;
-	            settings.touch_text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions;
-	            settings.touch_text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions;
-	            settings.touch_text.PreDebriefingText = input.PreDebriefingText;
-	        }
-	        else {
-	            settings.text.textOnError = input.textOnError;
-	            settings.text.leftKeyText = input.leftKeyText;
-	            settings.text.rightKeyText = input.rightKeyText;
-	            settings.text.orKeyText = input.orKeyText;
-	            settings.text.AttributesBlockInstructions = input.AttributesBlockInstructions;
-	            settings.text.CategoriesBlockInstructions = input.CategoriesBlockInstructions;
-	            settings.text.FirstCombinedBlockInstructions = input.FirstCombinedBlockInstructions;
-	            settings.text.SecondCombinedBlockInstructions = input.SecondCombinedBlockInstructions;
-	            settings.text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions;
-	            settings.text.PreDebriefingText = input.PreDebriefingText;
-	        }
+	        settings.parameters.isQualtrics = input.isQualtrics;
+	        settings.text.leftKeyText = input.leftKeyText;
+	        settings.text.rightKeyText = input.rightKeyText;
+	        settings.text.orKeyText = input.orKeyText;
+	        settings.text.remindErrorText = input.remindErrorText;
+	        settings.text.finalText = input.finalText;
+	        settings.text.instTemplatePractice = input.instTemplatePractice;
+	        settings.text.instTemplateCategoryRight = input.instTemplateCategoryRight;
+	        settings.text.instTemplateCategoryLeft = input.instTemplateCategoryLeft;
+	        settings.trialsByBlock = input.trialsByBlock;
+	        settings.blockOrder = input.blockOrder;
+	        settings.switchSideBlock = input.switchSideBlock;
+	        // settings = input;
+	        //console.log(settings);
+	        
 	    }
 	}
 
@@ -774,74 +954,106 @@
 	};
 
 	let parametersDesc = [
-	    {name: 'isTouch', options:['Keyboard', 'Touch'], label:'Keyboard input or touch input?', desc:'Minno does not auto-detect the input method. If you need a touch version and a keyboard version, create two different scripts with this tool.'},
-	    {name: 'isQualtrics',options:['Regular','Qualtrics'], label:'Regular script or Qualtrics?', desc: ['If you want this IAT to run from Qualtrics, read ', m('a',{href: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/'}, 'this blog post '),'to see how.']},
-	    {name: 'fullscreen', label:'Run Full Screen', desc: 'Do you want to enable a full screen option?'},
-	    {name: 'showDebriefing', label:'Show results interpretation at the end', desc: 'Not recommended. A single IAT score is not a reliable estimate of any psychological construct.'},
-	    {name: 'remindError', label: 'Error feedback on incorrect responses', desc: 'It is recommended to show participants an error feedback on error responses.'},
-	    {name: 'errorCorrection', label: 'Require correct response', desc: 'It is recommended to require participants to hit the correct response even after errors.'},
-	    {isTouch:false, isQualtrics:false, fullscreen:false, showDebriefing:false, remindError:false, errorCorrection:false,base_url:''}
+	    {name: 'isQualtrics', options:['Regular','Qualtrics'],label:'Regular script or Qualtrics?', desc: ['If you want this IAT to run from Qualtrics, read ', m('a',{href: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/'}, 'this blog post '),'to see how.']},
+	    {isQualtrics:false, base_url:''}
 	];
 
-	let textDesc=[
-	    {name: 'textOnError', label:'Screen\'s Bottom (error reminder)', desc:'We use this text to remind participants what happens on error. Replace this text if you do not require participants to correct their error responses (see General Parameters page).'},
+	let textDesc = [
 	    {name: 'leftKeyText', label:'Top-left text (about the left key)', desc: 'We use this text to remind participants what key to use for a left response.'},
 	    {name: 'rightKeyText', label:'Top-right text (about the right key)', desc: 'We use this text to remind participants what key to use for a right response.'},
 	    {name: 'orKeyText', label:'Or', desc: 'We show this text in the combined blocks to separate between the two categories that use the same key.'},
-	    {name: 'AttributesBlockInstructions', label: 'Instructions in Block 1', desc: 'The instructions in the attributes practice block.'},
-	    {name: 'CategoriesBlockInstructions', label: 'Instructions in Block 2', desc: 'The instructions in the categories practice block.'},
-	    {name: 'FirstCombinedBlockInstructions', label: 'Instructions in Blocks 3 and 6', desc: 'The instructions in the first combined (4-groups) block.'},
-	    {name: 'SecondCombinedBlockInstructions', label: 'Instructions in Blocks 4 and 7', desc: 'The instructions in the second combined (4-groups) block.'},
-	    {name: 'SwitchedCategoriesInstructions', label: 'Instructions in Block 5', desc: 'The instructions in the block that provides practice for the reversed categories.'},
-	    {name: 'PreDebriefingText', label: 'Text before showing results', desc: 'Will be used only if you selected (in the General Parameters page) to show the participants an interpretation of the result. We recommend avoiding that.'},
-	    {textOnError:'', leftKeyText:'', rightKeyText:'', orKeyText:'', AttributesBlockInstructions:'',CategoriesBlockInstructions:'',
-	        FirstCombinedBlockInstructions:'', SecondCombinedBlockInstructions:'', SwitchedCategoriesInstructions:'',PreDebriefingText:''}
+	    {name: 'remindErrorText', label: 'Screen\'s Bottom (error reminder)', desc: 'We use this text to remind participants what happens on error. Replace this text if you do not require participants to correct their error responses (see General Parameters page).'},
+	    {name: 'finalText', label:'Text shown at the end', desc: 'Text shown at the end'},
+	    {name: 'instTemplatePractice', label:'Instructions in Practice Block', desc: 'The instructions in the practice block.'},
+	    {name: 'instTemplateCategoryRight', label:'Instructions in Right Category', desc: 'The instructions in the right category.'},
+	    {name: 'instTemplateCategoryLeft', label:'Instructions in Left Category', desc: 'The instructions in the left category.'},
+	    {textOnError:'', leftKeyText:'', rightKeyText:'', orKeyText:'', remindErrorText:'',finalText:'',
+	    instTemplatePractice:'', instTemplateCategoryRight:'', instTemplateCategoryLeft:''}
 	];
 
-	let blocksDesc = [
-	    {label:'Block 1', numTrialBlocks:'blockCategories_nTrials', numMiniBlocks: 'blockCategories_nMiniBlocks', desc:'Will present the categories.'},
-	    {label:'Block 2', numTrialBlocks:'blockAttributes_nTrials', numMiniBlocks: 'blockAttributes_nMiniBlocks', desc:'Will present the attributes.'},
-	    {label:'Blocks 3 and 6', numTrialBlocks:'blockFirstCombined_nTrials', numMiniBlocks: 'blockFirstCombined_nMiniBlocks', desc:'The first combined block.'},
-	    {label:'Blocks 4 and 7', numTrialBlocks:'blockSecondCombined_nTrials', numMiniBlocks: 'blockSecondCombined_nMiniBlocks', desc:'The second combined block.'},
-	    {label:'Block 5', numTrialBlocks:'blockSwitch_nTrials', numMiniBlocks: 'blockSwitch_nMiniBlocks', desc:'Reversing the attributes block. Some have recommended using 50 trials in this block.'},
-	    {name:'randomBlockOrder' ,label:'Randomly choose categories location in Block 1', desc:'If not randomized: the First Category (in the Categories page) will appear on the left in Blocks 1,3, and 4.'},
-	    {name:'randomAttSide',label:'Randomly choose attributes location in the task', desc: 'If not randomized: the First Category (in the Attributes page) will appear on the left.'},
-	    {blockCategories_nTrials: 0,blockCategories_nMiniBlocks:0, blockAttributes_nTrials:0,blockAttributes_nMiniBlocks:0,
-	        blockFirstCombined_nTrials:0, blockFirstCombined_nMiniBlocks:0, blockSecondCombined_nTrials:0, blockSecondCombined_nMiniBlocks:0,
-	        blockSwitch_nTrials:0, blockSwitch_nMiniBlocks:0, randomBlockOrder: false, randomAttSide : false}
-	];
+	// let blocksDesc = [
+	//     {label:'Block 1', numTrialBlocks:'blockCategories_nTrials', numMiniBlocks: 'blockCategories_nMiniBlocks', desc:'Will present the categories.'},
+	//     {label:'Block 2', numTrialBlocks:'blockAttributes_nTrials', numMiniBlocks: 'blockAttributes_nMiniBlocks', desc:'Will present the attributes.'},
+	//     {label:'Blocks 3 and 6', numTrialBlocks:'blockFirstCombined_nTrials', numMiniBlocks: 'blockFirstCombined_nMiniBlocks', desc:'The first combined block.'},
+	//     {label:'Blocks 4 and 7', numTrialBlocks:'blockSecondCombined_nTrials', numMiniBlocks: 'blockSecondCombined_nMiniBlocks', desc:'The second combined block.'},
+	//     {label:'Block 5', numTrialBlocks:'blockSwitch_nTrials', numMiniBlocks: 'blockSwitch_nMiniBlocks', desc:'Reversing the attributes block. Some have recommended using 50 trials in this block.'},
+	//     {blockCategories_nTrials: 0,blockCategories_nMiniBlocks:0, blockAttributes_nTrials:0,blockAttributes_nMiniBlocks:0,
+	//         blockFirstCombined_nTrials:0, blockFirstCombined_nMiniBlocks:0, blockSecondCombined_nTrials:0, blockSecondCombined_nMiniBlocks:0,
+	//         blockSwitch_nTrials:0, blockSwitch_nMiniBlocks:0, randomBlockOrder: false, randomAttSide : false}
+	// ];
 
 	let categoryClear = [{name: '', title: {media: {word: ''}, css: {color: '#000000', 'font-size': '0em'}, height: 4},
 	    stimulusMedia: [],
 	    stimulusCss : {color:'#000000', 'font-size':'0em'}}];
 
+	let blockClear =  
+	    [//Each object in this array defines a block
+	        {
+	            instHTML : '', 
+	            block : 1,
+	            miniBlocks : 0, 
+	            singleAttTrials : 0, 
+	            sharedAttTrials : 0, 
+	            categoryTrials : 0 
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 2, 
+	            miniBlocks : 0, 
+	            singleAttTrials : 0, 
+	            sharedAttTrials : 0, 
+	            categoryTrials : 0
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 3, 
+	            miniBlocks : 0, 
+	            singleAttTrials : 0, 
+	            sharedAttTrials : 0, 
+	            categoryTrials : 0
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 4, 
+	            miniBlocks : 0, 
+	            singleAttTrials : 0, 
+	            sharedAttTrials : 0, 
+	            categoryTrials : 0
+	        }, 
+	        { 
+	            instHTML : '', 
+	            block : 5, 
+	            miniBlocks : 0, 
+	            singleAttTrials : 0, 
+	            sharedAttTrials : 0, 
+	            categoryTrials : 0
+	        }
+	    ];
+
+
 	let tabs = [
 	    {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },
-	    {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blocksDesc},
-	    {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: categoryClear},
+	    {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blockClear},
+	    {value: 'category', text: 'Category', component: categoriesComponent, rowsDesc: categoryClear},
 	    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: categoryClear},
 	    {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
 	    {value: 'output', text: 'Complete', component: outputComponent},
 	    {value: 'import', text: 'Import', component: importComponent},
-	    {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'IAT'}
+	    {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'STIAT'}
 	];
 
-	function clone(obj){
-	    return JSON.parse(JSON.stringify(obj));
-	}
-
-	let iat = {
+	let stiat = {
 	    controller: function(settings$1){ return {settings: settings$1 ? settings$1 : clone(settings)};},
 	    view: function(ctrl){
 	        return m('.container', 
 	            m('.header.p-3 mb-2 bg-info text-white',
-	                m('h1.display-4', 'Create my IAT script')),
+	                m('h1.display-4', 'Create my STIAT script')),
 	            m.component(tabsComponent, tabs, ctrl.settings, settings)
 	        );
 	    }
 	};
 
-	m.mount(document.getElementById('dashboard'), iat);
+	m.mount(document.getElementById('dashboard'), stiat);
 
 }());
-//# sourceMappingURL=iat_index.js.map
+//# sourceMappingURL=stiat_index.js.map
