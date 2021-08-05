@@ -2,15 +2,15 @@ let settings = {
     parameters : {isQualtrics:false, base_url:''},
     category: {name: 'Black people', title: {media: { word : 'Black people'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
         stimulusMedia: [{word: 'Tayron'}, {word: 'Malik'},{word: 'Terrell'},{word: 'Jazamin'},{word: 'Tiara'},{word: 'Shanice'}],
-        css : {color:'#31b404', 'font-size':'2em'}
+        stimulusCss : {color:'#31b404', 'font-size':'2em'}
     },
     attribute1: {name: 'Unpleasant', title: {media: { word : 'Unpleasant'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
         stimulusMedia: [{word: 'Bomb'}, {word: 'Abuse'},{word: 'Sadness'},{word: 'Pain'},{word: 'Poison'},{word: 'Grief'}],
-        css : {color:'#31b404', 'font-size':'2em'}
+        stimulusCss : {color:'#31b404', 'font-size':'2em'}
     },
     attribute2: {name: 'Pleasant', title: {media: { word : 'Pleasant'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
         stimulusMedia: [{word: 'Paradise'}, {word: 'Pleasure'},{word: 'Cheer'},{word: 'Wonderful'},{word: 'Splendid'},{word: 'Love'}],
-        css : {color:'#31b404', 'font-size':'2em'}
+        stimulusCss : {color:'#31b404', 'font-size':'2em'}
     },
     trialsByBlock : 
     [//Each object in this array defines a block

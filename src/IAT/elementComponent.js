@@ -8,7 +8,7 @@ function controller(object,settings, stimuliList){
     let element = settings[object.key];
     let fields = {
         newStimulus : m.prop(''),
-        elementType: m.prop(object.key.includes('category') ? 'Category' : 'Attribute'),
+        elementType: m.prop(object.key.includes('attribute') ? 'Attribute' : 'Category'),
         titleType: m.prop(element.title.media.word === undefined ? 'image' : 'word'),
         titleHidden: m.prop(''), //weather the category design flags will be visible
         selectedStimuli: m.prop(''),
@@ -19,7 +19,6 @@ function controller(object,settings, stimuliList){
         updateTitleType:updateTitleType, resetStimuliList:resetStimuliList};
     
     function get(name,media,type){
-        if(!element[name]) name = 'css'; 
         if (name == 'title' && media == null && type == null) { //special case - return the title's value (word/image)
             if (element.title.media.word == undefined) return element.title.media.image;
             return element.title.media.word;
@@ -38,7 +37,7 @@ function controller(object,settings, stimuliList){
     function set(name, media, type){ 
         if(!element[name]) name = 'css'; 
         return function(value){ 
-            if (media !=null && type!=null) {
+            if (media != null && type != null) {
                 if (type == 'font-size') {
                     if (value == 0) { 
                         alert("Font's size must be bigger then 0");

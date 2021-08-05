@@ -1,3 +1,4 @@
+import {clone} from '../resources/utilities.js';
 
 let outputComponent = {
     view:view,
@@ -37,7 +38,7 @@ function view(ctrl){
 }
 
 function controller(settings){
-    updateMediaSettings();
+    settings = updateMediaSettings(settings);
     return {createFile:createFile, printToPage:printToPage, toString:toString,
         updateSettings:updateSettings, toScript:toScript};
 
@@ -84,12 +85,22 @@ function controller(settings){
     }
     
     function updateMediaSettings(){
-        settings.category.media = settings.category.stimulusMedia
-        delete settings.category.stimulusMedia
-        settings.attribute1.media = settings.attribute1.stimulusMedia
-        delete settings.attribute1.stimulusMedia
-        settings.attribute2.media = settings.attribute2.stimulusMedia
-        delete settings.attribute2.stimulusMedia
+        //update attributes to be compatible to STIAT
+        let settings_output = clone(settings)
+        settings_output.category.media = settings_output.category.stimulusMedia
+        delete settings_output.category.stimulusMedia
+        settings_output.attribute1.media = settings_output.attribute1.stimulusMedia
+        delete settings_output.attribute1.stimulusMedia
+        settings_output.attribute2.media = settings_output.attribute2.stimulusMedia
+        delete settings_output.attribute2.stimulusMedia
+
+        settings_output.category.css = settings_output.category.stimulusCss 
+        delete settings_output.category.stimulusCss 
+        settings_output.attribute1.css = settings_output.attribute1.stimulusCss 
+        delete settings_output.attribute1.stimulusCss 
+        settings_output.attribute2.css = settings_output.attribute2.stimulusCss 
+        delete settings_output.attribute2.stimulusCss 
+        return settings_output
     }
     
     function updateSettings(){

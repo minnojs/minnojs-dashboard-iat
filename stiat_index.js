@@ -38,15 +38,15 @@
 	    parameters : {isQualtrics:false, base_url:''},
 	    category: {name: 'Black people', title: {media: { word : 'Black people'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
 	        stimulusMedia: [{word: 'Tayron'}, {word: 'Malik'},{word: 'Terrell'},{word: 'Jazamin'},{word: 'Tiara'},{word: 'Shanice'}],
-	        css : {color:'#31b404', 'font-size':'2em'}
+	        stimulusCss : {color:'#31b404', 'font-size':'2em'}
 	    },
 	    attribute1: {name: 'Unpleasant', title: {media: { word : 'Unpleasant'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
 	        stimulusMedia: [{word: 'Bomb'}, {word: 'Abuse'},{word: 'Sadness'},{word: 'Pain'},{word: 'Poison'},{word: 'Grief'}],
-	        css : {color:'#31b404', 'font-size':'2em'}
+	        stimulusCss : {color:'#31b404', 'font-size':'2em'}
 	    },
 	    attribute2: {name: 'Pleasant', title: {media: { word : 'Pleasant'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
 	        stimulusMedia: [{word: 'Paradise'}, {word: 'Pleasure'},{word: 'Cheer'},{word: 'Wonderful'},{word: 'Splendid'},{word: 'Love'}],
-	        css : {color:'#31b404', 'font-size':'2em'}
+	        stimulusCss : {color:'#31b404', 'font-size':'2em'}
 	    },
 	    trialsByBlock : 
 	    [//Each object in this array defines a block
@@ -154,11 +154,11 @@
 	            if(parameters[name] == true) return 'Touch' 
 	            else return 'Keyboard';
 	        if (name == 'isQualtrics')
-	            if (parameters[name] == true) return 'Qualtrics'
+	            if (parameters[name] == true){return 'Qualtrics'}
 	            else return 'Regular';
 	        return parameters[name];
 	    }
-	    function set(name){ return function(value){ 
+	    function set(name){return function(value){ 
 	        if (name == 'isTouch')
 	            if(value == 'Keyboard') return parameters[name] = false;
 	            else return parameters[name] = true;
@@ -184,13 +184,19 @@
 	       ])
 	       ]),
 	        ctrl.rows.slice(0,-1).map((row) => {
+	            if ((row.name === 'fullscreen' || row.name === 'showDebriefing') && ctrl.get('isQualtrics') === 'Regular') {
+	                return null;
+	            }
 	            return m('.row top-buffer', [
 	                    m('.col-auto info-buffer',[
 	                        m('i.fa.fa-info-circle'),
 	                        m('.card.info-box.card-header', [row.desc])
 	                    ]),
 	                    m('.col-3 param-buffer', row.label),
-	                    row.options ? //case of isTouch and isQualtrics
+	                    row.name.includes('key') ? //case of keys parameters
+	                    m('.col-8 param-buffer',
+	                    m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))}))                    
+	                    : row.options ? //case of isTouch and isQualtrics
 	                    m('.col-8 param-buffer',
 	                    m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
 	                    row.options.map(function(option){return m('option', option);})
@@ -199,17 +205,21 @@
 	                    m('.col-8 param-buffer',
 	                    m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
 	                    ])
-	                }),
+	        }),
 	        m('.row top-buffer', [
 	            m('.col-auto info-buffer',[
 	                m('i.fa.fa-info-circle'),
-	                m('.card.info-box.card-header',{style:{width: '500px'}}, ['If your task has any images, enter here the path to that images folder. It can be a full url, or a relative URL to the folder that will host this script'])
+	                m('.card.info-box.card-header', ['If your task has any images, enter here the path to that images folder. It can be a full url, or a relative URL to the folder that will host this script'])
 	            ]),
 	            m('.col-3 param-buffer', 'Image\'s URL'),
 	            m('.col-8 param-buffer',
 	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
 	        ])
 	    ])
+	}
+
+	function clone(obj){
+	    return JSON.parse(JSON.stringify(obj));
 	}
 
 	let outputComponent = {
@@ -250,7 +260,7 @@
 	}
 
 	function controller$1(settings){
-	    updateMediaSettings();
+	    settings = updateMediaSettings();
 	    return {createFile:createFile, printToPage:printToPage, toString:toString,
 	        updateSettings:updateSettings, toScript:toScript};
 
@@ -297,12 +307,22 @@
 	    }
 	    
 	    function updateMediaSettings(){
-	        settings.category.media = settings.category.stimulusMedia;
-	        delete settings.category.stimulusMedia;
-	        settings.attribute1.media = settings.attribute1.stimulusMedia;
-	        delete settings.attribute1.stimulusMedia;
-	        settings.attribute2.media = settings.attribute2.stimulusMedia;
-	        delete settings.attribute2.stimulusMedia;
+	        //update attributes to be compatible to STIAT
+	        let settings_output = clone(settings);
+	        settings_output.category.media = settings_output.category.stimulusMedia;
+	        delete settings_output.category.stimulusMedia;
+	        settings_output.attribute1.media = settings_output.attribute1.stimulusMedia;
+	        delete settings_output.attribute1.stimulusMedia;
+	        settings_output.attribute2.media = settings_output.attribute2.stimulusMedia;
+	        delete settings_output.attribute2.stimulusMedia;
+
+	        settings_output.category.css = settings_output.category.stimulusCss; 
+	        delete settings_output.category.stimulusCss; 
+	        settings_output.attribute1.css = settings_output.attribute1.stimulusCss; 
+	        delete settings_output.attribute1.stimulusCss; 
+	        settings_output.attribute2.css = settings_output.attribute2.stimulusCss; 
+	        delete settings_output.attribute2.stimulusCss; 
+	        return settings_output
 	    }
 	    
 	    function updateSettings(){
@@ -334,21 +354,20 @@
 	};
 
 	function controller$2(settings, defaultSettings, rows){
-	    //let textparameters = settings.text
 	    var textparameters;
 	    var isTouch = settings.parameters.isTouch;
 	    isTouch ? textparameters = settings.touch_text : textparameters = settings.text;
-	    return {reset:reset, clear:clear, set:set, get:get, rows: rows.slice(0,-1)};
+	    return {reset:reset, clear:clear, set:set, get:get, rows: rows.slice(0,-2), isTouch};
 	    
 	    function reset(){isTouch ? Object.assign(textparameters, defaultSettings.touch_text) : Object.assign(textparameters, defaultSettings.text);}
-	    function clear(){ Object.assign(textparameters, rows.slice(-1)[0]); }
-	    function get(name){ return textparameters[name]; }
+	    function clear(){isTouch ? Object.assign(textparameters, rows.slice(-1)[0]) : Object.assign(textparameters, rows.slice(-2)[0]);}
+	    function get(name){return textparameters[name];}
 	    function set(name){ 
 	        return function(value){return textparameters[name] = value;};
 	    }
 	}
 
-	function view$2(ctrl){
+	function view$2(ctrl, settings){
 	    return m('.container' , [
 	        m('.row top-buffer',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
@@ -363,6 +382,10 @@
 	            ])
 	        ]),
 	        ctrl.rows.map(function(row) {
+	            //if touch parameter is choosen, don't show the irrelevant text parametes
+	            if (settings.parameters.isTouch === true && row.nameTouch === undefined) {
+	                return null;
+	            }
 	            return m('.row top-buffer', [
 	                m('.col-auto info-buffer',[
 	                    m('i.fa.fa-info-circle'),
@@ -370,15 +393,11 @@
 	                ]),
 	                m('.col-3 param-buffer', {style:{width: '30%'}},row.label),
 	                m('.col-8 param-buffer', [
-	                    m('textarea.form-control',{style: {width: '30rem' ,height: '5.5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
+	                    m('textarea.form-control',{style: {width: '30rem' ,height: '5.5rem'}, value:ctrl.get(ctrl.isTouch ? row.nameTouch : row.name), onchange:m.withAttr('value', ctrl.set(ctrl.isTouch ? row.nameTouch : row.name))})
 	                ])
 	            ]);
 	        }),
 	    ]);
-	}
-
-	function clone(obj){
-	    return JSON.parse(JSON.stringify(obj));
 	}
 
 	let blocksComponent = {
@@ -416,7 +435,8 @@
 	            element.sharedAttTrials = 0, 
 	            element.categoryTrials = 0; 
 	        });
-	        Object.assign(settings.switchSideBlock, 0);
+	        settings.switchSideBlock = 0;
+	        settings.blockOrder = defaultSettings.blockOrder;
 	    }
 	    function get(name, index){ return blocks[index][name]; }
 	    function set(name, index, type){ 
@@ -449,7 +469,6 @@
 	        blocks.push(clone(clearBlock[0]));
 	        blocks.slice(-1)[0]['block'] = blocks.length;
 	        if (blocks.length === 30) addFlag('hidden'); //limit blocks to 30
-
 	    }
 	    function removeBlocks(){
 	        if (blocks.length < 4) {
@@ -595,7 +614,7 @@
 	    let element = settings[object.key];
 	    let fields = {
 	        newStimulus : m.prop(''),
-	        elementType: m.prop(object.key.includes('category') ? 'Category' : 'Attribute'),
+	        elementType: m.prop(object.key.includes('attribute') ? 'Attribute' : 'Category'),
 	        titleType: m.prop(element.title.media.word === undefined ? 'image' : 'word'),
 	        titleHidden: m.prop(''), //weather the category design flags will be visible
 	        selectedStimuli: m.prop(''),
@@ -606,7 +625,6 @@
 	        updateTitleType:updateTitleType, resetStimuliList:resetStimuliList};
 	    
 	    function get(name,media,type){
-	        if(!element[name]) name = 'css'; 
 	        if (name == 'title' && media == null && type == null) { //special case - return the title's value (word/image)
 	            if (element.title.media.word == undefined) return element.title.media.image;
 	            return element.title.media.word;
@@ -625,7 +643,7 @@
 	    function set(name, media, type){ 
 	        if(!element[name]) name = 'css'; 
 	        return function(value){ 
-	            if (media !=null && type!=null) {
+	            if (media != null && type != null) {
 	                if (type == 'font-size') {
 	                    if (value == 0) { 
 	                        alert("Font's size must be bigger then 0");
@@ -895,17 +913,23 @@
 	        };
 	    }
 	    function updateMediaSettings(input){
-	        input.category.stimulusMedia = input.category.media;
-	        delete input.category.media;
-	        input.attribute1.stimulusMedia = input.attribute1.media;
-	        delete input.attribute1.media;
-	        input.attribute2.stimulusMedia = input.attribute2.media;
-	        delete input.attribute2.media;
+	        //update attributes to be compatible to IAT so that elementComponent can be used.
+	        settings.category.stimulusMedia = input.category.media;
+	        delete settings.category.media;
+	        settings.attribute1.stimulusMedia = input.attribute1.media;
+	        delete settings.attribute1.media;
+	        settings.attribute2.stimulusMedia = input.attribute2.media;
+	        delete settings.attribute2.media;
+
+	        settings.category.stimulusCss = input.category.css;
+	        delete settings.category.css;
+	        settings.attribute1.stimulusCss = input.attribute1.css;
+	        delete settings.attribute1.css;
+	        settings.attribute2.stimulusCss = input.attribute2.css;
+	        delete settings.attribute2.css;
 	    }
 	    function updateSettings(input) {
-	        console.log("before", );
-	        updateMediaSettings(input);
-	        console.log("after");
+
 	        settings.category = input.category;
 	        settings.attribute1 = input.attribute1;
 	        settings.attribute2 = input.attribute2;
@@ -922,15 +946,17 @@
 	        settings.trialsByBlock = input.trialsByBlock;
 	        settings.blockOrder = input.blockOrder;
 	        settings.switchSideBlock = input.switchSideBlock;
-	        // settings = input;
-	        //console.log(settings);
+
+	        updateMediaSettings(input); 
+
 	        
 	    }
 	}
 
 	let links = {IAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/', 
 		BIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-biat/',
-		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/'
+		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/',
+		SPF: '#'
 	};
 
 	let helpComponent = {
@@ -968,26 +994,17 @@
 	    {name: 'instTemplateCategoryRight', label:'Instructions in Right Category', desc: 'The instructions in the right category.'},
 	    {name: 'instTemplateCategoryLeft', label:'Instructions in Left Category', desc: 'The instructions in the left category.'},
 	    {textOnError:'', leftKeyText:'', rightKeyText:'', orKeyText:'', remindErrorText:'',finalText:'',
-	    instTemplatePractice:'', instTemplateCategoryRight:'', instTemplateCategoryLeft:''}
+	    instTemplatePractice:'', instTemplateCategoryRight:'', instTemplateCategoryLeft:''},
+	    {} //an empty element
 	];
-
-	// let blocksDesc = [
-	//     {label:'Block 1', numTrialBlocks:'blockCategories_nTrials', numMiniBlocks: 'blockCategories_nMiniBlocks', desc:'Will present the categories.'},
-	//     {label:'Block 2', numTrialBlocks:'blockAttributes_nTrials', numMiniBlocks: 'blockAttributes_nMiniBlocks', desc:'Will present the attributes.'},
-	//     {label:'Blocks 3 and 6', numTrialBlocks:'blockFirstCombined_nTrials', numMiniBlocks: 'blockFirstCombined_nMiniBlocks', desc:'The first combined block.'},
-	//     {label:'Blocks 4 and 7', numTrialBlocks:'blockSecondCombined_nTrials', numMiniBlocks: 'blockSecondCombined_nMiniBlocks', desc:'The second combined block.'},
-	//     {label:'Block 5', numTrialBlocks:'blockSwitch_nTrials', numMiniBlocks: 'blockSwitch_nMiniBlocks', desc:'Reversing the attributes block. Some have recommended using 50 trials in this block.'},
-	//     {blockCategories_nTrials: 0,blockCategories_nMiniBlocks:0, blockAttributes_nTrials:0,blockAttributes_nMiniBlocks:0,
-	//         blockFirstCombined_nTrials:0, blockFirstCombined_nMiniBlocks:0, blockSecondCombined_nTrials:0, blockSecondCombined_nMiniBlocks:0,
-	//         blockSwitch_nTrials:0, blockSwitch_nMiniBlocks:0, randomBlockOrder: false, randomAttSide : false}
-	// ];
 
 	let categoryClear = [{name: '', title: {media: {word: ''}, css: {color: '#000000', 'font-size': '0em'}, height: 4},
 	    stimulusMedia: [],
 	    stimulusCss : {color:'#000000', 'font-size':'0em'}}];
 
-	let blockClear =  
-	    [//Each object in this array defines a block
+	let clearBlock =  
+	    [
+	        //Each of the following defines a block
 	        {
 	            instHTML : '', 
 	            block : 1,
@@ -995,45 +1012,13 @@
 	            singleAttTrials : 0, 
 	            sharedAttTrials : 0, 
 	            categoryTrials : 0 
-	        }, 
-	        { 
-	            instHTML : '', 
-	            block : 2, 
-	            miniBlocks : 0, 
-	            singleAttTrials : 0, 
-	            sharedAttTrials : 0, 
-	            categoryTrials : 0
-	        }, 
-	        { 
-	            instHTML : '', 
-	            block : 3, 
-	            miniBlocks : 0, 
-	            singleAttTrials : 0, 
-	            sharedAttTrials : 0, 
-	            categoryTrials : 0
-	        }, 
-	        { 
-	            instHTML : '', 
-	            block : 4, 
-	            miniBlocks : 0, 
-	            singleAttTrials : 0, 
-	            sharedAttTrials : 0, 
-	            categoryTrials : 0
-	        }, 
-	        { 
-	            instHTML : '', 
-	            block : 5, 
-	            miniBlocks : 0, 
-	            singleAttTrials : 0, 
-	            sharedAttTrials : 0, 
-	            categoryTrials : 0
 	        }
 	    ];
 
 
 	let tabs = [
 	    {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },
-	    {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blockClear},
+	    {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: clearBlock},
 	    {value: 'category', text: 'Category', component: categoriesComponent, rowsDesc: categoryClear},
 	    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: categoryClear},
 	    {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},

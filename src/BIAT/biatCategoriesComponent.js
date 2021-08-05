@@ -26,7 +26,7 @@ function controller(settings, defaultSettings, clearElement){
     
     return {addFlag:addFlag, removeFlag, chooseFlag ,firstFlag, secondFlag, categories: categories, headlines: headlines, 
         reset:reset, clear:clear, addCategory:addCategory, choosenCategoriesList:choosenCategoriesList, 
-        updateChoosenBlocks:updateChoosenBlocks, removeBlocks:removeBlocks, keys, chooseCategories: chooseCategories};
+        updateChoosenBlocks:updateChoosenBlocks, removeCategories:removeCategories, keys, chooseCategories: chooseCategories};
     
     function reset(){
         Object.assign(settings.categories[0], clone(defaultSettings.categories[0]));
@@ -66,7 +66,7 @@ function controller(settings, defaultSettings, clearElement){
             chooseClicked(true)
         }
     }
-    function removeBlocks(){
+    function removeCategories(){
 
         if (categories.length < 2) {
             alert('Minimum number of blocks needs to be 2'); 
@@ -130,7 +130,7 @@ function view(ctrl,settings, defaultSettings, clearElement) {
                 m('button.btn btn btn-info',{onclick: ctrl.addCategory, style:{'padding-right':'60px','padding-left':'60px' ,visibility: ctrl.addFlag()}}, [m('i.fas fa-plus')],' Add Category'),
                 m('button.btn btn btn-warning',{onclick: ctrl.chooseCategories},[
                     m('i.fas fa-check'), ' Choose Blocks to Remove']),
-                m('button.btn btn btn-danger',{onclick: ctrl.removeBlocks},[
+                m('button.btn btn btn-danger',{onclick: ctrl.removeCategories},[
                     m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
         ])
     ]),

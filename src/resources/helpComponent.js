@@ -1,7 +1,8 @@
 
 let links = {IAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/', 
 	BIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-biat/',
-	STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/'
+	STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/',
+	SPF: '#'
 };
 
 let helpComponent = {

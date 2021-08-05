@@ -22,26 +22,17 @@ let textDesc = [
     {name: 'instTemplateCategoryRight', label:'Instructions in Right Category', desc: 'The instructions in the right category.'},
     {name: 'instTemplateCategoryLeft', label:'Instructions in Left Category', desc: 'The instructions in the left category.'},
     {textOnError:'', leftKeyText:'', rightKeyText:'', orKeyText:'', remindErrorText:'',finalText:'',
-    instTemplatePractice:'', instTemplateCategoryRight:'', instTemplateCategoryLeft:''}
+    instTemplatePractice:'', instTemplateCategoryRight:'', instTemplateCategoryLeft:''},
+    {} //an empty element
 ];
-
-// let blocksDesc = [
-//     {label:'Block 1', numTrialBlocks:'blockCategories_nTrials', numMiniBlocks: 'blockCategories_nMiniBlocks', desc:'Will present the categories.'},
-//     {label:'Block 2', numTrialBlocks:'blockAttributes_nTrials', numMiniBlocks: 'blockAttributes_nMiniBlocks', desc:'Will present the attributes.'},
-//     {label:'Blocks 3 and 6', numTrialBlocks:'blockFirstCombined_nTrials', numMiniBlocks: 'blockFirstCombined_nMiniBlocks', desc:'The first combined block.'},
-//     {label:'Blocks 4 and 7', numTrialBlocks:'blockSecondCombined_nTrials', numMiniBlocks: 'blockSecondCombined_nMiniBlocks', desc:'The second combined block.'},
-//     {label:'Block 5', numTrialBlocks:'blockSwitch_nTrials', numMiniBlocks: 'blockSwitch_nMiniBlocks', desc:'Reversing the attributes block. Some have recommended using 50 trials in this block.'},
-//     {blockCategories_nTrials: 0,blockCategories_nMiniBlocks:0, blockAttributes_nTrials:0,blockAttributes_nMiniBlocks:0,
-//         blockFirstCombined_nTrials:0, blockFirstCombined_nMiniBlocks:0, blockSecondCombined_nTrials:0, blockSecondCombined_nMiniBlocks:0,
-//         blockSwitch_nTrials:0, blockSwitch_nMiniBlocks:0, randomBlockOrder: false, randomAttSide : false}
-// ];
 
 let categoryClear = [{name: '', title: {media: {word: ''}, css: {color: '#000000', 'font-size': '0em'}, height: 4},
     stimulusMedia: [],
     stimulusCss : {color:'#000000', 'font-size':'0em'}}];
 
-let blockClear =  
-    [//Each object in this array defines a block
+let clearBlock =  
+    [
+        //Each of the following defines a block
         {
             instHTML : '', 
             block : 1,
@@ -49,45 +40,13 @@ let blockClear =
             singleAttTrials : 0, 
             sharedAttTrials : 0, 
             categoryTrials : 0 
-        }, 
-        { 
-            instHTML : '', 
-            block : 2, 
-            miniBlocks : 0, 
-            singleAttTrials : 0, 
-            sharedAttTrials : 0, 
-            categoryTrials : 0
-        }, 
-        { 
-            instHTML : '', 
-            block : 3, 
-            miniBlocks : 0, 
-            singleAttTrials : 0, 
-            sharedAttTrials : 0, 
-            categoryTrials : 0
-        }, 
-        { 
-            instHTML : '', 
-            block : 4, 
-            miniBlocks : 0, 
-            singleAttTrials : 0, 
-            sharedAttTrials : 0, 
-            categoryTrials : 0
-        }, 
-        { 
-            instHTML : '', 
-            block : 5, 
-            miniBlocks : 0, 
-            singleAttTrials : 0, 
-            sharedAttTrials : 0, 
-            categoryTrials : 0
         }
     ]
 
 
 let tabs = [
     {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },
-    {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blockClear},
+    {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: clearBlock},
     {value: 'category', text: 'Category', component: categoryComponent, rowsDesc: categoryClear},
     {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: categoryClear},
     {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},

@@ -170,7 +170,7 @@
 	    text: {
 	        leftKeyText:'"E" for all else',
 	        rightKeyText:'"I" if item belongs', 
-	        orKeyText:'or',
+	        orText:'or',
 	        remindErrorText : '<p style="font-size:0.6em;font-family:arial sans-serif; text-align:center;">' +
 	        'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +
 	        'Press the other key to continue.<p/>',
@@ -187,14 +187,13 @@
 	        '<p style="text-align:center;">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
 	    },
 	    touch_text : {
-	        rightKeyText : 'Left for all else', 
-	        leftKeyText : 'Right if item belongs',
-	        orKeyText:'or',
-	        remindErrorText : '<p style="font-size:1.4em; font-family:arial sans-serif; text-align:center;">' +
+	        rightKeyTextTouch : 'Left for all else', 
+	        leftKeyTextTouch : 'Right if item belongs',
+	        remindErrorTextTouch : '<p style="font-size:1.4em; font-family:arial sans-serif; text-align:center;">' +
 	        'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +
 	        'Touch the other side to continue.<p/>',
-	        finalText: 'Touch the bottom green area to continue to the next task',
-	        instTemplate: '<div><p style="text-align:center;"" ' +
+	        finalTouchText: 'Touch the bottom green area to continue to the next task',
+	        instTemplateTouch: '<div><p style="text-align:center;"" ' +
 	        '<br/><font-color="#000000"><u>Part blockNum of nBlocks </u><br/></p>' +
 	        '<p style="text-align:left;" style="margin-left:5px"> ' +
 	        'Put a right finger on the <b>right</b> green area for items that belong to the category ' + 
@@ -223,11 +222,11 @@
 	            if(parameters[name] == true) return 'Touch' 
 	            else return 'Keyboard';
 	        if (name == 'isQualtrics')
-	            if (parameters[name] == true) return 'Qualtrics'
+	            if (parameters[name] == true){return 'Qualtrics'}
 	            else return 'Regular';
 	        return parameters[name];
 	    }
-	    function set(name){ return function(value){ 
+	    function set(name){return function(value){ 
 	        if (name == 'isTouch')
 	            if(value == 'Keyboard') return parameters[name] = false;
 	            else return parameters[name] = true;
@@ -253,13 +252,19 @@
 	       ])
 	       ]),
 	        ctrl.rows.slice(0,-1).map((row) => {
+	            if ((row.name === 'fullscreen' || row.name === 'showDebriefing') && ctrl.get('isQualtrics') === 'Regular') {
+	                return null;
+	            }
 	            return m('.row top-buffer', [
 	                    m('.col-auto info-buffer',[
 	                        m('i.fa.fa-info-circle'),
 	                        m('.card.info-box.card-header', [row.desc])
 	                    ]),
 	                    m('.col-3 param-buffer', row.label),
-	                    row.options ? //case of isTouch and isQualtrics
+	                    row.name.includes('key') ? //case of keys parameters
+	                    m('.col-8 param-buffer',
+	                    m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))}))                    
+	                    : row.options ? //case of isTouch and isQualtrics
 	                    m('.col-8 param-buffer',
 	                    m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
 	                    row.options.map(function(option){return m('option', option);})
@@ -268,11 +273,11 @@
 	                    m('.col-8 param-buffer',
 	                    m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
 	                    ])
-	                }),
+	        }),
 	        m('.row top-buffer', [
 	            m('.col-auto info-buffer',[
 	                m('i.fa.fa-info-circle'),
-	                m('.card.info-box.card-header',{style:{width: '500px'}}, ['If your task has any images, enter here the path to that images folder. It can be a full url, or a relative URL to the folder that will host this script'])
+	                m('.card.info-box.card-header', ['If your task has any images, enter here the path to that images folder. It can be a full url, or a relative URL to the folder that will host this script'])
 	            ]),
 	            m('.col-3 param-buffer', 'Image\'s URL'),
 	            m('.col-8 param-buffer',
@@ -352,21 +357,20 @@
 	};
 
 	function controller$2(settings, defaultSettings, rows){
-	    //let textparameters = settings.text
 	    var textparameters;
 	    var isTouch = settings.parameters.isTouch;
 	    isTouch ? textparameters = settings.touch_text : textparameters = settings.text;
-	    return {reset:reset, clear:clear, set:set, get:get, rows: rows.slice(0,-1)};
+	    return {reset:reset, clear:clear, set:set, get:get, rows: rows.slice(0,-2), isTouch};
 	    
 	    function reset(){isTouch ? Object.assign(textparameters, defaultSettings.touch_text) : Object.assign(textparameters, defaultSettings.text);}
-	    function clear(){ Object.assign(textparameters, rows.slice(-1)[0]); }
-	    function get(name){ return textparameters[name]; }
+	    function clear(){isTouch ? Object.assign(textparameters, rows.slice(-1)[0]) : Object.assign(textparameters, rows.slice(-2)[0]);}
+	    function get(name){return textparameters[name];}
 	    function set(name){ 
 	        return function(value){return textparameters[name] = value;};
 	    }
 	}
 
-	function view$2(ctrl){
+	function view$2(ctrl, settings){
 	    return m('.container' , [
 	        m('.row top-buffer',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
@@ -381,6 +385,10 @@
 	            ])
 	        ]),
 	        ctrl.rows.map(function(row) {
+	            //if touch parameter is choosen, don't show the irrelevant text parametes
+	            if (settings.parameters.isTouch === true && row.nameTouch === undefined) {
+	                return null;
+	            }
 	            return m('.row top-buffer', [
 	                m('.col-auto info-buffer',[
 	                    m('i.fa.fa-info-circle'),
@@ -388,7 +396,7 @@
 	                ]),
 	                m('.col-3 param-buffer', {style:{width: '30%'}},row.label),
 	                m('.col-8 param-buffer', [
-	                    m('textarea.form-control',{style: {width: '30rem' ,height: '5.5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
+	                    m('textarea.form-control',{style: {width: '30rem' ,height: '5.5rem'}, value:ctrl.get(ctrl.isTouch ? row.nameTouch : row.name), onchange:m.withAttr('value', ctrl.set(ctrl.isTouch ? row.nameTouch : row.name))})
 	                ])
 	            ]);
 	        }),
@@ -806,7 +814,7 @@
 	    
 	    return {addFlag:addFlag, removeFlag, chooseFlag ,firstFlag, secondFlag, categories: categories, headlines: headlines, 
 	        reset:reset, clear:clear, addCategory:addCategory, choosenCategoriesList:choosenCategoriesList, 
-	        updateChoosenBlocks:updateChoosenBlocks, removeBlocks:removeBlocks, keys, chooseCategories: chooseCategories};
+	        updateChoosenBlocks:updateChoosenBlocks, removeCategories:removeCategories, keys, chooseCategories: chooseCategories};
 	    
 	    function reset(){
 	        Object.assign(settings.categories[0], clone(defaultSettings.categories[0]));
@@ -846,7 +854,7 @@
 	            chooseClicked(true);
 	        }
 	    }
-	    function removeBlocks(){
+	    function removeCategories(){
 
 	        if (categories.length < 2) {
 	            alert('Minimum number of blocks needs to be 2'); 
@@ -910,7 +918,7 @@
 	                m('button.btn btn btn-info',{onclick: ctrl.addCategory, style:{'padding-right':'60px','padding-left':'60px' ,visibility: ctrl.addFlag()}}, [m('i.fas fa-plus')],' Add Category'),
 	                m('button.btn btn btn-warning',{onclick: ctrl.chooseCategories},[
 	                    m('i.fas fa-check'), ' Choose Blocks to Remove']),
-	                m('button.btn btn btn-danger',{onclick: ctrl.removeBlocks},[
+	                m('button.btn btn btn-danger',{onclick: ctrl.removeCategories},[
 	                    m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
 	        ])
 	    ]),
@@ -1141,7 +1149,8 @@
 
 	let links = {IAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/', 
 		BIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-biat/',
-		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/'
+		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/',
+		SPF: '#'
 	};
 
 	let helpComponent = {
@@ -1186,14 +1195,16 @@
 	];
 
 	let textDesc = [
-	    {name: 'instTemplate', label:'Instructions', desc: 'Instructions'},
-	    {name: 'remindErrorText', label:'Screen\'s Bottom (error reminder)', desc:'We use this text to remind participants what happens on error. Replace this text if you do not require participants to correct their error responses (see General Parameters page).'},
-	    {name: 'leftKeyText', label:'Top-left text (about the left key)', desc: 'We use this text to remind participants what key to use for a left response.'},
-	    {name: 'rightKeyText', label:'Top-right text (about the right key)', desc: 'We use this text to remind participants what key to use for a right response.'},
-	    {name: 'orKeyText', label:'Or', desc: 'We show this text in the combined blocks to separate between the two categories that use the same key.'},
-	    {name: 'finalText', label:'Text shown at the end', desc: 'Text shown at the end'},
-	    {remindErrorText:'', leftKeyText:'', rightKeyText:'', orKeyText:'', 
-	        instTemplate:'', finalText:''}
+	    {name: 'instTemplate', nameTouch: 'instTemplateTouch',label:'Instructions', desc: 'Instructions'},
+	    {name: 'remindErrorText', nameTouch: 'remindErrorTextTouch' , label:'Screen\'s Bottom (error reminder)', desc:'We use this text to remind participants what happens on error. Replace this text if you do not require participants to correct their error responses (see General Parameters page).'},
+	    {name: 'leftKeyText', nameTouch:'leftKeyTextTouch',label:'Top-left text (about the left key)', desc: 'We use this text to remind participants what key to use for a left response.'},
+	    {name: 'rightKeyText', nameTouch:'rightKeyTextTouch',label:'Top-right text (about the right key)', desc: 'We use this text to remind participants what key to use for a right response.'},
+	    {name: 'orText', label:'Or', desc: 'We show this text in the combined blocks to separate between the two categories that use the same key.'},
+	    {name: 'finalText', nameTouch: 'finalTouchText' , label:'Text shown at the end', desc: 'Text shown at the end'},
+	    {remindErrorText:'', leftKeyText:'', rightKeyText:'', orText:'', 
+	        instTemplate:'', finalText:''},
+	    {remindErrorTextTouch:'', leftKeyTextTouch:'', rightKeyTextTouch:'',  
+	    instTemplateTouch:'', finalTouchText:''}
 	];
 
 	let elementClear = [{
@@ -1222,12 +1233,6 @@
 	    {value: 'import', text: 'Import', component: importComponent},
 	    {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'BIAT'}
 	];
-
-	//remove practice related elements
-	if (!settings.parameters.practiceBlock) {
-	    blocksDesc.splice(2,1); 
-	    tabs.splice(2,1);
-	}
 
 	let biat = {
 	    controller: function(settings$1){

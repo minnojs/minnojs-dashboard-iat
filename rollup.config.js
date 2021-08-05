@@ -20,6 +20,13 @@ const bannerSTIAT = `/**
 `;
 
 
+const bannerSPF = `/**
+* @preserve minnojs-spf-dashboard v${version}
+* @license Apache-2.0 (${(new Date()).getFullYear()})
+*/
+`;
+
+
 const configIAT = {
     input: 'src/IAT/iat.index.standalone.js',
     output: {
@@ -53,5 +60,16 @@ const configSTIAT = {
     }
 };
 
+const configSPF = {
+    input: 'src/spf/spf.index.standalone.js',
+    output: {
+        file: 'spf_index.js',
+        format: 'iife', 
+        name: 'spfDashboard',
+        sourcemap:true,
+        banner: bannerSPF
+    }
+};
+
 // at some time we might want to outputs, one as a standalone, one as a plugin
-export default [ configIAT, configBIAT, configSTIAT ];
+export default [ configIAT, configBIAT, configSTIAT, configSPF ];

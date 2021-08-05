@@ -33,17 +33,23 @@ function controller(settings) {
         };
     }
     function updateMediaSettings(input){
-        input.category.stimulusMedia = input.category.media
-        delete input.category.media
-        input.attribute1.stimulusMedia = input.attribute1.media
-        delete input.attribute1.media
-        input.attribute2.stimulusMedia = input.attribute2.media
-        delete input.attribute2.media
+        //update attributes to be compatible to IAT so that elementComponent can be used.
+        settings.category.stimulusMedia = input.category.media
+        delete settings.category.media
+        settings.attribute1.stimulusMedia = input.attribute1.media
+        delete settings.attribute1.media
+        settings.attribute2.stimulusMedia = input.attribute2.media
+        delete settings.attribute2.media
+
+        settings.category.stimulusCss = input.category.css
+        delete settings.category.css
+        settings.attribute1.stimulusCss = input.attribute1.css
+        delete settings.attribute1.css
+        settings.attribute2.stimulusCss = input.attribute2.css
+        delete settings.attribute2.css
     }
     function updateSettings(input) {
-        console.log("before", )
-        updateMediaSettings(input);
-        console.log("after")
+
         settings.category = input.category;
         settings.attribute1 = input.attribute1;
         settings.attribute2 = input.attribute2;
@@ -60,8 +66,9 @@ function controller(settings) {
         settings.trialsByBlock = input.trialsByBlock
         settings.blockOrder = input.blockOrder;
         settings.switchSideBlock = input.switchSideBlock;
-        // settings = input;
-        //console.log(settings);
+
+        updateMediaSettings(input); 
+
         
     }
 }

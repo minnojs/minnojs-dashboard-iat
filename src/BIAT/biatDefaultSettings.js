@@ -136,7 +136,7 @@ let settings = {
     text: {
         leftKeyText:'"E" for all else',
         rightKeyText:'"I" if item belongs', 
-        orKeyText:'or',
+        orText:'or',
         remindErrorText : '<p style="font-size:0.6em;font-family:arial sans-serif; text-align:center;">' +
         'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +
         'Press the other key to continue.<p/>',
@@ -153,14 +153,13 @@ let settings = {
         '<p style="text-align:center;">Press the <b>space bar</b> when you are ready to start.</font></p></div>',
     },
     touch_text : {
-        rightKeyText : 'Left for all else', 
-        leftKeyText : 'Right if item belongs',
-        orKeyText:'or',
-        remindErrorText : '<p style="font-size:1.4em; font-family:arial sans-serif; text-align:center;">' +
+        rightKeyTextTouch : 'Left for all else', 
+        leftKeyTextTouch : 'Right if item belongs',
+        remindErrorTextTouch : '<p style="font-size:1.4em; font-family:arial sans-serif; text-align:center;">' +
         'If you make a mistake, a red <font-color="#ff0000"><b>X</b></font> will appear. ' +
         'Touch the other side to continue.<p/>',
-        finalText: 'Touch the bottom green area to continue to the next task',
-        instTemplate: '<div><p style="text-align:center;"" ' +
+        finalTouchText: 'Touch the bottom green area to continue to the next task',
+        instTemplateTouch: '<div><p style="text-align:center;"" ' +
         '<br/><font-color="#000000"><u>Part blockNum of nBlocks </u><br/></p>' +
         '<p style="text-align:left;" style="margin-left:5px"> ' +
         'Put a right finger on the <b>right</b> green area for items that belong to the category ' + 

@@ -35,7 +35,8 @@ function controller(settings, defaultSettings, clearBlock){
             element.sharedAttTrials = 0, 
             element.categoryTrials = 0 
         });
-        Object.assign(settings.switchSideBlock, 0);
+        settings.switchSideBlock = 0;
+        settings.blockOrder = defaultSettings.blockOrder;
     }
     function get(name, index){ return blocks[index][name]; }
     function set(name, index, type){ 
@@ -68,7 +69,6 @@ function controller(settings, defaultSettings, clearBlock){
         blocks.push(clone(clearBlock[0]));
         blocks.slice(-1)[0]['block'] = blocks.length;
         if (blocks.length === 30) addFlag('hidden') //limit blocks to 30
-
     }
     function removeBlocks(){
         if (blocks.length < 4) {
