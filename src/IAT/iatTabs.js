@@ -6,7 +6,6 @@ import categoriesComponent from './categoriesComponent.js';
 import attributesComponent from './attributesComponent.js';
 import importComponent from './importComponent.js';
 import helpComponent from '../resources/helpComponent.js';
-import defaultSettings from './iatDefaultSettings.js';
 
 
 let parametersDesc = [
@@ -59,7 +58,7 @@ let tabs = [
     {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: categoryClear},
     {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: categoryClear},
     {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
-    {value: 'output', text: 'Complete', component: outputComponent},
+    {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
     {value: 'import', text: 'Import', component: importComponent},
     {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'IAT'}
 ];

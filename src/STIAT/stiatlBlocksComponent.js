@@ -41,12 +41,12 @@ function controller(settings, defaultSettings, clearBlock){
     function get(name, index){ return blocks[index][name]; }
     function set(name, index, type){ 
         if (type === 'text') return function(value){return blocks[index][name] = value; };
-        return function(value){return blocks[index][name] = Math.round(value);};
+        return function(value){return blocks[index][name] = Math.abs(Math.round(value));};
     }
     function getParameters(name){ return settings[name]; }
     function setParameters(name, type){ 
         if (type === 'select') return function(value){return settings[name] = value; };
-        return function(value){return settings[name] = Math.round(value);};
+        return function(value){return settings[name] = Math.abs(Math.round(value));};
     }
     function updateChoosenBlocks(e, index){
         if (choosenBlocksList.includes(index) && !e.target.checked){
@@ -95,18 +95,6 @@ function controller(settings, defaultSettings, clearBlock){
 
 function view(ctrl){
     return m('.container' , [
-        m('.row top-buffer',[
-            m('.col',{style:{'margin-bottom':'7px'}},[
-                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-                        m('i.fas fa-undo fa-sm'), ' Reset'
-                    ]),
-                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-                    ])
-                ])
-            ])
-        ]),
         m('.row.space top-buffer', [
             m('.col-sm-2.space',[
                 m('i.fa.fa-info-circle'),
@@ -127,7 +115,7 @@ function view(ctrl){
                 m('span', [' ', 'Switch side block'])
             ]),
             m('.col-sm-9',
-                m('input[type=number].form-control',{value: ctrl.getParameters('switchSideBlock'), onchange:m.withAttr('value',ctrl.setParameters('switchSideBlock')), style: {width: '4em'}}))   
+                m('input[type=number].form-control',{value: ctrl.getParameters('switchSideBlock'), onchange:m.withAttr('value',ctrl.setParameters('switchSideBlock')), style: {width: '4em'}, min:0}))   
         ]),
         ctrl.blocks.map(function(block) {
             let index = ctrl.blocks.indexOf(block);
@@ -155,7 +143,7 @@ function view(ctrl){
                                 m('span', [' ', 'Number of mini-blocks: '])
                             ]),
                             m('.col-sm-9', [
-                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('miniBlocks', index,'number')), value: ctrl.get('miniBlocks', index)})
+                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('miniBlocks', index,'number')), value: ctrl.get('miniBlocks', index), min:0})
                             ])
                         ]),
                         m('.row.space',[
@@ -165,7 +153,7 @@ function view(ctrl){
                                 m('span', [' ', 'Number of single attribute trials: '])
                             ]),
                             m('.col-sm-9', [
-                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('singleAttTrials', index,'number')), value: ctrl.get('singleAttTrials', index)})
+                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('singleAttTrials', index,'number')), value: ctrl.get('singleAttTrials', index), min:0})
                             ])
                         ]),
                         m('.row.space',[
@@ -175,7 +163,7 @@ function view(ctrl){
                                 m('span', [' ', 'Number of shared key attribute trials: '])
                             ]),
                             m('.col-sm-9', [
-                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('sharedAttTrials', index,'number')), value: ctrl.get('sharedAttTrials', index)})
+                                m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set('sharedAttTrials', index,'number')), value: ctrl.get('sharedAttTrials', index), min:0})
                             ])
                         ]),
                         m('.row.space',[
@@ -185,7 +173,7 @@ function view(ctrl){
                                 m('span', [' ', 'Number of category trials: '])
                             ]),
                             m('.col-sm-9', [
-                                m('input[type=number].form-control',{style:{width:'4em'}, onchange: m.withAttr('value', ctrl.set('categoryTrials', index,'number')), value: ctrl.get('categoryTrials', index)})
+                                m('input[type=number].form-control',{style:{width:'4em'}, onchange: m.withAttr('value', ctrl.set('categoryTrials', index,'number')), value: ctrl.get('categoryTrials', index), min:0})
                             ])
                         ])
                     ])
@@ -200,8 +188,22 @@ function view(ctrl){
                     m('i.fas fa-check'), ' Choose Blocks to Remove']),
                 m('button.btn btn btn-danger',{onclick: ctrl.removeBlocks},[
                     m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
+            ])
+        ]),
+        m('.row.space',[
+            m('.col',{style:{'margin-bottom':'7px'}},[
+                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+                    m('button.btn btn-secondary', 
+                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+                        m('i.fas fa-undo fa-sm'), ' Reset'
+                    ]),
+                    m('button.btn btn-danger',
+                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+                    ]),
+                ]),
+            ]),
         ])
-    ])
     ]);
 }
 

@@ -4,7 +4,7 @@ let elementComponent = {
     view:view,
 };
 
-function controller(object,settings, stimuliList){
+function controller(object, settings, stimuliList){
     let element = settings[object.key];
     let fields = {
         newStimulus : m.prop(''),
@@ -14,16 +14,17 @@ function controller(object,settings, stimuliList){
         selectedStimuli: m.prop(''),
         stimuliHidden: m.prop(''),
     }; 
+
     return {fields, set:set, get:get, addStimulus:addStimulus, 
-        updateSelectedStimuli:updateSelectedStimuli,removeChosenStimuli:removeChosenStimuli, removeAllStimuli:removeAllStimuli, 
+        updateSelectedStimuli:updateSelectedStimuli, removeChosenStimuli:removeChosenStimuli, removeAllStimuli:removeAllStimuli, 
         updateTitleType:updateTitleType, resetStimuliList:resetStimuliList};
     
-    function get(name,media,type){
+    function get(name, media, type){
         if (name == 'title' && media == null && type == null) { //special case - return the title's value (word/image)
             if (element.title.media.word == undefined) return element.title.media.image;
             return element.title.media.word;
         }
-        if (media !=null && type!=null) {
+        if (media != null && type != null) {
             if (type == 'font-size') {
                 return parseFloat((element[name][media][type].replace("em","")));
             }
@@ -35,10 +36,10 @@ function controller(object,settings, stimuliList){
         return element[name]; 
     }
     function set(name, media, type){ 
-        if(!element[name]) name = 'css'; 
         return function(value){ 
             if (media != null && type != null) {
                 if (type == 'font-size') {
+                    value = Math.abs(value);
                     if (value == 0) { 
                         alert("Font's size must be bigger then 0");
                         return element[name][media][type]; 
@@ -49,6 +50,7 @@ function controller(object,settings, stimuliList){
             }
             else if (media == 'color') return element[name][media] = value;
             else if (media == 'font-size') {
+                value = Math.abs(value);
                 if (value == 0) { 
                     alert("Font's size must be bigger then 0");
                     return element[name][media]; 
@@ -119,8 +121,8 @@ function view(ctrl) {
             ]),
             m('.col-sm-2', ctrl.fields.elementType()+'\'s type:',
                 [
-                    m('select.custom-select',{value: ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
-                        ctrl.fields.titleType(ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word'),
+                    m('select.custom-select',{value: ctrl.get('title','media','word') === undefined ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
+                        ctrl.fields.titleType(ctrl.get('title','media','word') === undefined ? 'image' : 'word'),
                         ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
                         m('option', 'word'),
                         m('option', 'image')

@@ -8,10 +8,7 @@ let categoriesComponent = {
 
 function controller(settings, defaultSettings, clearElement){
     let categories = settings.categories;
-    let keys_categories = [];
     for (let i=0; i < categories.length; i++){
-        //let category = categories[i];
-        //keys_categories.push({i: Math.random()});
         categories[i].key = Math.random();
     }
     let headlines = ['First','Second','Third','Fourth','Fifth','Sixth','Seventh','Eighth'];
@@ -41,11 +38,8 @@ function controller(settings, defaultSettings, clearElement){
     }
     function addCategory() {
         categories.push(clone(clearElement[0]));
-        //let last_category = categories[categories.length -1];
         let last = categories.length - 1
-        //keys_categories.push({ : Math.random()});
         categories[last].key = Math.random()
-        console.log (categories);
         if (categories.length === 8) addFlag('hidden');
     }
     function updateChoosenBlocks(e, index){
@@ -93,18 +87,6 @@ function controller(settings, defaultSettings, clearElement){
 
 function view(ctrl,settings, defaultSettings, clearElement) {
     return m('.container',{id:'categories'} ,[
-        m('.row top-buffer',[
-            m('.col',{style:{'margin-bottom':'7px'}},[
-                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-                        m('i.fas fa-undo fa-sm'), ' Reset'
-                    ]),
-                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-                    ])
-                ])
-            ])
-        ]),
         //filter to remove the first element
         ctrl.categories.map(function(category, index){
             let stimulusMedia;
@@ -132,8 +114,22 @@ function view(ctrl,settings, defaultSettings, clearElement) {
                     m('i.fas fa-check'), ' Choose Blocks to Remove']),
                 m('button.btn btn btn-danger',{onclick: ctrl.removeCategories},[
                     m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
-        ])
-    ]),
+            ])
+        ]),
+        m('.row top-buffer',[
+            m('.col',{style:{'margin-bottom':'7px'}},[
+                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+                    m('button.btn btn-secondary', 
+                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+                        m('i.fas fa-undo fa-sm'), ' Reset'
+                    ]),
+                    m('button.btn btn-danger',
+                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+                    ]),
+                ]),
+            ]),
+        ]),
     ]);
 }
 

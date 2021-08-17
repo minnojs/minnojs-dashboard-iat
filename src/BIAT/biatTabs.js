@@ -65,7 +65,7 @@ let tabs = [
     {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: elementClear},
     {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: elementClear},
     {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
-    {value: 'output', text: 'Complete', component: outputComponent},
+    {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
     {value: 'import', text: 'Import', component: importComponent},
     {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'BIAT'}
 ];

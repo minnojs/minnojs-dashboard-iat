@@ -13,14 +13,14 @@ var tabsComponent = {
 				if (tab.value == 'practice') {
 					if(settings.parameters.practiceBlock == false) return null;
 				}
-				return m('button.tablinks', {
+				return m('button', {
                     class: ctrl.tab == tab.value ? 'active' : '',
                     onclick:function(){
 						ctrl.tab = tab.value;
 						ctrl.index = ctrl.setIndex(tab.value);
 					}},tab.text);
 			})),
-			m('.tabContent', [
+			m('.div', [
 				m.component(tabs[ctrl.index].component, settings, defaultSettings, tabs[ctrl.index].rowsDesc)
 			])
 		]);

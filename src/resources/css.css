@@ -1,14 +1,24 @@
+.link {cursor: pointer;}
+
 .body {
   font-family: Arial;
   overflow-x:hidden;
 
 }
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 .space {
   padding-top: 7px;
   padding-bottom: 7px;
 
 }
-/* Style the tab */
+/* Style the main tab */
 .tab {
   overflow: hidden;
   border: 1px solid #ccc;
@@ -38,14 +48,6 @@
   background-color: #ccc;
 }
 
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-}
-  
 .info-box {
   display: none;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;

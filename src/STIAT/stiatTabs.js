@@ -50,7 +50,7 @@ let tabs = [
     {value: 'category', text: 'Category', component: categoryComponent, rowsDesc: categoryClear},
     {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: categoryClear},
     {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
-    {value: 'output', text: 'Complete', component: outputComponent},
+    {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: clearBlock},
     {value: 'import', text: 'Import', component: importComponent},
     {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'STIAT'}
 ];

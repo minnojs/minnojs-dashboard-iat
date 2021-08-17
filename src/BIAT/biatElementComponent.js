@@ -66,6 +66,7 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
             {
                 if (type === 'font-size')
                 {
+                    value = Math.abs(value);
                     if (value === 0)
                     { 
                         alert('Font\'s size must be bigger then 0');
@@ -73,13 +74,25 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
                     }
                     return element[name][media][type] = value + 'em';
                 }
-                else if (startStimulus !=null) //in case of startStimulus
+                else if (startStimulus !=null) { //in case of startStimulus
+                    if(startStimulus === 'font-size')
+                    {
+                        value = Math.abs(value);
+                        if (value === 0)
+                        { 
+                            alert('Font\'s size must be bigger then 0');
+                            return element[name][media][type][startStimulus]; 
+                        }
+                        return element[name][media][type][startStimulus] = value + 'em';
+                    }
                     return element[name][media][type][startStimulus] = value;
-                return element[name][media][type] = value;
+                }
+                return element[name][media][type] = value; 
             }
             else if (media === 'color') return element[name][media] = value;
             else if (media === 'font-size')
             {
+                value = Math.abs(value);
                 if (value === 0)
                 { 
                     alert('Font\'s size must be bigger then 0');
@@ -87,7 +100,7 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
                 }
                 return element[name][media] = value + 'em';
             }
-            return element[name] = value; 
+            return element[name]= value; 
         };
     }
     function updateTitleType() { 
@@ -211,9 +224,18 @@ function view(ctrl) {
             m('.col-md-3 element-buffer', ctrl.fields.elementType()+' title as will appear to the user: '),
             m('.col-md-4 element-buffer',
                 m('input[type=text].form-control',{style: {width: '16rem', height: '2.5rem'}, value: ctrl.get('title'), onchange:m.withAttr('value', ctrl.set('title', 'media', ctrl.fields.titleType()))})),
-            m('.col-sm-2',ctrl.fields.elementType()+'\'s type:   ',[
-                m('select.custom-select',{value: ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
-                    ctrl.fields.titleType(ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word'),
+            // m('.col-sm-2',ctrl.fields.elementType()+'\'s type:   ',[
+            //     m('select.custom-select',{value: ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
+            //         ctrl.fields.titleType(ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word'),
+            //         ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
+            //         m('option', 'word'),
+            //         m('option', 'image')
+            //     ])
+            // ]),
+            m('.col-sm-2', ctrl.fields.elementType()+'\'s type:',
+            [
+                m('select.custom-select',{value: ctrl.get('title','media','word') === undefined ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
+                    ctrl.fields.titleType(ctrl.get('title','media','word') === undefined ? 'image' : 'word'),
                     ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
                     m('option', 'word'),
                     m('option', 'image')
@@ -251,7 +273,6 @@ function view(ctrl) {
                     ])
                 ])
             ]),
-            //console.log(ctrl.fields.newStimulus()),
             ///startStimulus
             m('.col-auto info-buffer',{style: {'padding-top': '1.6em', visibility:ctrl.fields.startStimulus()}},[
                 m('i.fa.fa-info-circle'),

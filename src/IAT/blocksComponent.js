@@ -13,24 +13,12 @@ function controller(settings, defaultSettings, rows){
     function get(name){ return blocks[name]; }
     function set(name, type){ 
         if (type === 'checkbox') return function(value){return blocks[name] = value; };
-        return function(value){return blocks[name] = Math.round(value);};
+        return function(value){return blocks[name] = Math.abs(Math.round(value));};
     }
 }
 
 function view(ctrl){
     return m('.container' ,{style:{height: '500px'}}, [
-        m('.row top-buffer',[
-            m('.col',{style:{'margin-bottom':'7px'}},[
-                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-                        m('i.fas fa-undo fa-sm'), ' Reset'
-                    ]),
-                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-                    ])
-                ])
-            ])
-        ]),
         ctrl.rows.slice(0,-1).map(function(row) {
             return m('.row top-buffer', [
                 m('.col-auto block-buffer',[
@@ -46,20 +34,33 @@ function view(ctrl){
                     m('.row', [
                         m('.col-4 block-buffer', 'Number of trials: '),
                         m('.col block-buffer', [
-                            m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.numTrialBlocks, 'number')), value: ctrl.get(row.numTrialBlocks)})
+                            m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.numTrialBlocks, 'number')), value: ctrl.get(row.numTrialBlocks), min:'0'})
                         ])
                     ]),
                     m('.row',[
                         m('.col-4 block-buffer', 'Number of mini-blocks: '),
                         m('.col block-buffer', [
-                            m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.numMiniBlocks, 'number')), value: ctrl.get(row.numMiniBlocks)})
+                            m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.numMiniBlocks, 'number')), value: ctrl.get(row.numMiniBlocks), min:'0'})
                         ])
                     ])
                 ])
             ]);
                     
-        }
-        ),
+        }),
+        m('.row.space',[
+            m('.col',{style:{'margin-bottom':'7px'}},[
+                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+                    m('button.btn btn-secondary', 
+                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+                        m('i.fas fa-undo fa-sm'), ' Reset'
+                    ]),
+                    m('button.btn btn-danger',
+                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+                    ]),
+                ]),
+            ]),
+        ]),
         m('.alert alert-info', {role:'alert', style: {position: 'relative', width: '25rem', left: '62%',top: '-650px',  border: '2px solid #bcdae2'}},[
             m('h4','More information:'),
             m('p','By default, we separate each block into mini-blocks of four trials. In Blocks 3, 4, 6, and 7, '+
@@ -70,7 +71,6 @@ function view(ctrl){
             m('hr'),
             m('p','To cancel a block, set the number of trials to 0 (useful for 5-blocks IATs).')
         ])
-
     ]);
 }
 

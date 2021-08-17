@@ -10,7 +10,7 @@ let biat = {
     },
     view: function(ctrl){
         return m('.container', 
-            m('.header.p-3 mb-2 bg-info text-white',
+            m('.header.p-3 mb-2 bg-info text-white', {style:{'background-color': 'coral'}},
                 m('h1.display-4', 'Create my BIAT script')),
             m.component(tabsComponent, tabs, ctrl.settings, defaultSettings)
         );

@@ -20,14 +20,14 @@
 					if (tab.value == 'practice') {
 						if(settings.parameters.practiceBlock == false) return null;
 					}
-					return m('button.tablinks', {
+					return m('button', {
 	                    class: ctrl.tab == tab.value ? 'active' : '',
 	                    onclick:function(){
 							ctrl.tab = tab.value;
 							ctrl.index = ctrl.setIndex(tab.value);
 						}},tab.text);
 				})),
-				m('.tabContent', [
+				m('.div', [
 					m.component(tabs[ctrl.index].component, settings, defaultSettings, tabs[ctrl.index].rowsDesc)
 				])
 			]);
@@ -239,18 +239,6 @@
 
 	function view(ctrl){
 	    return m('.container' , [
-	       m('.row top-buffer',[
-	           m('.col',{style:{'margin-bottom':'7px'}},[
-	           m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	               m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                   m('i.fas fa-undo fa-sm'), ' Reset'
-	               ]),
-	               m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                   m('i.far fa-trash-alt fa-sm'), ' Clear'
-	               ])
-	           ])
-	       ])
-	       ]),
 	        ctrl.rows.slice(0,-1).map((row) => {
 	            if ((row.name === 'fullscreen' || row.name === 'showDebriefing') && ctrl.get('isQualtrics') === 'Regular') {
 	                return null;
@@ -282,6 +270,20 @@
 	            m('.col-3 param-buffer', 'Image\'s URL'),
 	            m('.col-8 param-buffer',
 	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
+	        ]),
+	        m('.row.space',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
 	        ])
 	    ])
 	}
@@ -299,24 +301,12 @@
 	    function clear(){Object.assign(blocks, rows.slice(-1)[0]);}
 	    function get(name){return blocks[name]; }
 	    function set(name, type){ 
-	        if (type === 'number') return function(value){ return blocks[name] = Math.round(value);};
+	        if (type === 'number') return function(value){ return blocks[name] = Math.abs(Math.round(value));};
 	        return function(value){ return blocks[name] = value; };
 	    }
 	}
 	function view$1(ctrl, settings){
 	    return m('.container' , [
-	        m('.row top-buffer',[
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
 	        //create numbers inputs
 	        ctrl.rows.slice(0,4).map(function(row) {
 	        //if user chooses not to have a prcatice block set it's parameter to 0
@@ -331,7 +321,7 @@
 	                ]),
 	                m('.col-3 param-buffer', row.label),
 	                m('.col-8 param-buffer',
-	                    m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.name, 'number')), value: ctrl.get(row.name)}))
+	                    m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.name, 'number')), value: ctrl.get(row.name), min:0}))
 	            ]);
 	        }),
 	        //create select inputs
@@ -347,7 +337,21 @@
 	                        row.options.map(function(option){return m('option', option);})
 	                    ]))
 	            ]);
-	        })
+	        }),
+	        m('.row top-buffer',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ]),
 	    ]);
 	}
 
@@ -372,18 +376,6 @@
 
 	function view$2(ctrl, settings){
 	    return m('.container' , [
-	        m('.row top-buffer',[
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
 	        ctrl.rows.map(function(row) {
 	            //if touch parameter is choosen, don't show the irrelevant text parametes
 	            if (settings.parameters.isTouch === true && row.nameTouch === undefined) {
@@ -400,12 +392,80 @@
 	                ])
 	            ]);
 	        }),
+	        m('.row.space',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ]),
 	    ]);
 	}
 
 	function clone(obj){
 	    return JSON.parse(JSON.stringify(obj));
 	}
+
+	function checkMissingElementName(element, name_to_display, error_msg){
+	    let containsImage = false;
+	    
+	    //check for missing titles and names
+	    if(element.name.length == 0)
+	        error_msg.push(name_to_display+'\'s\ name is missing');
+
+	    if(element.title.media.image !== undefined){
+	        containsImage = true;
+	        if(element.title.media.image.length == 0){
+	            error_msg.push(name_to_display+'\'s\ title is missing');   
+	        } 
+	    }
+	    else {
+	        if(element.title.media.word.length == 0)
+	            error_msg.push(name_to_display+'\'s\ title is missing');
+	    }
+	    let stimulusMedia = element.stimulusMedia;
+	    
+	    //if there an empty stimulli list
+	    if (stimulusMedia.length === 0) 
+	        error_msg.push(name_to_display+'\'s stimuli list is empty, please enter at least one stimulus.');
+	    
+	    //check if the stimuli contains images
+	    for(let i = 0; i < stimulusMedia.length ;i++)
+	        if(stimulusMedia[i].image) containsImage = true;
+	    
+
+	    return containsImage
+	}
+
+
+	    // function checkMissingElementName(element, name_to_display){
+	    //     if(settings[element].name.length == 0)
+	    //         error_msg.push(name_to_display+'\'s\ name is missing');
+	    
+	    //     if(settings[element].title.media.image !== undefined){
+	    //         containsImage = true
+	    //         if(settings[element].title.media.image.length == 0){
+	    //             error_msg.push(name_to_display+'\'s\ title is missing');
+	    //         }
+	    //     }
+	    //     else{
+	    //         if(settings[element].title.media.word.length == 0){
+	    //             error_msg.push(name_to_display+'\'s\ title is missing');
+	    //         }   
+	    //     }
+	    
+	    //     let stimulusMedia = settings[element].stimulusMedia
+	    //     for(let i = 0; i < stimulusMedia.length ;i++){
+	    //         if(stimulusMedia[i].image) containsImage = true
+	    //     }
+	    // }
 
 	let elementComponent = {
 	    controller: controller$3,
@@ -473,6 +533,7 @@
 	            {
 	                if (type === 'font-size')
 	                {
+	                    value = Math.abs(value);
 	                    if (value === 0)
 	                    { 
 	                        alert('Font\'s size must be bigger then 0');
@@ -480,13 +541,25 @@
 	                    }
 	                    return element[name][media][type] = value + 'em';
 	                }
-	                else if (startStimulus !=null) //in case of startStimulus
+	                else if (startStimulus !=null) { //in case of startStimulus
+	                    if(startStimulus === 'font-size')
+	                    {
+	                        value = Math.abs(value);
+	                        if (value === 0)
+	                        { 
+	                            alert('Font\'s size must be bigger then 0');
+	                            return element[name][media][type][startStimulus]; 
+	                        }
+	                        return element[name][media][type][startStimulus] = value + 'em';
+	                    }
 	                    return element[name][media][type][startStimulus] = value;
-	                return element[name][media][type] = value;
+	                }
+	                return element[name][media][type] = value; 
 	            }
 	            else if (media === 'color') return element[name][media] = value;
 	            else if (media === 'font-size')
 	            {
+	                value = Math.abs(value);
 	                if (value === 0)
 	                { 
 	                    alert('Font\'s size must be bigger then 0');
@@ -494,7 +567,7 @@
 	                }
 	                return element[name][media] = value + 'em';
 	            }
-	            return element[name] = value; 
+	            return element[name]= value; 
 	        };
 	    }
 	    function updateTitleType() { 
@@ -618,9 +691,18 @@
 	            m('.col-md-3 element-buffer', ctrl.fields.elementType()+' title as will appear to the user: '),
 	            m('.col-md-4 element-buffer',
 	                m('input[type=text].form-control',{style: {width: '16rem', height: '2.5rem'}, value: ctrl.get('title'), onchange:m.withAttr('value', ctrl.set('title', 'media', ctrl.fields.titleType()))})),
-	            m('.col-sm-2',ctrl.fields.elementType()+'\'s type:   ',[
-	                m('select.custom-select',{value: ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
-	                    ctrl.fields.titleType(ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word'),
+	            // m('.col-sm-2',ctrl.fields.elementType()+'\'s type:   ',[
+	            //     m('select.custom-select',{value: ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
+	            //         ctrl.fields.titleType(ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word'),
+	            //         ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
+	            //         m('option', 'word'),
+	            //         m('option', 'image')
+	            //     ])
+	            // ]),
+	            m('.col-sm-2', ctrl.fields.elementType()+'\'s type:',
+	            [
+	                m('select.custom-select',{value: ctrl.get('title','media','word') === undefined ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
+	                    ctrl.fields.titleType(ctrl.get('title','media','word') === undefined ? 'image' : 'word'),
 	                    ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
 	                    m('option', 'word'),
 	                    m('option', 'image')
@@ -658,7 +740,6 @@
 	                    ])
 	                ])
 	            ]),
-	            //console.log(ctrl.fields.newStimulus()),
 	            ///startStimulus
 	            m('.col-auto info-buffer',{style: {'padding-top': '1.6em', visibility:ctrl.fields.startStimulus()}},[
 	                m('i.fa.fa-info-circle'),
@@ -769,24 +850,27 @@
 	function view$4(ctrl, settings, defaultSettings) {
 	    return m('.container', [
 	        m('.row top-buffer',[
-	            m('col', m('h1.categoryHeadline','First Practice Category')),
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
+	            m('col', m('h1.categoryHeadline','First Practice Category'))]),
 	        m.component(elementComponent, {key: 'practiceCategory1'} ,settings,
 	            defaultSettings.practiceCategory1.stimulusMedia, defaultSettings.practiceCategory1.title.startStimulus),
 	        m('h1.categoryHeadline','Second Practice Category'),
 	        m('.row top-buffer'),
 	        m.component(elementComponent, {key:'practiceCategory2'}, settings,
-	            defaultSettings.practiceCategory2.stimulusMedia, defaultSettings.practiceCategory2.title.startStimulus)
+	            defaultSettings.practiceCategory2.stimulusMedia, defaultSettings.practiceCategory2.title.startStimulus),
+	        m('.row top-buffer',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ]),
 	    ]);
 	}
 
@@ -798,8 +882,6 @@
 	function controller$5(settings, defaultSettings, clearElement){
 	    let categories = settings.categories;
 	    for (let i=0; i < categories.length; i++){
-	        //let category = categories[i];
-	        //keys_categories.push({i: Math.random()});
 	        categories[i].key = Math.random();
 	    }
 	    let headlines = ['First','Second','Third','Fourth','Fifth','Sixth','Seventh','Eighth'];
@@ -829,11 +911,8 @@
 	    }
 	    function addCategory() {
 	        categories.push(clone(clearElement[0]));
-	        //let last_category = categories[categories.length -1];
 	        let last = categories.length - 1;
-	        //keys_categories.push({ : Math.random()});
 	        categories[last].key = Math.random();
-	        console.log (categories);
 	        if (categories.length === 8) addFlag('hidden');
 	    }
 	    function updateChoosenBlocks(e, index){
@@ -881,18 +960,6 @@
 
 	function view$5(ctrl,settings, defaultSettings, clearElement) {
 	    return m('.container',{id:'categories'} ,[
-	        m('.row top-buffer',[
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
 	        //filter to remove the first element
 	        ctrl.categories.map(function(category, index){
 	            let stimulusMedia;
@@ -920,8 +987,22 @@
 	                    m('i.fas fa-check'), ' Choose Blocks to Remove']),
 	                m('button.btn btn btn-danger',{onclick: ctrl.removeCategories},[
 	                    m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
-	        ])
-	    ]),
+	            ])
+	        ]),
+	        m('.row top-buffer',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ]),
 	    ]);
 	}
 
@@ -944,42 +1025,163 @@
 	function view$6(ctrl,settings, defaultSettings) {
 	    return m('.container', [
 	        m('.row top-buffer',[
-	            m('col', m('h1.categoryHeadline','First Attribute')),
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
+	        m('h1.categoryHeadline','First Attribute')]),
 	        m.component(elementComponent,{key: 'attribute1'} ,settings,
 	            defaultSettings.attribute1.stimulusMedia, defaultSettings.attribute1.title.startStimulus),
 	        m('h1.categoryHeadline','Second Attribute'),
 	        m('.row top-buffer'),
 	        m.component(elementComponent,{key:'attribute2'}, settings,
-	            defaultSettings.attribute2.stimulusMedia, defaultSettings.attribute2.title.startStimulus)
+	            defaultSettings.attribute2.stimulusMedia, defaultSettings.attribute2.title.startStimulus),
+	        m('.row top-buffer',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ]),
 	    ]);
 	}
 
 	let outputComponent = {
+	    controller: controller$7,
 	    view:view$7
 	};
+	function controller$7(settings, defaultSettings, blocksObject){
+	    let error_msg = [];
 
-	function view$7(ctrl,settings){
+	    validityCheck(settings);
+
+	    return {printToPage, createFile, error_msg}
+	    
+
+	    function validityCheck(settings){
+	        let containsImage = false;
+	        let category_headlines = ['First','Second','Third','Fourth','Fifth','Sixth','Seventh','Eighth'];
+
+	        let temp1,temp2,temp3 = false;
+	        if(settings.parameters.practiceBlock){
+	            temp1 = checkMissingElementName(settings.practiceCategory1, 'First Pratice Category', error_msg);
+	            temp2 = checkMissingElementName(settings.practiceCategory2, 'Second Pratice Category', error_msg);
+	        }
+	        settings.categories.map(function(category, index){
+	            let temp = checkMissingElementName(category, category_headlines[index]+' Category', error_msg);
+	            if (temp) temp3 = true;
+	        });
+	        let temp4 = checkMissingElementName(settings.attribute1, 'First Attribute', error_msg);
+	        let temp5 = checkMissingElementName(settings.attribute2, 'Second Attribute', error_msg);
+
+	        if (temp1 || temp2 || temp3 || temp4 || temp5) containsImage = true;
+	        else containsImage = false;
+	    
+	        if(settings.parameters.base_url.length === 0 && containsImage)
+	            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
+	        
+	        //check for blocks problems
+	        let currBlocks = clone(settings.blocks);
+	        let clearBlocks = blocksObject.slice(-1)[0]; //blocks parameters with zeros as the values, used to check if the current parameters are also zeros.
+	   
+	        ['focalAttribute', 'firstFocalAttribute', 'focalCategoryOrder'].forEach(function(key){
+	            delete currBlocks[key];
+	            delete clearBlocks[key];
+	        });
+
+	        if(JSON.stringify(currBlocks) === JSON.stringify(clearBlocks))
+	            error_msg.push('All the block\'s parameters equals to 0, that will result in not showing the task at all');    
+	    }
+
+	    function createFile(settings, type){
+	        return function(){
+	            let output,textFileAsBlob;
+	            let downloadLink = document.createElement('a');
+	            if (type === 'JS') {
+	                output = toString(settings);
+	                textFileAsBlob = new Blob([output], {type:'text/plain'});
+	                downloadLink.download = 'BIAT.js';
+	            }
+	            else {
+	                output = updateSettings(settings);
+	                textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
+	                downloadLink.download = 'BIAT.json';
+	            }
+	            if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+	            else {
+	                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+	                downloadLink.style.display = 'none';
+	                document.body.appendChild(downloadLink);
+	            }
+	            downloadLink.click();
+	        };
+	    }
+
+	    function printToPage(settings){
+	        return function() {
+	            let para = document.getElementById('textDiv');
+	            para.style.visibility = 'visible';
+	            let text_area = document.getElementById('textArea');
+	            text_area.value = toString(settings);
+	        };
+	    }
+
+	    function toString(settings){return toScript(updateSettings(settings));}
+
+	    function removeIndexFromCategories(settings){
+	        let categories = settings.categories;
+	        categories.forEach(element => delete element.key);
+	    }
+	    function updateSettings(settings){
+	        removeIndexFromCategories(settings);
+	        let output = {};
+	        if (settings.parameters.practiceBlock) {
+	            output.practiceCategory1 = settings.practiceCategory1;
+	            output.practiceCategory2 = settings.practiceCategory2;
+	        }
+	        output.categories = settings.categories;
+	        output.attribute1 = settings.attribute1;
+	        output.attribute2 = settings.attribute2;
+	        output.base_url = settings.parameters.base_url;
+	        output.remindError =  settings.parameters.remindError;
+	        output.showStimuliWithInst = settings.parameters.showStimuliWithInst;
+	        output.isTouch = settings.parameters.isTouch;
+	        output.practiceBlock = settings.parameters.practiceBlock;
+	        if(settings.parameters.isQualtrics) output.isQualtrics = settings.parameters.isQualtrics; 
+	        Object.assign(output, settings.blocks);
+	        settings.parameters.isTouch ? Object.assign(output, settings.touch_text) : Object.assign(output, settings.text); 
+	        return output;
+	    }
+
+	    function toScript(output){
+	        return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/BIAT/qualtrics/qbiat6.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/BIAT/biat6.js'}'], function(APIConstructor, iatExtension) {var API = new APIConstructor(); return iatExtension(${JSON.stringify(output,null,4)});});`;
+	    }
+
+
+
+	}
+	function view$7(ctrl, settings){
 	    return m('.container',[
+	        m('.alert alert-danger', {role:'alert',style: {'margin-top':'20px',visibility: ctrl.error_msg.length === 0 ? 'hidden' : 'visible'}},[
+	            m('h6','Some problems were found in your script, it\'s recommended to fix them before proceeding to download:'),
+	            m('ul',[
+	                ctrl.error_msg.map(function(err){
+	                    return m('li',err);
+	                })
+	            ])
+	        ]),
 	        m('.row justify-content-md-center',[
 	            m('.col-auto'),
 	            m('col-auto',[
 	                m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
-	                    m('button.CreateFile', {onclick: createFile(settings,'JS')},[
+	                    m('button.CreateFile', {onclick: ctrl.createFile(settings,'JS')},[
 	                        m('i.fas fa-file-download'), ' Download Script']),
-	                    m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')},[
+	                    m('button.CreateJSONFile', {onclick: ctrl.createFile(settings,'JSON')},[
 	                        m('i.fas fa-file-download'), ' Download JSON']),
-	                    m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser')
+	                    m('button.CreateJSONFile', {onclick: ctrl.printToPage(settings)}, 'Print to Browser')
 	                ])
 	            ]),
 	            m('.col-auto',{style:{'padding':'1.7em 0em 5em 1em',float:'left'}},[
@@ -1001,79 +1203,8 @@
 
 	}
 
-	function createFile(settings, type){
-	    return function(){
-	        let output,textFileAsBlob;
-	        let downloadLink = document.createElement('a');
-	        if (type === 'JS') {
-	            output = toString(settings);
-	            textFileAsBlob = new Blob([output], {type:'text/plain'});
-	            downloadLink.download = 'BIAT.js';
-	        }
-	        else {
-	            output = updateSettings(settings);
-	            textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
-	            downloadLink.download = 'BIAT.json';
-	        }
-	        if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
-	        else {
-	            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-	            downloadLink.style.display = 'none';
-	            document.body.appendChild(downloadLink);
-	        }
-	        downloadLink.click();
-	    };
-	}
-
-	// function toConsole(settings){
-	//     return function(){
-	//         window.settings = settings;
-	//         console.log(settings);};
-	// }
-
-	function printToPage(settings){
-	    return function() {
-	        let para = document.getElementById('textDiv');
-	        para.style.visibility = 'visible';
-	        let text_area = document.getElementById('textArea');
-	        text_area.value = toString(settings);
-	    };
-	}
-
-	function toString(settings){return toScript(updateSettings(settings));}
-
-	function removeIndexFromCategories(settings){
-	    let categories = settings.categories;
-	    categories.forEach(element => delete element.key);
-	}
-	function updateSettings(settings){
-	    removeIndexFromCategories(settings);
-	    let output = {};
-	    if (settings.parameters.practiceBlock) {
-	        output.practiceCategory1 = settings.practiceCategory1;
-	        output.practiceCategory2 = settings.practiceCategory2;
-	    }
-	    output.categories = settings.categories;
-	    output.attribute1 = settings.attribute1;
-	    output.attribute2 = settings.attribute2;
-	    output.base_url = settings.parameters.base_url;
-	    output.remindError =  settings.parameters.remindError;
-	    output.showStimuliWithInst = settings.parameters.showStimuliWithInst;
-	    output.isTouch = settings.parameters.isTouch;
-	    output.practiceBlock = settings.parameters.practiceBlock;
-	    if(settings.parameters.isQualtrics) output.isQualtrics = settings.parameters.isQualtrics; 
-	    Object.assign(output, settings.blocks);
-	    settings.parameters.isTouch ? Object.assign(output, settings.touch_text) : Object.assign(output, settings.text); 
-	    settings.parameters.isTouch ? console.log(settings.touch_text) : console.log(settings.text); 
-	    return output;
-	}
-
-	function toScript(output){
-	    return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/BIAT/qualtrics/qbiat6.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/BIAT/biat6.js'}'], function(APIConstructor, iatExtension) {var API = new APIConstructor(); return iatExtension(${JSON.stringify(output,null,4)});});`;
-	}
-
 	let importComponent = {
-	    controller:controller$7,
+	    controller:controller$8,
 	    view:view$8
 	};
 
@@ -1093,7 +1224,7 @@
 	}
 
 
-	function controller$7(settings) {
+	function controller$8(settings) {
 	    let fileInput = m.prop('');
 	    return {fileInput:fileInput, handleFile:handleFile, updateSettings:updateSettings};
 
@@ -1229,7 +1360,7 @@
 	    {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: elementClear},
 	    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: elementClear},
 	    {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
-	    {value: 'output', text: 'Complete', component: outputComponent},
+	    {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
 	    {value: 'import', text: 'Import', component: importComponent},
 	    {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'BIAT'}
 	];
@@ -1240,7 +1371,7 @@
 	    },
 	    view: function(ctrl){
 	        return m('.container', 
-	            m('.header.p-3 mb-2 bg-info text-white',
+	            m('.header.p-3 mb-2 bg-info text-white', {style:{'background-color': 'coral'}},
 	                m('h1.display-4', 'Create my BIAT script')),
 	            m.component(tabsComponent, tabs, ctrl.settings, settings)
 	        );

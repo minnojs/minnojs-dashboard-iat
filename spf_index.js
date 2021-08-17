@@ -20,14 +20,14 @@
 					if (tab.value == 'practice') {
 						if(settings.parameters.practiceBlock == false) return null;
 					}
-					return m('button.tablinks', {
+					return m('button', {
 	                    class: ctrl.tab == tab.value ? 'active' : '',
 	                    onclick:function(){
 							ctrl.tab = tab.value;
 							ctrl.index = ctrl.setIndex(tab.value);
 						}},tab.text);
 				})),
-				m('.tabContent', [
+				m('.div', [
 					m.component(tabs[ctrl.index].component, settings, defaultSettings, tabs[ctrl.index].rowsDesc)
 				])
 			]);
@@ -116,18 +116,6 @@
 
 	function view(ctrl){
 	    return m('.container' , [
-	       m('.row top-buffer',[
-	           m('.col',{style:{'margin-bottom':'7px'}},[
-	           m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	               m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                   m('i.fas fa-undo fa-sm'), ' Reset'
-	               ]),
-	               m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                   m('i.far fa-trash-alt fa-sm'), ' Clear'
-	               ])
-	           ])
-	       ])
-	       ]),
 	        ctrl.rows.slice(0,-1).map((row) => {
 	            if ((row.name === 'fullscreen' || row.name === 'showDebriefing') && ctrl.get('isQualtrics') === 'Regular') {
 	                return null;
@@ -159,25 +147,194 @@
 	            m('.col-3 param-buffer', 'Image\'s URL'),
 	            m('.col-8 param-buffer',
 	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
+	        ]),
+	        m('.row.space',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
 	        ])
 	    ])
 	}
 
+	function clone(obj){
+	    return JSON.parse(JSON.stringify(obj));
+	}
+
+	function checkMissingElementName(element, name_to_display, error_msg){
+	    let containsImage = false;
+	    
+	    //check for missing titles and names
+	    if(element.name.length == 0)
+	        error_msg.push(name_to_display+'\'s\ name is missing');
+
+	    if(element.title.media.image !== undefined){
+	        containsImage = true;
+	        if(element.title.media.image.length == 0){
+	            error_msg.push(name_to_display+'\'s\ title is missing');   
+	        } 
+	    }
+	    else {
+	        if(element.title.media.word.length == 0)
+	            error_msg.push(name_to_display+'\'s\ title is missing');
+	    }
+	    let stimulusMedia = element.stimulusMedia;
+	    
+	    //if there an empty stimulli list
+	    if (stimulusMedia.length === 0) 
+	        error_msg.push(name_to_display+'\'s stimuli list is empty, please enter at least one stimulus.');
+	    
+	    //check if the stimuli contains images
+	    for(let i = 0; i < stimulusMedia.length ;i++)
+	        if(stimulusMedia[i].image) containsImage = true;
+	    
+
+	    return containsImage
+	}
+
+
+	    // function checkMissingElementName(element, name_to_display){
+	    //     if(settings[element].name.length == 0)
+	    //         error_msg.push(name_to_display+'\'s\ name is missing');
+	    
+	    //     if(settings[element].title.media.image !== undefined){
+	    //         containsImage = true
+	    //         if(settings[element].title.media.image.length == 0){
+	    //             error_msg.push(name_to_display+'\'s\ title is missing');
+	    //         }
+	    //     }
+	    //     else{
+	    //         if(settings[element].title.media.word.length == 0){
+	    //             error_msg.push(name_to_display+'\'s\ title is missing');
+	    //         }   
+	    //     }
+	    
+	    //     let stimulusMedia = settings[element].stimulusMedia
+	    //     for(let i = 0; i < stimulusMedia.length ;i++){
+	    //         if(stimulusMedia[i].image) containsImage = true
+	    //     }
+	    // }
+
 	let outputComponent = {
+	    controller: controller$1,
 	    view:view$1
 	};
 
+	function controller$1(settings, defaultSettings, blocksObject){
+	    let error_msg = [];
+
+	    validityCheck(settings);
+
+	    return {printToPage, createFile, error_msg};
+
+	    function validityCheck(settings){
+	        let containsImage = false;
+
+	        let temp1 = checkMissingElementName(settings.objectCat1, 'First Category', error_msg);
+	        let temp2 = checkMissingElementName(settings.objectCat2, 'Second Category', error_msg);
+	        let temp3 = checkMissingElementName(settings.attribute1, 'First Attribute', error_msg);
+	        let temp4 = checkMissingElementName(settings.attribute2, 'Second Attribute', error_msg);
+
+	        if (temp1 || temp2 || temp3 || temp4) containsImage = true;
+	        else containsImage = false;
+	    
+	        if(settings.parameters.base_url.length === 0 && containsImage)
+	            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
+	        
+	        //check for blocks problems
+	        let currBlocks = clone(settings.blocks);
+	        let clearBlocks = blocksObject.slice(-1)[0]; //blocks parameters with zeros as the values, used to check if the current parameters are also zeros.
+	   
+	        ['randomCategoryLocation', 'randomAttributeLocation'].forEach(function(key){
+	            delete currBlocks[key];
+	            delete clearBlocks[key];
+	        });
+	        
+	        if(JSON.stringify(currBlocks) === JSON.stringify(clearBlocks))
+	            error_msg.push('All the block\'s parameters equals to 0, that will result in not showing the task at all');    
+	    }
+
+	    function createFile(settings, fileType){
+	        return function(){
+	            let output,textFileAsBlob;
+	            let downloadLink = document.createElement('a');
+	            if (fileType === 'JS') {
+	                output = toString(settings);
+	                textFileAsBlob = new Blob([output], {type:'text/plain'});
+	                downloadLink.download = 'SPF.js'; }
+	            else {
+	                output = updateSettings(settings);
+	                textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
+	                downloadLink.download = 'SPF.json'; }
+	            if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+	            else {
+	                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+	                downloadLink.style.display = 'none';
+	                document.body.appendChild(downloadLink);
+	            }
+	            downloadLink.click();
+	        };
+	    }
+
+	    
+	    function printToPage(settings){
+	        return function() {
+	            let para = document.getElementById('textDiv');
+	            para.style.visibility = 'visible';
+	            let text_area = document.getElementById('textArea');
+	            text_area.value = toString(settings);
+	        };
+	    }
+	    
+	    function toString(settings){
+	        return toScript(updateSettings(settings));
+	    }
+	    
+	    function updateSettings(settings){
+	        let output={
+	            objectCat1: settings.objectCat1,
+	            objectCat2: settings.objectCat2,
+	            attribute1: settings.attribute1,
+	            attribute2: settings.attribute2,
+	        };
+	        Object.assign(output, settings.parameters);
+	        Object.assign(output, settings.blocks);
+	        Object.assign(output, settings.text); 
+	        return output;
+	    }
+	    
+	    function toScript(output){
+	        return `define(['pipAPI' ,'${'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/spf/spf4.js'}'], function(APIConstructor, spfExtension) {var API = new APIConstructor(); return spfExtension(${JSON.stringify(output,null,4)})});`;
+	    }
+	}
+
 	function view$1(ctrl,settings){
 	    return m('.container',[
+	        m('.alert alert-danger', {role:'alert',style: {'margin-top':'20px',visibility: ctrl.error_msg.length === 0 ? 'hidden' : 'visible'}},[
+	            m('h6','Some problems were found in your script, it\'s recommended to fix them before proceeding to download:'),
+	            m('ul',[
+	                ctrl.error_msg.map(function(err){
+	                    return m('li',err);
+	                })
+	            ])
+	        ]),
 	        m('.row justify-content-md-center',[
 	            m('.col-auto'),
 	            m('col-auto',[
 	                m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
-	                    m('button.CreateFile', {onclick: createFile(settings,'JS')},[
+	                    m('button.CreateFile', {onclick: ctrl.createFile(settings,'JS')},[
 	                        m('i.fas fa-file-download'), ' Download Script']),
-	                    m('button.CreateJSONFile', {onclick: createFile(settings,'JSON')},[
+	                    m('button.CreateJSONFile', {onclick: ctrl.createFile(settings,'JSON')},[
 	                        m('i.fas fa-file-download'), ' Download JSON']),
-	                    m('button.CreateJSONFile', {onclick: printToPage(settings)}, 'Print to Browser')
+	                    m('button.CreateJSONFile', {onclick: ctrl.printToPage(settings)}, 'Print to Browser')
 	                ])
 	            ]),
 	            m('.col-auto',{style:{'padding':'1.7em 0em 5em 1em',float:'left'}},[
@@ -199,72 +356,12 @@
 
 	}
 
-	function createFile(settings, fileType){
-	    return function(){
-	        let output,textFileAsBlob;
-	        let downloadLink = document.createElement('a');
-	        if (fileType === 'JS') {
-	            output = toString(settings);
-	            textFileAsBlob = new Blob([output], {type:'text/plain'});
-	            downloadLink.download = 'SPF.js'; }
-	        else {
-	            output = updateSettings(settings);
-	            textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
-	            downloadLink.download = 'SPF.json'; }
-	        if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
-	        else {
-	            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-	            downloadLink.style.display = 'none';
-	            document.body.appendChild(downloadLink);
-	        }
-	        downloadLink.click();
-	    };
-	}
-
-	// function toConsole(settings){
-	//     return function(){
-	//         window.settings = settings;
-	//         console.log(settings);
-	//     }
-	// }
-
-	function printToPage(settings){
-	    return function() {
-	        let para = document.getElementById('textDiv');
-	        para.style.visibility = 'visible';
-	        let text_area = document.getElementById('textArea');
-	        text_area.value = toString(settings);
-	    };
-	}
-
-	function toString(settings){
-	    return toScript(updateSettings(settings));
-	}
-
-	function updateSettings(settings){
-	    let output={
-	        objectCat1: settings.objectCat1,
-	        objectCat2: settings.objectCat2,
-	        attribute1: settings.attribute1,
-	        attribute2: settings.attribute2,
-	        //base_url: settings.parameters.base_url,
-	    };
-	    Object.assign(output, settings.parameters);
-	    Object.assign(output, settings.blocks);
-	    Object.assign(output, settings.text); 
-	    return output;
-	}
-
-	function toScript(output){
-	    return `define(['pipAPI' ,'${'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/spf/spf4.js'}'], function(APIConstructor, spfExtension) {var API = new APIConstructor(); return spfExtension(${JSON.stringify(output,null,4)})});`;
-	}
-
 	let textComponent = {
-	    controller:controller$1,
+	    controller:controller$2,
 	    view:view$2
 	};
 
-	function controller$1(settings, defaultSettings, rows){
+	function controller$2(settings, defaultSettings, rows){
 	    var textparameters;
 	    var isTouch = settings.parameters.isTouch;
 	    isTouch ? textparameters = settings.touch_text : textparameters = settings.text;
@@ -280,18 +377,6 @@
 
 	function view$2(ctrl, settings){
 	    return m('.container' , [
-	        m('.row top-buffer',[
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
 	        ctrl.rows.map(function(row) {
 	            //if touch parameter is choosen, don't show the irrelevant text parametes
 	            if (settings.parameters.isTouch === true && row.nameTouch === undefined) {
@@ -308,15 +393,29 @@
 	                ])
 	            ]);
 	        }),
+	        m('.row.space',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ]),
 	    ]);
 	}
 
 	let blocksComponent = {
-	    controller:controller$2,
+	    controller:controller$3,
 	    view:view$3
 	};
 
-	function controller$2(settings, defaultSettings, rows){
+	function controller$3(settings, defaultSettings, rows){
 	    let blocks = settings.blocks;
 	    return {reset:reset, clear:clear, set:set, get:get, rows: rows};
 	    
@@ -324,24 +423,12 @@
 	    function clear(){Object.assign(blocks, rows.slice(-1)[0]);}
 	    function get(name){return blocks[name]; }
 	    function set(name, type){ 
-	        if (type === 'number') return function(value){ return blocks[name] = Math.round(value);};
+	        if (type === 'number') return function(value){ return blocks[name] = Math.abs(Math.round(value));};
 	        return function(value){ return blocks[name] = value; };
 	    }
 	}
 	function view$3(ctrl, settings){
 	    return m('.container' , [
-	        m('.row top-buffer',[
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
 	        //create numbers inputs
 	        ctrl.rows.slice(0,2).map(function(row) {
 	            return m('.row top-buffer', [
@@ -351,7 +438,7 @@
 	                ]),
 	                m('.col-3 param-buffer', row.label),
 	                m('.col-8 param-buffer',
-	                    m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.name, 'number')), value: ctrl.get(row.name)}))
+	                    m('input[type=number].form-control',{style:{width:'4em'},onchange: m.withAttr('value', ctrl.set(row.name, 'number')), value: ctrl.get(row.name), min:0}))
 	            ]);
 	        }),
 	        //create select inputs
@@ -367,16 +454,30 @@
 	                        row.options.map(function(option){return m('option', option);})
 	                    ]))
 	            ]);
-	        })
+	        }),
+	        m('.row.space',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ])
 	    ]);
 	}
 
 	let elementComponent = {
-	    controller:controller$3,
+	    controller:controller$4,
 	    view:view$4,
 	};
 
-	function controller$3(object,settings, stimuliList){
+	function controller$4(object, settings, stimuliList){
 	    let element = settings[object.key];
 	    let fields = {
 	        newStimulus : m.prop(''),
@@ -386,16 +487,17 @@
 	        selectedStimuli: m.prop(''),
 	        stimuliHidden: m.prop(''),
 	    }; 
+
 	    return {fields, set:set, get:get, addStimulus:addStimulus, 
-	        updateSelectedStimuli:updateSelectedStimuli,removeChosenStimuli:removeChosenStimuli, removeAllStimuli:removeAllStimuli, 
+	        updateSelectedStimuli:updateSelectedStimuli, removeChosenStimuli:removeChosenStimuli, removeAllStimuli:removeAllStimuli, 
 	        updateTitleType:updateTitleType, resetStimuliList:resetStimuliList};
 	    
-	    function get(name,media,type){
+	    function get(name, media, type){
 	        if (name == 'title' && media == null && type == null) { //special case - return the title's value (word/image)
 	            if (element.title.media.word == undefined) return element.title.media.image;
 	            return element.title.media.word;
 	        }
-	        if (media !=null && type!=null) {
+	        if (media != null && type != null) {
 	            if (type == 'font-size') {
 	                return parseFloat((element[name][media][type].replace("em","")));
 	            }
@@ -407,10 +509,10 @@
 	        return element[name]; 
 	    }
 	    function set(name, media, type){ 
-	        if(!element[name]) name = 'css'; 
 	        return function(value){ 
 	            if (media != null && type != null) {
 	                if (type == 'font-size') {
+	                    value = Math.abs(value);
 	                    if (value == 0) { 
 	                        alert("Font's size must be bigger then 0");
 	                        return element[name][media][type]; 
@@ -421,6 +523,7 @@
 	            }
 	            else if (media == 'color') return element[name][media] = value;
 	            else if (media == 'font-size') {
+	                value = Math.abs(value);
 	                if (value == 0) { 
 	                    alert("Font's size must be bigger then 0");
 	                    return element[name][media]; 
@@ -491,8 +594,8 @@
 	            ]),
 	            m('.col-sm-2', ctrl.fields.elementType()+'\'s type:',
 	                [
-	                    m('select.custom-select',{value: ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
-	                        ctrl.fields.titleType(ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word'),
+	                    m('select.custom-select',{value: ctrl.get('title','media','word') === undefined ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
+	                        ctrl.fields.titleType(ctrl.get('title','media','word') === undefined ? 'image' : 'word'),
 	                        ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
 	                        m('option', 'word'),
 	                        m('option', 'image')
@@ -572,11 +675,11 @@
 	}
 
 	let categoriesComponent = {
-	    controller:controller$4,
+	    controller:controller$5,
 	    view:view$5
 	};
 
-	function controller$4(settings, defaultSettings, clearElement){
+	function controller$5(settings, defaultSettings, clearElement){
 	    return {reset:reset, clear:clear};
 	    function reset(){
 	        Object.assign(settings.objectCat1,  JSON.parse(JSON.stringify(defaultSettings.objectCat1)));
@@ -590,33 +693,41 @@
 
 	function view$5(ctrl,settings, defaultSettings) {
 	    return m('.container', [
-	        m('.row top-buffer',[
-	            m('col', m('h1.categoryHeadline','First Category')),
-	            m('.col',{style:{'margin-bottom':'7px'}},[
-	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
-	                        m('i.fas fa-undo fa-sm'), ' Reset'
-	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
-	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
+	        m('.row top-buffer',
+	            m('col', m('h1.categoryHeadline','First Category'))),
 	        m.component(elementComponent, {key: 'objectCat1'} ,settings, defaultSettings.objectCat1.stimulusMedia),
 	        m('h1.categoryHeadline','Second Category'),
 	        m('.row top-buffer'),
-	        m.component(elementComponent, {key:'objectCat2'}, settings, defaultSettings.objectCat2.stimulusMedia)
+	        m.component(elementComponent, {key:'objectCat2'}, settings, defaultSettings.objectCat2.stimulusMedia),
+	        m('.row.space',[
+	            m('.col',{style:{'margin-bottom':'7px'}},[
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
+	                        m('i.fas fa-undo fa-sm'), ' Reset'
+	                    ]),
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
+	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
+	                    ]),
+	                ]),
+	            ]),
+	        ])
 	    ]);
 	}
 
 	let attributesComponent = {
-	    controller:controller$5,
+	    controller:controller$6,
 	    view:view$6
 	};
 
-	function controller$5(settings, defaultSettings, clearElement){
-	    return {reset:reset, clear:clear};
+	function controller$6(settings, defaultSettings, clearElement){
+	    let tabs = [
+	        {value: 'attribute1', text: 'First Attribute'},
+	        {value: 'attribute2', text: 'Second Attribute'},
+	    ];
+	    let curr_tab = tabs[0].value; // set default tab
+	    return {reset:reset, clear:clear, tabs, curr_tab};
 	    function reset(){
 	        Object.assign(settings.attribute1,  JSON.parse(JSON.stringify(defaultSettings.attribute1)));
 	        Object.assign(settings.attribute2,  JSON.parse(JSON.stringify(defaultSettings.attribute2)));}
@@ -627,29 +738,36 @@
 	}
 
 	function view$6(ctrl,settings, defaultSettings) {
-	    return m('.container', [
-	        m('.row top-buffer',[
-	            m('col', m('h1.categoryHeadline','First Attribute')),
+	    return m('.container.space', [
+	        m('.tab',{style:{width:'19.5em'}}, ctrl.tabs.map(function(tab){
+	            return m('button', {
+	                class: ctrl.curr_tab == tab.value ? 'active' : '',
+	                onclick:function(){
+	                    ctrl.curr_tab = tab.value;
+	                }},tab.text);
+	        })),
+	        m('.div', [
+	            m.component(elementComponent, {key:ctrl.curr_tab}, settings, defaultSettings[ctrl.curr_tab].stimulusMedia),
+	        ]),
+	        m('.row.space',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
-	                    m('button.btn btn btn-danger', {onclick: ctrl.reset},[
+	                    m('button.btn btn-secondary', 
+	                        {title:'Reset all current fields to default values', onclick: () => confirm('Are you sure you want to reset the current form?\n This action is permanent') ? ctrl.reset() : null},[
 	                        m('i.fas fa-undo fa-sm'), ' Reset'
 	                    ]),
-	                    m('button.btn btn btn-danger',{onclick: ctrl.clear},[
+	                    m('button.btn btn-danger',
+	                        {title:'Clears all current values',onclick:() => confirm('Are you sure you want to clear the current form?\n This action is permanent') ? ctrl.clear() : null},[
 	                        m('i.far fa-trash-alt fa-sm'), ' Clear'
-	                    ])
-	                ])
-	            ])
-	        ]),
-	        m.component(elementComponent,{key: 'attribute1'} ,settings, defaultSettings.attribute1.stimulusMedia),
-	        m('h1.categoryHeadline','Second Attribute'),
-	        m('.row top-buffer'),
-	        m.component(elementComponent,{key:'attribute2'}, settings, defaultSettings.attribute2.stimulusMedia)
+	                    ]),
+	                ]),
+	            ]),
+	        ])
 	    ]);
 	}
 
 	let importComponent = {
-	    controller:controller$6,
+	    controller:controller$7,
 	    view:view$7
 	};
 
@@ -668,7 +786,7 @@
 	    ]);
 	}
 
-	function controller$6(settings) {
+	function controller$7(settings) {
 	    let fileInput = m.prop('');
 	    return {fileInput:fileInput, handleFile:handleFile, updateSettings:updateSettings};
 
@@ -753,7 +871,7 @@
 	    {name: 'nTrialsPerPrimeTargetPair', label: 'Number of trials in a block, per prime-target combination', desc: 'How many trials in a block, per prime-target combination (always three blocks).'},
 	    {name: 'randomCategoryLocation', label: 'Randomly choose categories location', desc: 'Whether to randomly select which category is on top. If false, then the first category is on top.', options: ['true','false']},
 	    {name: 'randomAttributeLocation', label: 'Randomly choose attributes location', desc: 'Whether to randomly select which attribute is on the left. If false, the first attribute is on the left.', options: ['true','false']},
-	    {nBlocks: 3, nTrialsPerPrimeTargetPair: 10, randomCategoryLocation : 'true', focalCategoryOrder: 'false'}
+	    {nBlocks: 0, nTrialsPerPrimeTargetPair: 0, randomCategoryLocation : 'false', randomAttributeLocation: 'false'}
 	];
 
 	let categoryClear = [{name: '', title: {media: {word: ''}, css: {color: '#000000', 'font-size': '0em'}, height: 4},
@@ -766,14 +884,10 @@
 	    {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: categoryClear},
 	    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: categoryClear},
 	    {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
-	    {value: 'output', text: 'Complete', component: outputComponent},
+	    {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
 	    {value: 'import', text: 'Import', component: importComponent},
 	    {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'SPF'}
 	];
-
-	function clone(obj){
-	    return JSON.parse(JSON.stringify(obj));
-	}
 
 	let spf = {
 	    controller: function(settings$1){ return {settings: settings$1 ? settings$1 : clone(settings)};},
