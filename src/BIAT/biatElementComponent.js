@@ -1,4 +1,4 @@
-import {clone} from '../resources/utilities.js';
+import {clone, showRestrictions} from '../resources/utilities.js';
 
 let elementComponent = {
     controller: controller,
@@ -19,35 +19,30 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
         newStartStimulus: m.prop(''), //startStimulus
         startStimuliHidden: m.prop(this.startStimulus),
         selectedStartStimuli: m.prop(''),
+        isNewCategory: index > 1 ? m.prop(true) : m.prop(false) //if it's a new category (mot first or second) there won't be an option to reset stimuli lists
     };
-    return {fields, set:set, get:get, addStimulus:addStimulus, 
-        updateSelectedStimuli:updateSelectedStimuli,removeChosenStimuli:removeChosenStimuli, removeAllStimuli:removeAllStimuli, 
-        updateTitleType:updateTitleType, removeChosenStartStimuli:removeChosenStartStimuli,
-        resetStimuliList:resetStimuliList};
+    return {fields, set, get, addStimulus, updateSelectedStimuli,removeChosenStimuli, removeAllStimuli, 
+        updateTitleType, removeChosenStartStimuli, resetStimuliList};
     
     function get(name, media, type, startStimulus){
-        if (name === 'title' && media === 'startStimulus' && type === 'media') { //in case of getting startStimulus stimuli list
-            if (element.title.startStimulus.media.word !== undefined)
-            {
+        if (name === 'title' && media === 'startStimulus' && type === 'media'){ //in case of getting startStimulus stimuli list
+            if (element.title.startStimulus.media.word !== undefined){
                 if (element.title.startStimulus.media.word === '') return [];
                 return element.title.startStimulus.media.word.split(', ');
             }
-            else {
+            else{
                 if (element.title.startStimulus.media.image === '') return [];
                 return [element.title.startStimulus.media.image];
             }
         }
-        if (name === 'title' && media == null && type == null) //special case - return the title's value (word/image)
-        { 
+        if (name === 'title' && !media && !type ){ //special case - return the title's value (word/image) 
             if (element.title.media.word === undefined) return element.title.media.image;
             return element.title.media.word;
         }
-        if (media !=null && type!=null) 
-        {
+        if (media && type){
             if (type === 'font-size')
                 return parseFloat((element[name][media][type].replace('em','')));
-            else if (startStimulus != null) 
-            {
+            else if (startStimulus){
                 if (startStimulus === 'font-size')
                     return parseFloat((element[name][media][type][startStimulus].replace('em','')));
                 return element[name][media][type][startStimulus];
@@ -60,27 +55,21 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
         return element[name]; 
     }
     function set(name, media, type, startStimulus){
-        return function(value)
-        { 
-            if (media !=null && type!=null) 
-            {
-                if (type === 'font-size')
-                {
+        return function(value){ 
+            if (media && type){
+                if (type === 'font-size'){
                     value = Math.abs(value);
-                    if (value === 0)
-                    { 
-                        alert('Font\'s size must be bigger then 0');
+                    if (!value){ 
+                        showRestrictions('Font\'s size must be bigger than 0.', 'error')
                         return element[name][media][type]; 
                     }
                     return element[name][media][type] = value + 'em';
                 }
-                else if (startStimulus !=null) { //in case of startStimulus
-                    if(startStimulus === 'font-size')
-                    {
+                else if (startStimulus !=null){ //in case of startStimulus
+                    if(startStimulus === 'font-size'){
                         value = Math.abs(value);
-                        if (value === 0)
-                        { 
-                            alert('Font\'s size must be bigger then 0');
+                        if (!value){ 
+                            showRestrictions('Font\'s size must be bigger than 0.', 'error')
                             return element[name][media][type][startStimulus]; 
                         }
                         return element[name][media][type][startStimulus] = value + 'em';
@@ -90,12 +79,10 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
                 return element[name][media][type] = value; 
             }
             else if (media === 'color') return element[name][media] = value;
-            else if (media === 'font-size')
-            {
+            else if (media === 'font-size'){
                 value = Math.abs(value);
-                if (value === 0)
-                { 
-                    alert('Font\'s size must be bigger then 0');
+                if (!value){ 
+                    showRestrictions('Font\'s size must be bigger than 0.', 'error')
                     return element[name][media]; 
                 }
                 return element[name][media] = value + 'em';
@@ -103,83 +90,78 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
             return element[name]= value; 
         };
     }
-    function updateTitleType() { 
-        return function (type) {
+    function updateTitleType(){ 
+        return function (type){
             fields.titleType(type);
             let object = element.title.media;
             let category;
-            object.word !== undefined ? category = object.word : category = object.image;
-            if (type === 'word')
-            {
+            object.word ? category = object.word : category = object.image;
+            if (type === 'word'){
                 element.title.media = {};
                 element.title.media = {word: category};
             }
-            else 
-            {
+            else{
                 element.title.media = {};
                 element.title.media = {image: category};
             }
         };
     }
-    function addStimulus(event, startStimulus = false)
-    {
+    function addStimulus(event, startStimulus = false){
         let new_stimuli = !startStimulus ? fields.newStimulus() : fields.newStartStimulus();
         event = event.path[0].id; //get the button name, to know the kind of the stimulus added
-        if(new_stimuli == null || new_stimuli === '') alert('Please fill the stimulus field');
-        else {
-            if (event === 'addWord') {
-                if (!startStimulus) element.stimulusMedia.push({word : new_stimuli});
-                else {
-                    let mediaStr;
-                    if (element.title.startStimulus.media.word === undefined) {
-                        removeAllStimuli(event, true);
-                        mediaStr = new_stimuli;
-                    }
-                    else if (element.title.startStimulus.media.word === '')
-                        mediaStr = element.title.startStimulus.media.word + new_stimuli;
-                    else mediaStr = element.title.startStimulus.media.word +', '+new_stimuli;
-                    element.title.startStimulus.media = {word : mediaStr};}
-            }
-            else {
-                if (!startStimulus) element.stimulusMedia.push({image : new_stimuli});
-                else {
+        if (event === 'addWord'){
+            if (!startStimulus) element.stimulusMedia.push({word : new_stimuli});
+            else{
+                let mediaStr;
+                if (!element.title.startStimulus.media.word){
                     removeAllStimuli(event, true);
-                    element.title.startStimulus.media = {image: new_stimuli};
+                    mediaStr = new_stimuli;
                 }
+                else if (element.title.startStimulus.media.word === '')
+                    mediaStr = element.title.startStimulus.media.word + new_stimuli;
+                else mediaStr = element.title.startStimulus.media.word +', '+new_stimuli;
+                element.title.startStimulus.media = {word : mediaStr};}
+        }
+        else{ //addImage
+            if (!startStimulus) element.stimulusMedia.push({image : new_stimuli});
+            else{
+                removeAllStimuli(event, true);
+                element.title.startStimulus.media = {image: new_stimuli};
             }
-            if (!startStimulus) fields.newStimulus(''); //reset the field
-            else fields.newStartStimulus('');
-        }        
+        }
+        if (!startStimulus) fields.newStimulus(''); //reset the field
+        else fields.newStartStimulus('');
+                
     }
 
     function updateSelectedStimuli(select, startStimulus = false){
         let list =[];
-        if (startStimulus === false ) {
+        if (!startStimulus){
             list = element.stimulusMedia.filter((val,i) => select.target.options[i].selected);
             fields.selectedStimuli(list);
         }
-        else {
-            for (let i = 0; i < select.target.options.length; i++) {
+        else{
+            for (let i = 0; i < select.target.options.length; i++)
                 if (select.target.options[i].selected) list.push(select.target.options[i].value);
-            }
+
             fields.selectedStartStimuli(list);
         }
     }
-    function removeChosenStimuli() {
+    function removeChosenStimuli(){
         element.stimulusMedia = element.stimulusMedia.filter((element)=>!fields.selectedStimuli().includes(element));
         fields.selectedStimuli([]);
     }
-    function removeChosenStartStimuli(e) {
+    function removeChosenStartStimuli(e){
         let selected = fields.selectedStartStimuli();
         let stimuli = element.title.startStimulus.media;
-        if (stimuli.word === undefined) { //in case of a single image
+        if (!stimuli.word){ //in case of a single image
             removeAllStimuli(e, true);
             fields.selectedStartStimuli([]);
             return; 
         }
-        else stimuli = element.title.startStimulus.media.word.split(', ');
+        stimuli = element.title.startStimulus.media.word.split(', ');
         let new_str = '';
-        for (let i = 0 ; i < stimuli.length; i++) {
+        for (let i = 0 ; i < stimuli.length; i++){
             if (selected.includes(stimuli[i])){
                 if (stimuli.length === 1) new_str = '';
                 else if (i === stimuli.length - 1) new_str = new_str.slice(0,-2);
@@ -192,10 +174,10 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
         element.title.startStimulus.media.word = new_str;
         fields.selectedStartStimuli([]);
     }
-    function removeAllStimuli(e,startStimulus = false) {
+    function removeAllStimuli(e, startStimulus = false){
         if (!startStimulus) element.stimulusMedia.length = 0;
-        else {
-            if (element.title.startStimulus.media.word !== undefined)
+        else{
+            if (element.title.startStimulus.media.word)
                 element.title.startStimulus.media.word = '';
             else element.title.startStimulus.media.image = '';
         }
@@ -207,33 +189,24 @@ function controller(object, settings,stimuliList, startStimulusList ,index){
 
 function view(ctrl) {
     return m('.container',[
-        m('.row top-buffer', [
-            m('.col-auto info-buffer',[
+        m('.row.space.line', [
+            m('.col-xs-1.space',[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['Will appear in the data and in the default feedback message'])
             ]),
-            m('.col-3 element-buffer', ctrl.fields.elementType()+' name as will appear in the data:'),
-            m('.col-6 element-buffer',
+            m('.col-3.space', ctrl.fields.elementType()+' name as will appear in the data:'),
+            m('.col-6.space',
                 m('input[type=text].form-control',{style: {width: '16rem', height: '2.5rem'}, value:ctrl.get('name'), onchange:m.withAttr('value', ctrl.set('name'))})),
         ]),
-        m('.row row-element-buffer', [
-            m('.col-auto info-buffer',[
+        m('.row.space.line', [
+            m('.col-xs-1.space',[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['Name of the ' +ctrl.fields.elementType()+' presented in the task'])
             ]),
-            m('.col-md-3 element-buffer', ctrl.fields.elementType()+' title as will appear to the user: '),
-            m('.col-md-4 element-buffer',
+            m('.col-md-3.space', ctrl.fields.elementType()+' title as will appear to the user: '),
+            m('.col-md-4.space',
                 m('input[type=text].form-control',{style: {width: '16rem', height: '2.5rem'}, value: ctrl.get('title'), onchange:m.withAttr('value', ctrl.set('title', 'media', ctrl.fields.titleType()))})),
-            // m('.col-sm-2',ctrl.fields.elementType()+'\'s type:   ',[
-            //     m('select.custom-select',{value: ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
-            //         ctrl.fields.titleType(ctrl.get('title','media','word') === undefined || ctrl.get('title','media','word') === '' ? 'image' : 'word'),
-            //         ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
-            //         m('option', 'word'),
-            //         m('option', 'image')
-            //     ])
-            // ]),
-            m('.col-sm-2', ctrl.fields.elementType()+'\'s type:',
-            [
+            m('.col-sm-2.space', ctrl.fields.elementType()+'\'s type:',[
                 m('select.custom-select',{value: ctrl.get('title','media','word') === undefined ? 'image' : 'word', onchange:m.withAttr('value',ctrl.updateTitleType())},[
                     ctrl.fields.titleType(ctrl.get('title','media','word') === undefined ? 'image' : 'word'),
                     ctrl.fields.titleHidden(ctrl.fields.titleType() === 'word' ? 'visible' : 'hidden'),
@@ -257,7 +230,7 @@ function view(ctrl) {
             ])
         ]),
         m('.row',[
-            m('.col-auto info-buffer',{style:{'padding-top': '1.6em'}},[
+            m('.col-xs-1.space',{style:{'padding-top': '1.6em'}},[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['Enter text (word) or image name (image). Set the path to the folder of images in the General Parameters page'])
             ]),
@@ -265,16 +238,14 @@ function view(ctrl) {
                 m('br'),
                 m('input[type=text].form-control', {style:{width:'15em'}, placeholder:'Enter Stimulus content here', 'aria-label':'Enter Stimulus content', 'aria-describedby':'basic-addon2', value: ctrl.fields.newStimulus(), oninput: m.withAttr('value', ctrl.fields.newStimulus)}),
                 m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
-                    m('button[type=button].btn btn-outline-secondary',{disabled:ctrl.fields.newStimulus().length === 0, id:'addWord', onclick:ctrl.addStimulus},[
-                        m('i.fas fa-plus'), 'Add Word'
-                    ]),
-                    m('button[type=button].btn btn-outline-secondary', {disabled:ctrl.fields.newStimulus().length === 0, id:'addImage', onclick: ctrl.addStimulus},[
-                        m('i.fas fa-plus'), 'Add Image'
-                    ])
+                    m('button[type=button].btn btn-outline-secondary',{disabled:ctrl.fields.newStimulus().length === 0, id:'addWord', onclick:ctrl.addStimulus},
+                        m('i.fas fa-plus'), 'Add Word'),
+                    m('button[type=button].btn btn-outline-secondary', {disabled:ctrl.fields.newStimulus().length === 0, id:'addImage', onclick: ctrl.addStimulus},
+                        m('i.fas fa-plus'), 'Add Image')
                 ])
             ]),
             ///startStimulus
-            m('.col-auto info-buffer',{style: {'padding-top': '1.6em', visibility:ctrl.fields.startStimulus()}},[
+            m('.col-xs-1.space',{style: {'padding-top': '1.6em', visibility:ctrl.fields.startStimulus()}},[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['Here You can enter only one type of stimuli (image or words), if you enter an image you can only enter one and with it\'s file extension.']),
             ]),
@@ -282,17 +253,15 @@ function view(ctrl) {
                 m('br'),
                 m('input[type=text].form-control', {style:{width:'15em'},placeholder:'Enter Stimulus content here', 'aria-label':'Enter Stimulus content', 'aria-describedby':'basic-addon2', value: ctrl.fields.newStartStimulus(), oninput: m.withAttr('value', ctrl.fields.newStartStimulus)}),
                 m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
-                    m('button[type=button].btn btn-outline-secondary',{disabled:ctrl.fields.newStartStimulus().length === 0, id:'addWord', onclick: (e) => ctrl.addStimulus(e,true)},[
-                        m('i.fas fa-plus'), 'Add Word'
-                    ]),
-                    m('button[type=button].btn btn-outline-secondary', {disabled:ctrl.fields.newStartStimulus().length === 0, id:'addImage', onclick: (e) => ctrl.addStimulus(e,true)},[
-                        m('i.fas fa-plus'), 'Add Image'
-                    ])
+                    m('button[type=button].btn btn-outline-secondary',{disabled:ctrl.fields.newStartStimulus().length === 0, id:'addWord', onclick: (e) => ctrl.addStimulus(e,true)},
+                        m('i.fas fa-plus'), 'Add Word'),
+                    m('button[type=button].btn btn-outline-secondary', {disabled:ctrl.fields.newStartStimulus().length === 0, id:'addImage', onclick: (e) => ctrl.addStimulus(e,true)},
+                        m('i.fas fa-plus'), 'Add Image')
                 ])
             ]),
         ]),
         m('.row',[
-            m('.col-auto info-buffer',{style: {'padding-top': '1.6em'}},[
+            m('.col-xs-1.space',{style: {'padding-top': '1.6em'}},[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['To select multiple stimuli, please press the ctrl key while selecting the desired stimuli'])
             ]),
@@ -310,7 +279,7 @@ function view(ctrl) {
                     ]),
                     m('div',{style: {visibility:ctrl.fields.stimuliHidden(), position: 'relative', top: '-170px', left: '255px', marginBottom: '-150px'}},[
                         m('span',{style:{'text-decoration': 'underline'}}, 'Stimuli font\'s design'),m('br'),
-                        m('label','Font\'s color: '),m('br'),
+                        m('label','Font\'s color: '), m('br'),
                         m('input[type=color]', {style:{'border-radius':'3px'},value: ctrl.get('stimulusCss','color'), onchange:m.withAttr('value', ctrl.set('stimulusCss','color'))}),
                         m('br'), m('label', 'Font\'s size:'), m('br'),
                         m('input[type=number]', {style: {'border-radius':'4px','border':'1px solid #E2E3E2'}, value:ctrl.get('stimulusCss','font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set('stimulusCss','font-size'))})
@@ -319,12 +288,12 @@ function view(ctrl) {
                     m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
                         m('button.btn btn btn-warning', {disabled: ctrl.fields.selectedStimuli().length===0, onclick:ctrl.removeChosenStimuli}, 'Remove Chosen Stimuli'),
                         m('button.btn btn btn-warning', {onclick:ctrl.removeAllStimuli},'Remove All Stimuli'),
-                        m('button.btn btn btn-warning', {onclick:(e) => ctrl.resetStimuliList(e)}, 'Reset Stimuli List'),
+                        ctrl.fields.isNewCategory() ? '' : m('button.btn btn btn-warning', {onclick:(e) => ctrl.resetStimuliList(e)}, 'Reset Stimuli List'),
                     ])
                 ]),
             ]),
             ///startStimulus
-            m('.col-auto info-buffer',{style: {'padding-top': '1.6em', visibility:ctrl.fields.startStimulus()}},[
+            m('.col-xs-1.space',{style: {'padding-top': '1.6em', visibility:ctrl.fields.startStimulus()}},[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['To select multiple stimuli, please press the ctrl key while selecting the desired stimuli'])
             ]),
@@ -353,12 +322,12 @@ function view(ctrl) {
                     m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
                         m('button.btn btn btn-warning', {disabled: ctrl.fields.selectedStartStimuli().length === 0, onclick: (e) => ctrl.removeChosenStartStimuli(e)}, 'Remove Chosen Stimuli'),
                         m('button.btn btn btn-warning', {onclick: (e) => ctrl.removeAllStimuli(e,true)}, 'Remove All Stimuli'),
-                        m('button.btn btn btn-warning', {onclick:(e) => ctrl.resetStimuliList(e,true)}, 'Reset Stimuli List'),
+                        ctrl.fields.isNewCategory() ? '' : m('button.btn btn btn-warning', {onclick:(e) => ctrl.resetStimuliList(e,true)}, 'Reset Stimuli List'),
                     ])
                 ])
             ])
         ]),
-        m('.row border_lines')
+        m('.row.space.line')
     ]);
 }
 

@@ -2,8 +2,7 @@ import parametersComponent from '../resources/parametersComponent.js';
 import outputComponent from './spfOutputComponent.js';
 import textComponent from '../resources/textComponent.js';
 import blocksComponent from './spfBlocksComponent.js';
-import categoriesComponent from './spfCategoriesComponent.js';
-import attributesComponent from '../IAT/attributesComponent.js';
+import categoriesComponent from '../resources/categoriesComponent.js';
 import importComponent from './spfImportComponent.js';
 import helpComponent from '../resources/helpComponent.js';
 
@@ -36,11 +35,21 @@ let categoryClear = [{name: '', title: {media: {word: ''}, css: {color: '#000000
     stimulusMedia: [],
     stimulusCss : {color:'#000000', 'font-size':'0em'}}];
 
+let categoriesTabs = [
+    {value: 'objectCat1', text: 'First Category'},
+    {value: 'objectCat2', text: 'Second Category'},
+]
+
+let attributesTabs = [
+    {value: 'attribute1', text: 'First Attribute'},
+    {value: 'attribute2', text: 'Second Attribute'},
+]
+
 let tabs = [
     {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },
     {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blocksDesc},
-    {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: categoryClear},
-    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: categoryClear},
+    {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: categoryClear, subTabs:categoriesTabs},
+    {value: 'attributes', text: 'Attributes', component: categoriesComponent, rowsDesc: categoryClear, subTabs:attributesTabs},
     {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
     {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
     {value: 'import', text: 'Import', component: importComponent},

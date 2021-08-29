@@ -5,19 +5,18 @@
   overflow-x:hidden;
 
 }
-button {
-  cursor: pointer;
-}
+button {cursor: pointer;}
 
-button:disabled {
-  cursor: not-allowed;
-}
+button:disabled {cursor: not-allowed;}
 
 .space {
-  padding-top: 7px;
-  padding-bottom: 7px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 
 }
+
+.line{ border-bottom:1px solid #ccc;}
+
 /* Style the main tab */
 .tab {
   overflow: hidden;
@@ -28,10 +27,8 @@ button:disabled {
 /* Style the buttons inside the tab */
 .tab button {
   background-color: inherit;
-  float: left;
   border: none;
   outline: none;
-  cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
   font-size: 17px;
@@ -48,6 +45,30 @@ button:disabled {
   background-color: #ccc;
 }
 
+/* Style the sub tab */
+.subtab {
+  overflow: hidden;
+  border: 1px solid #afd8e3;
+  background-color: #cee9f0;
+}
+
+/* Style the buttons inside the sub tab */
+.subtab button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  font-family:"Century Gothic", sans-serif;	
+}
+
+/* Change background color of buttons on hover */
+.subtab button:hover{background-color: #afd8e3;}
+
+/* Create an active/current tablink class */
+.subtab button.active{background-color: #85b9c9;}
+
 .info-box {
   display: none;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
@@ -63,32 +84,11 @@ button:disabled {
   z-index: 3000;
 }
 
+*:hover + .info-box, .info-box:hover {display: block;}
 
-*:hover + .info-box, .info-box:hover {
-  display: block; 
-}
+input[type=number]{width: 3em;}
 
-
-
-input[type=number]{
-  width: 3em;
-}
-
-
-
-.border_lines{
-  padding-top:12px;
-  border-bottom:5px solid #bcdae2;   
-}
-
-h1.categoryHeadline {
-  font-size: 1.8em;
-  margin-top: 0.3em;
-  font-weight: bold;
-}
-
-
-button.CreateFile{
+/* button.CreateFile{
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
   width: 250px;
   height: 50px;
@@ -101,6 +101,23 @@ button.CreateFile{
   font-size: 15px;
   margin: 15px auto;
   border-color:#fff;
+} */
+
+button.createFile{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  height: 3.5em;
+  background-color: rgb(40, 28, 128);
+  border-radius: 6px;
+  font-size: 15px;
+
+}
+
+button.subOutput{
+  font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  height: 3.5em;
+  border-radius: 6px;
+  font-size: 15px;
+
 }
 
 button.CreateJSONFile{
@@ -118,44 +135,8 @@ button.CreateJSONFile{
   border-color:#fff;
 }
 
-.top-buffer
- { 
-  border-bottom:1px solid #ccc; 
-  padding-top:12px; 
-}
 
-.block-buffer{
-    padding: 5px;
 
-}
-
-.biat-block-buffer{
-  padding:15px;
-}
-
-.param-buffer{
-  padding: 13px;
-
-}
-
-.info-buffer{
-  padding: 0.8em 0em 0.8em 0.5em;
-}
-
-.element-buffer{
-  padding: 1em 0em 0.8em 0.5em;
-  font-size: 15px;
-  position: relative;
-}
-
-.row-element-buffer
- { 
-  border-bottom:1px solid #ccc; 
-}
-
-.design-text-buffer {
-  padding: 0em 1em 0em 1em;
-}
 
 
 

@@ -1,5 +1,5 @@
 let settings = {
-    parameters : {isTouch:false, isQualtrics:false, fullscreen:false, showDebriefing:false, remindError:true, errorCorrection:true,base_url:''},
+    parameters : {isTouch:false, isQualtrics:false, leftKey:'E',rightKey:'I',fullscreen:false, showDebriefing:false, remindError:true, errorCorrection:true, base_url:''},
     category1: {name: 'Black people', title: {media: { word : 'Black people'}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4},
         stimulusMedia: [{word: 'Tayron'}, {word: 'Malik'},{word: 'Terrell'},{word: 'Jazamin'},{word: 'Tiara'},{word: 'Shanice'}],
         stimulusCss : {color:'#336600', 'font-size':'1.8em'}
@@ -8,15 +8,15 @@ let settings = {
         stimulusMedia: [{word: 'Jake'}, {word: 'Conor'},{word: 'Bradley'},{word: 'Allison'},{word: 'Emma'},{word: 'Emily'}],
         stimulusCss : {color:'#336600', 'font-size':'1.8em'}
     },
-    attribute1: {name: 'Bad Words', title: {media: { word : 'Bad Words'}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4},
+    attribute1: {name: 'Bad Words', title: {media: { word : 'Bad Words'}, css: {color: '#0000FF', 'font-size': '1.8em'}, height: 4},
         stimulusMedia: [{word: 'Awful'}, {word: 'Failure'},{word: 'Agony'},{word: 'Hurt'},{word: 'Horrible'},{word: 'Terrible'}
             ,{word: 'Nasty'},{word: 'Evil'}],
-        stimulusCss : {color:'#336600', 'font-size':'2.3em'}
+        stimulusCss : {color:'#0000FF', 'font-size':'2.3em'}
     },
-    attribute2: {name: 'Good Words', title: {media: { word : 'Good Words'}, css: {color: '#336600', 'font-size': '1.8em'}, height: 4},
+    attribute2: {name: 'Good Words', title: {media: { word : 'Good Words'}, css: {color: '#0000FF', 'font-size': '1.8em'}, height: 4},
         stimulusMedia: [{word: 'Laughter'}, {word: 'Happy'},{word: 'Glorious'},{word: 'Joy'},{word: 'Wonderful'},{word: 'Peace'}
             ,{word: 'Pleasure'}, {word: 'Love'}],
-        stimulusCss : {color:'#336600', 'font-size':'2.3em'}
+        stimulusCss : {color:'#0000FF', 'font-size':'2.3em'}
     },
     blocks: {blockCategories_nTrials: 20,blockCategories_nMiniBlocks:5, blockAttributes_nTrials:20,blockAttributes_nMiniBlocks:5,
         blockFirstCombined_nTrials:20, blockFirstCombined_nMiniBlocks:5, blockSecondCombined_nTrials:40, blockSecondCombined_nMiniBlocks:10,

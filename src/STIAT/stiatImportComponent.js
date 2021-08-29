@@ -1,3 +1,4 @@
+import {viewImport} from '../resources/utilities.js';
 
 let importComponent = {
     controller:controller,
@@ -5,18 +6,7 @@ let importComponent = {
 };
 
 function view(ctrl){
-    return m('.container',[ 
-        m('br'),
-        m('.row justify-content-md-center',[
-            m('.card border-info mb-3',{style:{'max-width': '25rem'}}, [
-                m('.card-header','Upload a JSON file: ' ),
-                m('.card-body text-info',[
-                    m('p.card-title','If you saved a JSON file from a previous session, you can upload that file here to edit the parameters.'),
-                    m('input[type=file].form-control',{id:'uploadFile', style: {'text-align': 'center'}, onchange: ctrl.handleFile})
-                ])
-            ])
-        ])
-    ]);
+    return viewImport(ctrl)
 }
 
 function controller(settings) {

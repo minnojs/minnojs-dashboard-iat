@@ -1,5 +1,3 @@
-
-
 let settings = {
     parameters : {isTouch:false, isQualtrics:false, practiceBlock:true, 
         showStimuliWithInst:true, remindError:true, base_url:''},

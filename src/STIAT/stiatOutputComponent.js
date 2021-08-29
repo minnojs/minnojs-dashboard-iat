@@ -1,4 +1,4 @@
-import {clone, checkMissingElementName} from '../resources/utilities.js';
+import {clone, checkMissingElementName, viewOutput} from '../resources/utilities.js';
 
 let outputComponent = {
     view:view,
@@ -27,7 +27,7 @@ function controller(settings, defaultSettings, clearBlock){
         
         //check for blocks problems
         let currBlocks = clone(settings.trialsByBlock)
-        clearBlock = clone(clearBlock[0]); //blocks parameters with zeros as the values, used to check if the current parameters are also zeros.
+        clearBlock = clone(clearBlock); //blocks parameters with zeros as the values, used to check if the current parameters are also zeros.
         delete clearBlock.block;
         
         let count = 0
@@ -122,46 +122,9 @@ function controller(settings, defaultSettings, clearBlock){
     }
 }
 
-function view(ctrl){
-    return m('.container',[
-        m('.alert alert-danger', {role:'alert',style: {'margin-top':'20px',visibility: ctrl.error_msg.length === 0 ? 'hidden' : 'visible'}},[
-            m('h6','Some problems were found in your script, it\'s recommended to fix them before proceeding to download:'),
-            m('ul',[
-                ctrl.error_msg.map(function(err){
-                    return m('li',err);
-                })
-            ])
-        ]),
-        m('.row justify-content-md-center',[
-            m('.col-auto'),
-            m('col-auto',[
-                m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
-                    m('button.CreateFile', {onclick: ctrl.createFile('JS')},[
-                        m('i.fas fa-file-download'), ' Download Script']),
-                    m('button.CreateJSONFile', {onclick: ctrl.createFile('JSON')},[
-                        m('i.fas fa-file-download'), ' Download JSON']),
-                    m('button.CreateJSONFile', {onclick: ctrl.printToPage()}, 'Print to Browser')
-                ])
-            ]),
-            m('.col-auto',{style:{'padding':'1.7em 0em 5em 1em',float:'left'}},[
-                m('row',[
-                    m('i.fa.fa-info-circle'),
-                    m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
-                ]),
-                m('.row',[
-                    m('.col-auto',{style:{'padding-top':'3.45em'}},[
-                        m('i.fa.fa-info-circle'),
-                        m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
-                    ])
-                ])
-            ]),
-        ]),
-        m('div',{id: 'textDiv', style: {visibility: 'hidden', 'padding' :'0 0 0 3.5em'}},
-            m('textarea.form-control', {id:'textArea', value:'', style: {width : '60rem', height: '25rem'}}))
-    ]);
-
+function view(ctrl, settings){
+    return viewOutput(ctrl, settings)
 }
-
 
 export default outputComponent;
 

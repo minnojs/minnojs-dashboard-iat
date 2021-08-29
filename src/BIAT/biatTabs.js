@@ -1,10 +1,8 @@
 import parametersComponent from '../resources/parametersComponent.js';
-import defaultSettings from './biatDefaultSettings.js';
 import blocksComponent from './biatBlocksComponent.js';
 import textComponent from '../resources/textComponent.js';
-import practiceComponent from './biatPracticeComponent.js';
 import categoriesComponent from './biatCategoriesComponent.js';
-import attributesComponent from './biatAttributesComponent.js';
+import attributesComponent from '../resources/categoriesComponent.js';
 import outputComponent from './biatOutputComponent.js';
 import importComponent from './biatImportComponent.js';
 import helpComponent from '../resources/helpComponent.js';
@@ -37,20 +35,18 @@ let textDesc = [
     {name: 'rightKeyText', nameTouch:'rightKeyTextTouch',label:'Top-right text (about the right key)', desc: 'We use this text to remind participants what key to use for a right response.'},
     {name: 'orText', label:'Or', desc: 'We show this text in the combined blocks to separate between the two categories that use the same key.'},
     {name: 'finalText', nameTouch: 'finalTouchText' , label:'Text shown at the end', desc: 'Text shown at the end'},
-    {remindErrorText:'', leftKeyText:'', rightKeyText:'', orText:'', 
-        instTemplate:'', finalText:''},
-    {remindErrorTextTouch:'', leftKeyTextTouch:'', rightKeyTextTouch:'',  
-    instTemplateTouch:'', finalTouchText:''}
+    {remindErrorText:'', leftKeyText:'', rightKeyText:'', orText:'', instTemplate:'', finalText:''},
+    {remindErrorTextTouch:'', leftKeyTextTouch:'', rightKeyTextTouch:'',  instTemplateTouch:'', finalTouchText:''}
 ];
 
 let elementClear = [{
     name : '',
     title : {
-        media : {image : ''},
+        media : {word : ''},
         css : {color:'#000000','font-size':'0em'},
         height : 4, 
         startStimulus : { 
-            media : {image : ''}, 
+            media : {word : ''}, 
             css : {color:'#000000','font-size':'0em'}, 
             height : 2
         }
@@ -58,12 +54,22 @@ let elementClear = [{
     stimulusMedia : [], 
     stimulusCss : {color:'#000000','font-size':'0em'} }];
 
+let attributesTabs = [
+    {value: 'attribute1', text: 'First Attribute'},
+    {value: 'attribute2', text: 'Second Attribute'},
+]
+
+let practiceTabs = [
+    {value: 'practiceCategory1', text: 'First Practice Category'},
+    {value: 'practiceCategory2', text: 'Second Practice Category'},
+]
+
 let tabs = [
     {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },
     {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blocksDesc},
-    {value: 'practice', text: 'Practice Block', component: practiceComponent, rowsDesc: elementClear},
+    {value: 'practice', text: 'Practice Block', component: attributesComponent, rowsDesc: elementClear, subTabs:practiceTabs, biat: true},
     {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: elementClear},
-    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: elementClear},
+    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: elementClear, subTabs:attributesTabs, biat: true},
     {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
     {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
     {value: 'import', text: 'Import', component: importComponent},

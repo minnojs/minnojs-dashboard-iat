@@ -1,3 +1,4 @@
+import {viewImport} from '../resources/utilities.js';
 
 let importComponent = {
     controller:controller,
@@ -5,29 +6,18 @@ let importComponent = {
 };
 
 function view(ctrl){
-    return m('.container',[ 
-        m('br'),
-        m('.row justify-content-md-center',[
-            m('.card border-info mb-3',{style:{'max-width': '25rem'}}, [
-                m('.card-header','Upload a JSON file: ' ),
-                m('.card-body text-info',[
-                    m('p.card-title','If you saved a JSON file from a previous session, you can upload that file here to edit the parameters.'),
-                    m('input[type=file].form-control',{id:'uploadFile', style: {'text-align': 'center'}, onchange: ctrl.handleFile})
-                ])
-            ])
-        ])
-    ]);
+    return viewImport(ctrl)
 }
 
 function controller(settings) {
     let fileInput = m.prop('');
-    return {fileInput:fileInput, handleFile:handleFile, updateSettings:updateSettings};
+    return {fileInput, handleFile, updateSettings};
 
     function handleFile(){
         let importedFile = document.getElementById('uploadFile').files[0];
         let reader = new FileReader();
         reader.readAsText(importedFile); 
-        reader.onload = function() {
+        reader.onload = function(){
             let fileContent = JSON.parse(reader.result);
             updateSettings(fileContent);
         };
@@ -45,6 +35,9 @@ function controller(settings) {
             settings.parameters.isQualtrics = input.isQualtrics;
             settings.parameters.showDebriefing = input.showDebriefing;
             settings.parameters.fullscreen = input.fullscreen;
+            settings.parameters.leftKey = input.leftKey;
+            settings.parameters.rightKey = input.rightKey;
+
         }
         settings.blocks.blockCategories_nTrials = input.blockCategories_nTrials;
         settings.blocks.blockCategories_nMiniBlocks = input.blockCategories_nMiniBlocks;
@@ -70,7 +63,7 @@ function controller(settings) {
             settings.touch_text.SwitchedCategoriesInstructions = input.SwitchedCategoriesInstructions;
             settings.touch_text.PreDebriefingText = input.PreDebriefingText;
         }
-        else {
+        else{
             settings.text.textOnError = input.textOnError;
             settings.text.leftKeyText = input.leftKeyText;
             settings.text.rightKeyText = input.rightKeyText;
