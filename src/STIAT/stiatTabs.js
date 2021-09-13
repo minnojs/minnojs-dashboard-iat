@@ -41,22 +41,13 @@ let blocksDesc = [
     }
 ]
 
-let categoryClear = [{name: '', title: {media: {word: ''}, css: {color: '#000000', 'font-size': '0em'}, height: 4},
+let categoryClear = [{
+    name: '', 
+    title: {media: {word: ''},
+    css: {color: '#000000', 'font-size': '1em'}, height: 4},
     stimulusMedia: [],
-    stimulusCss : {color:'#000000', 'font-size':'0em'}}];
-
-// let clearBlock =  
-//     [
-//         //Each of the following defines a block
-//         {
-//             instHTML : '', 
-//             block : 1,
-//             miniBlocks : 0, 
-//             singleAttTrials : 0, 
-//             sharedAttTrials : 0, 
-//             categoryTrials : 0 
-//         }
-//     ]
+    stimulusCss : {color:'#000000', 'font-size':'1em'}
+}];
 
 let category = [
     {value: 'category', text: 'Category'},
@@ -66,7 +57,6 @@ let attributesTabs = [
     {value: 'attribute1', text: 'First Attribute'},
     {value: 'attribute2', text: 'Second Attribute'},
 ]
-
 
 let tabs = [
     {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },

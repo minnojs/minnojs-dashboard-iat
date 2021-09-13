@@ -234,7 +234,9 @@
 	    for(let i = 0; i < stimulusMedia.length ;i++)
 	        if(stimulusMedia[i].image) containsImage = true;
 	    
-
+	    if(element.title.startStimulus)
+	        element.title.startStimulus.media.image ? containsImage = true : ''; //for biat only, checking if startStimulus contains image
+	    
 	    return containsImage
 	}
 
@@ -359,12 +361,12 @@
 	    }}
 	}
 
-	function view(ctrl){
+	function view(ctrl, settings){
 	    return m('.container' , [
 	        ctrl.rows.slice(0,-1).map((row) => {
-	            if ((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') {
-	                return null;
-	            }
+	            if ((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
+	            if(settings.parameters.isTouch && row.name.toLowerCase().includes('key')) return;
+	            
 	            return m('.row.space.line', [
 	                    m('.col-xs-1.space',[
 	                        m('i.fa.fa-info-circle'),
@@ -372,20 +374,18 @@
 	                    ]),
 	                    m('.col-3.space', row.label),
 	                    row.name.toLowerCase().includes('key') ? //case of keys parameters
-	                    m('.col-8.space',
-	                    m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))}))                    
+	                        m('.col-8.space',
+	                            m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
+	                        )                    
 	                    : row.options ? //case of isTouch and isQualtrics
-	                    m('.col-8.space',
-	                    m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
-	                    row.options.map(function(option){return m('option', option);})
-	                    ]))
-	                    // : ['leftKey', 'rightKey'].includes(row.name) ?
-	                    // m('.col-8.space',
-	                    // m('input[type=text].form-control', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
+	                        m('.col-8.space',
+	                            m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
+	                                row.options.map(function(option){return m('option', option);})
+	                        ]))
 	                    :
-	                    m('.col-8.space',
-	                    m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
-	                    ])
+	                        m('.col-8.space',
+	                            m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
+	                        ])
 	        }),
 	        m('.row.space.line', [
 	            m('.col-xs-1.space',[
@@ -501,11 +501,11 @@
 	    }
 	}
 
-	function view$2(ctrl, settings){
+	function view$2(ctrl){
 	    return m('.container' , [
 	        ctrl.rows.map(function(row) {
 	            //if touch parameter is choosen, don't show the irrelevant text parametes
-	            if (settings.parameters.isTouch === true && row.nameTouch === undefined) {
+	            if (ctrl.isTouch === true && row.nameTouch === undefined) {
 	                return null;
 	            }
 	            return m('.row.space.line', [
@@ -962,7 +962,7 @@
 	    }
 	}
 
-	function view$4(ctrl,settings,) {
+	function view$4(ctrl,settings) {
 	    return m('.container.space',[
 	        m('.subtab', ctrl.categories.map(function(tab, index){
 	            return m('button',{
@@ -970,7 +970,7 @@
 	            onclick:function(){
 	                ctrl.curr_tab(index);
 	            }}, ctrl.headlines[index] + ' Category',
-	            m('input[type=checkbox].space', {checked : ctrl.choosenCategoriesList().includes(index), style:{'margin-left':'1em',visibility: ctrl.chooseFlag()}, onclick: (e) => ctrl.updateChoosenBlocks(e, index)}),);
+	            m('input[type=checkbox].space', {checked : ctrl.choosenCategoriesList().includes(index), style:{'margin-left':'1em',visibility: ctrl.chooseFlag()}, onclick: (e) => ctrl.updateChoosenBlocks(e, index)}));
 	        })),
 	        m('.row.space.line.space justify-content-md-center',[
 	            m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
@@ -1276,9 +1276,8 @@
 	        let temp4 = checkMissingElementName(settings.attribute1, 'First Attribute', error_msg);
 	        let temp5 = checkMissingElementName(settings.attribute2, 'Second Attribute', error_msg);
 
-	        if (temp1 || temp2 || temp3 || temp4 || temp5) containsImage = true;
-	        else containsImage = false;
-	    
+	        containsImage = temp1 || temp2 || temp3 || temp4 || temp5;
+
 	        if(settings.parameters.base_url.length === 0 && containsImage)
 	            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
 	        
@@ -1377,8 +1376,7 @@
 	}
 
 	function controller$8(settings) {
-	    let fileInput = m.prop('');
-	    return {fileInput, handleFile, updateSettings};
+	    return {handleFile, updateSettings};
 
 	    function handleFile(){
 	        let importedFile = document.getElementById('uploadFile').files[0];
@@ -1494,16 +1492,16 @@
 	    name : '',
 	    title : {
 	        media : {word : ''},
-	        css : {color:'#000000','font-size':'0em'},
+	        css : {color:'#000000','font-size':'1em'},
 	        height : 4, 
 	        startStimulus : { 
 	            media : {word : ''}, 
-	            css : {color:'#000000','font-size':'0em'}, 
+	            css : {color:'#000000','font-size':'1em'}, 
 	            height : 2
 	        }
 	    },
 	    stimulusMedia : [], 
-	    stimulusCss : {color:'#000000','font-size':'0em'} }];
+	    stimulusCss : {color:'#000000','font-size':'1em'} }];
 
 	let attributesTabs = [
 	    {value: 'attribute1', text: 'First Attribute'},

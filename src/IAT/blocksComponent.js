@@ -21,7 +21,7 @@ function controller(settings, defaultSettings, rows){
 
 function view(ctrl){
     return m('.container' ,{style:{height: '500px'}},[
-        ctrl.rows.slice(0,-1).map(function(row) {
+        ctrl.rows.slice(0,-1).map(function(row){
             return m('.row.space.line', [
                 m('.col-xs-1.space',[
                     m('i.fa.fa-info-circle'),
@@ -58,7 +58,7 @@ function view(ctrl){
                 ]),
             ]),
         ]),
-        m('.alert alert-info', {role:'alert', style: {position: 'relative', width: '25rem', left: '62%',top: '-700px',  border: '2px solid #bcdae2'}},[
+        m('.alert alert-info', {role:'alert', style: {position: 'relative', width: '25rem', left: '62%',top: '-750px',  border: '2px solid #bcdae2'}},[
             m('h4','More information:'),
             m('p','By default, we separate each block into mini-blocks of four trials. In Blocks 3, 4, 6, and 7, '+
                                 'exactly one item from each of the four groups (attributes and categories) appears in each mini-block. In Blocks 1, 2, and 5, '+

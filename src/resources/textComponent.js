@@ -1,4 +1,4 @@
-import {showClearOrReset} from '../resources/utilities.js';
+import {showClearOrReset} from './utilities.js';
 
 let textComponent = {
     controller:controller,
@@ -25,11 +25,11 @@ function controller(settings, defaultSettings, rows){
     }
 }
 
-function view(ctrl, settings){
+function view(ctrl){
     return m('.container' , [
         ctrl.rows.map(function(row) {
             //if touch parameter is choosen, don't show the irrelevant text parametes
-            if (settings.parameters.isTouch === true && row.nameTouch === undefined) {
+            if (ctrl.isTouch === true && row.nameTouch === undefined) {
                 return null;
             }
             return m('.row.space.line', [

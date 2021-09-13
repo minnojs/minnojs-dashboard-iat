@@ -27,7 +27,9 @@ export function checkMissingElementName(element, name_to_display, error_msg){
     for(let i = 0; i < stimulusMedia.length ;i++)
         if(stimulusMedia[i].image) containsImage = true
     
-
+    if(element.title.startStimulus)
+        element.title.startStimulus.media.image ? containsImage = true : '' //for biat only, checking if startStimulus contains image
+    
     return containsImage
 }
 

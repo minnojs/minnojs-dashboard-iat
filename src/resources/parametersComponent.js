@@ -33,12 +33,12 @@ function controller(settings, defaultSettings, rows){
     }}
 }
 
-function view(ctrl){
+function view(ctrl, settings){
     return m('.container' , [
         ctrl.rows.slice(0,-1).map((row) => {
-            if ((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') {
-                return null;
-            }
+            if ((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
+            if(settings.parameters.isTouch && row.name.toLowerCase().includes('key')) return;
+            
             return m('.row.space.line', [
                     m('.col-xs-1.space',[
                         m('i.fa.fa-info-circle'),
@@ -46,20 +46,18 @@ function view(ctrl){
                     ]),
                     m('.col-3.space', row.label),
                     row.name.toLowerCase().includes('key') ? //case of keys parameters
-                    m('.col-8.space',
-                    m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))}))                    
+                        m('.col-8.space',
+                            m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
+                        )                    
                     : row.options ? //case of isTouch and isQualtrics
-                    m('.col-8.space',
-                    m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
-                    row.options.map(function(option){return m('option', option);})
-                    ]))
-                    // : ['leftKey', 'rightKey'].includes(row.name) ?
-                    // m('.col-8.space',
-                    // m('input[type=text].form-control', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
+                        m('.col-8.space',
+                            m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
+                                row.options.map(function(option){return m('option', option);})
+                        ]))
                     :
-                    m('.col-8.space',
-                    m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
-                    ])
+                        m('.col-8.space',
+                            m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
+                        ])
         }),
         m('.row.space.line', [
             m('.col-xs-1.space',[

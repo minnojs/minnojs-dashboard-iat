@@ -10,8 +10,7 @@ function view(ctrl){
 }
 
 function controller(settings) {
-    let fileInput = m.prop('');
-    return {fileInput, handleFile, updateSettings};
+    return {handleFile, updateSettings};
 
     function handleFile(){
         let importedFile = document.getElementById('uploadFile').files[0];

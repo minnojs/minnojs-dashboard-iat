@@ -20,9 +20,8 @@ function controller(settings, defaultSettings, blocksObject){
         let temp3 = checkMissingElementName(settings.attribute1, 'First Attribute', error_msg)
         let temp4 = checkMissingElementName(settings.attribute2, 'Second Attribute', error_msg)
 
-        if (temp1 || temp2 || temp3 || temp4) containsImage = true;
-        else containsImage = false;
-    
+        containsImage = temp1 || temp2 || temp3 || temp4;
+
         if(settings.parameters.base_url.length === 0 && containsImage)
             error_msg.push('Image\'s\ url is missing and there is an image in the study');    
         

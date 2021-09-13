@@ -18,8 +18,9 @@ function controller(settings, defaultSettings, blocksObject){
         let temp2 = checkMissingElementName(settings.category2, 'Second Category', error_msg)
         let temp3 = checkMissingElementName(settings.attribute1, 'First Attribute', error_msg) 
         let temp4 = checkMissingElementName(settings.attribute2, 'Second Attribute', error_msg)
-        temp1 || temp2 || temp3 || temp4 ? containsImage = true : containsImage = false; 
-        
+                
+        containsImage = temp1 || temp2 || temp3 || temp4;
+
         if(settings.parameters.base_url.length == 0 && containsImage)
             error_msg.push('Image\'s\ url is missing and there is an image in the study');    
         
@@ -90,8 +91,10 @@ function controller(settings, defaultSettings, blocksObject){
             output.isQualtrics=settings.parameters.isQualtrics;
             output.showDebriefing=settings.parameters.showDebriefing;
             output.fullscreen=settings.parameters.fullscreen;
-            output.leftKey=settings.parameters.leftKey;
-            output.rightKey=settings.parameters.rightKey;
+            if(!input.isTouch){
+                output.leftKey=settings.parameters.leftKey;
+                output.rightKey=settings.parameters.rightKey;
+            }
 
         }
         Object.assign(output, settings.blocks);
@@ -102,7 +105,7 @@ function controller(settings, defaultSettings, blocksObject){
         function toScript(output){
             return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/qualtrics/quiat10.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/IAT/iat9.js'}'], function(APIConstructor, iatExtension) {var API = new APIConstructor(); return iatExtension(${JSON.stringify(output,null,4)});});`;
         }
-    }
+}
 
 function view(ctrl, settings){
     return viewOutput(ctrl, settings);

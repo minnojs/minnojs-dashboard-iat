@@ -48,9 +48,13 @@ let blocksDesc = [
         blockSwitch_nTrials:0, blockSwitch_nMiniBlocks:0, randomBlockOrder: false, randomAttSide : false}
 ];
 
-let categoryClear = [{name: '', title: {media: {word: ''}, css: {color: '#000000', 'font-size': '0em'}, height: 4},
+let categoryClear = [{
+    name: '', 
+    title: {media: {word: ''}, 
+    css: {color: '#000000', 'font-size': '1em'}, height: 4},
     stimulusMedia: [],
-    stimulusCss : {color:'#000000', 'font-size':'0em'}}];
+    stimulusCss : {color:'#000000', 'font-size':'1em'}
+}];
 
 let categoriesTabs = [
     {value: 'category1', text: 'First Category'},

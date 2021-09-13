@@ -98,7 +98,7 @@ function controller(settings, defaultSettings, clearElement){
     }
 }
 
-function view(ctrl,settings,) {
+function view(ctrl,settings) {
     return m('.container.space',[
         m('.subtab', ctrl.categories.map(function(tab, index){
             return m('button',{
@@ -106,7 +106,7 @@ function view(ctrl,settings,) {
             onclick:function(){
                 ctrl.curr_tab(index);
             }}, ctrl.headlines[index] + ' Category',
-            m('input[type=checkbox].space', {checked : ctrl.choosenCategoriesList().includes(index), style:{'margin-left':'1em',visibility: ctrl.chooseFlag()}, onclick: (e) => ctrl.updateChoosenBlocks(e, index)}),);
+            m('input[type=checkbox].space', {checked : ctrl.choosenCategoriesList().includes(index), style:{'margin-left':'1em',visibility: ctrl.chooseFlag()}, onclick: (e) => ctrl.updateChoosenBlocks(e, index)}));
         })),
         m('.row.space.line.space justify-content-md-center',[
             m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[

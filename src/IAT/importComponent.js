@@ -10,8 +10,7 @@ function view(ctrl){
 }
 
 function controller(settings) {
-    let fileInput = m.prop('');
-    return {fileInput, handleFile, updateSettings};
+    return {handleFile, updateSettings};
 
     function handleFile(){
         let importedFile = document.getElementById('uploadFile').files[0];
@@ -35,9 +34,10 @@ function controller(settings) {
             settings.parameters.isQualtrics = input.isQualtrics;
             settings.parameters.showDebriefing = input.showDebriefing;
             settings.parameters.fullscreen = input.fullscreen;
-            settings.parameters.leftKey = input.leftKey;
-            settings.parameters.rightKey = input.rightKey;
-
+            if(!input.isTouch){
+                settings.parameters.leftKey = input.leftKey;
+                settings.parameters.rightKey = input.rightKey;
+            } 
         }
         settings.blocks.blockCategories_nTrials = input.blockCategories_nTrials;
         settings.blocks.blockCategories_nMiniBlocks = input.blockCategories_nMiniBlocks;

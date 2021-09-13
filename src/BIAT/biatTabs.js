@@ -43,16 +43,16 @@ let elementClear = [{
     name : '',
     title : {
         media : {word : ''},
-        css : {color:'#000000','font-size':'0em'},
+        css : {color:'#000000','font-size':'1em'},
         height : 4, 
         startStimulus : { 
             media : {word : ''}, 
-            css : {color:'#000000','font-size':'0em'}, 
+            css : {color:'#000000','font-size':'1em'}, 
             height : 2
         }
     },
     stimulusMedia : [], 
-    stimulusCss : {color:'#000000','font-size':'0em'} }];
+    stimulusCss : {color:'#000000','font-size':'1em'} }];
 
 let attributesTabs = [
     {value: 'attribute1', text: 'First Attribute'},
