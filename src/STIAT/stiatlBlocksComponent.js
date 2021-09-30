@@ -87,7 +87,7 @@ function controller(settings, defaultSettings, rows){
     }
     function chooseBlocks(){
         if (blocks.length < 4) {
-            showRestrictions('It\'s not possible to remove blocks because there must be at least 2 blocks.', 'error'); 
+            showRestrictions('It\'s not possible to remove blocks because there must be at least 3 blocks.', 'error'); 
             return;
         }
         chooseFlag('visible');
@@ -142,7 +142,7 @@ function controller(settings, defaultSettings, rows){
 
 function view(ctrl){
     return m('.container' , [
-        m('.row.space .space.line', [
+        m('.row.space.line', [
             m('.col-sm-2.space',[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['Change to \'startRight\' if you want to start with category on the right in the first block, \'startLeft\' if you want to start with category on the left in the first block or \'random\' if you want to randomize the order.']),
@@ -155,7 +155,7 @@ function view(ctrl){
                     m('option', 'startLeft'),
                 ]))        
         ]),
-        m('.row.space .space.line', [
+        m('.row.space.line', [
             m('.col-sm-2.space',[
                 m('i.fa.fa-info-circle'),
                 m('.card.info-box.card-header', ['By default, we switch on block 4 (i.e., after blocks 2 and 3 showed the first pairing condition).']),
@@ -167,7 +167,7 @@ function view(ctrl){
         ctrl.blocks.map(function(block) {
             let index = ctrl.blocks.indexOf(block);
             return m('div',[
-                m('.row.space .space.line', [
+                m('.row.space.line', [
                     m('.col-sm-2',[
                         m('input[type=checkbox]', {checked : ctrl.choosenBlocksList.includes(index), style:{visibility: ctrl.chooseFlag()}, onclick: (e) => ctrl.updateChoosenBlocks(e, index)}),
                         m('span', [' ','Block '+parseInt(index+1)])
@@ -193,11 +193,12 @@ function view(ctrl){
         }),
         m('.row.space justify-content-md-center',[
             m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
-                m('button.btn btn btn-info',{onclick: ctrl.addBlock, style:{'padding-right':'60px','padding-left':'60px' ,visibility: ctrl.addFlag()}}, [m('i.fas fa-plus')],' Add Block'),
-                m('button.btn btn btn-warning',{onclick: ctrl.chooseBlocks},[
-                    m('i.fas fa-check'), ' Choose Blocks to Remove']),
-                m('button.btn btn btn-danger',{onclick: ctrl.showRemoveBlocks, disabled: !ctrl.choosenBlocksList.length},[
-                    m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
+                m('button.btn btn btn-info',{onclick: ctrl.addBlock, style:{'padding-right':'60px','padding-left':'60px' ,visibility: ctrl.addFlag()}}, 
+                    m('i.fas fa-plus'),' Add Block'),
+                m('button.btn btn btn-warning',{onclick: ctrl.chooseBlocks},
+                    m('i.fas fa-check'), ' Choose Blocks to Remove'),
+                m('button.btn btn btn-danger',{onclick: ctrl.showRemoveBlocks, disabled: !ctrl.choosenBlocksList.length},
+                    m('i.far fa-minus-square'), ' Remove Choosen Blocks'),
             ])
         ]),
         m('.row.space',[

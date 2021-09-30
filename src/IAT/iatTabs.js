@@ -1,9 +1,9 @@
 import parametersComponent from '../resources/parametersComponent.js';
-import outputComponent from './outputComponent.js';
+import outputComponent from './iatOutputComponent.js';
 import textComponent from '../resources/textComponent.js';
-import blocksComponent from './blocksComponent.js';
+import blocksComponent from './iatBlocksComponent.js';
 import categoriesComponent from '../resources/categoriesComponent.js';
-import importComponent from './importComponent.js';
+import importComponent from './iatImportComponent.js';
 import helpComponent from '../resources/helpComponent.js';
 
 let parametersDesc = [

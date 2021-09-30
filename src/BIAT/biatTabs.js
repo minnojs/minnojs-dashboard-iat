@@ -1,5 +1,5 @@
 import parametersComponent from '../resources/parametersComponent.js';
-import blocksComponent from './biatBlocksComponent.js';
+import blocksComponent from '../resources/blocksComponent.js';
 import textComponent from '../resources/textComponent.js';
 import categoriesComponent from './biatCategoriesComponent.js';
 import attributesComponent from '../resources/categoriesComponent.js';
@@ -67,9 +67,9 @@ let practiceTabs = [
 let tabs = [
     {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },
     {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blocksDesc},
-    {value: 'practice', text: 'Practice Block', component: attributesComponent, rowsDesc: elementClear, subTabs:practiceTabs, biat: true},
+    {value: 'practice', text: 'Practice Block', component: attributesComponent, rowsDesc: elementClear, subTabs:practiceTabs, type: 'BIAT'},
     {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: elementClear},
-    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: elementClear, subTabs:attributesTabs, biat: true},
+    {value: 'attributes', text: 'Attributes', component: attributesComponent, rowsDesc: elementClear, subTabs:attributesTabs, type: 'BIAT'},
     {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
     {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
     {value: 'import', text: 'Import', component: importComponent},

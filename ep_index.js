@@ -1,5 +1,5 @@
 /**
-* @preserve minnojs-spf-dashboard v1.0.0
+* @preserve minnojs-ep-dashboard v1.0.0
 * @license Apache-2.0 (2021)
 */
 
@@ -33,57 +33,127 @@
 	};
 
 	let settings = {
-	    parameters: {keyTopLeft: 'E', keyTopRight: 'I', keyBottomLeft: 'C', keyBottomRight: 'N',base_url:''},
-	    objectCat1: {name: 'Mammals', title: {media: { word : 'Mammals'}, css: {color: '#31b404', 'font-size': '2em'}, height: 8},
-	        stimulusMedia: [{word: 'Dogs'}, {word: 'Horses'},{word: 'Lions'},{word: 'Cows'}],
-	        stimulusCss : {color:'#31b404', 'font-size':'2em'}
+	    parameters : {isQualtrics:false, base_url:'', separateStimulusSelection : true,primeDuration: 200, fixationDuration:0, deadlineDuration:0, deadlineMsgDuration: 750, 
+	    fixationStimulus : {
+	        css : {color:'#000000', 'font-size':'3em'}, 
+	        media : {word:'+'}
+	    },  
+	    deadlineStimulus : {
+	        css : {color:'#FF0000', 'font-size':'2.5em'}, 
+	        media : {word:'!!!PLEASE RESPOND FASTER!!!'}, 
+	        location: {bottom:10}
+	    }
 	    },
-	    objectCat2: {name: 'Birds', title: {media: { word : 'Birds'}, css: {color: '#31b404', 'font-size': '2em'}, height: 8},
-	        stimulusMedia: [{word: 'Pigeons'}, {word: 'Swans'},{word: 'Crows'},{word: 'Ravens'}],
-	        stimulusCss : {color:'#31b404', 'font-size':'2em'}
+	    primeStimulusCSS : {color:'#0000FF','font-size':'2.3em'}, //The CSS for all the prime stimuli.
+	    prime1 : {
+	            name : 'prime1',  //Will be used in the logging
+	            mediaArray : [{word : 'prime1Stim1'}, {word : 'prime1Stim2'}] //An array of all media objects for this category.
+
+	    }, 
+	    prime2: {
+	            name : 'prime2', 
+	            mediaArray : [{word : 'prime2Stim2'}, {word : 'prime2Stim2'}]
 	    },
-	    attribute1: {name: 'Unpleasant', title: {media: { word : 'Unpleasant'}, css: {color: '#0000FF', 'font-size': '2em'}, height: 8},
-	        stimulusMedia: [{word: 'Bomb'}, {word: 'Abuse'},{word: 'Sadness'},{word: 'Pain'},{word: 'Poison'},{word: 'Grief'}],
-	        stimulusCss : {color:'#0000FF', 'font-size':'2em'}
+	    rightAttTargets: {
+	            name : 'Pleasant', 
+	            title : {
+	                media : {word : 'Pleasant'}, //Name of the attribute presented in the task.
+	                css : {color:'#0000FF','font-size':'3em'} //Style of the attribute title.
+	            }, 
+	            stimulusMedia : [
+	                {word: 'Paradise'},
+	                {word: 'Pleasure'},
+	                {word: 'Cheer'},
+	                {word: 'Friend'},
+	                {word: 'Splendid'},
+	                {word: 'Love'},
+	                {word: 'Glee'},
+	                {word: 'Smile'},
+	                {word: 'Enjoy'},
+	                {word: 'Delight'},
+	                {word: 'Beautiful'},
+	                {word: 'Attractive'},
+	                {word: 'Likeable'},
+	                {word: 'Wonderful'}
+	            ], 
+	            stimulusCss : {color:'#0000FF','font-size':'2em'}
+	    }, 
+	    leftAttTargets : {
+	            name : 'Unpleasant', 
+	            title : {
+	                media : {word : 'Unpleasant'}, //Name of the attribute presented in the task.
+	                css : {color:'#0000FF','font-size':'3em'} //Style of the attribute title.
+	            }, 
+	            stimulusMedia : [
+	                {word: 'Bomb'},
+	                {word: 'Abuse'},
+	                {word: 'Sadness'},
+	                {word: 'Pain'},
+	                {word: 'Poison'},
+	                {word: 'Grief'},
+	                {word: 'Ugly'},
+	                {word: 'Dirty'},
+	                {word: 'Stink'},
+	                {word: 'Noxious'},
+	                {word: 'Humiliate'},
+	                {word: 'Annoying'},
+	                {word: 'Disgusting'},
+	                {word: 'Offensive'}
+	            ],
+	            stimulusCss : {color:'#0000FF','font-size':'2em'}
 	    },
-	    attribute2: {name: 'Pleasant', title: {media: { word : 'Pleasant'}, css: {color: '#0000FF', 'font-size': '2em'}, height: 8},
-	        stimulusMedia: [{word: 'Paradise'}, {word: 'Pleasure'},{word: 'Cheer'},{word: 'Wonderful'},{word: 'Splendid'},{word: 'Love'}],
-	        stimulusCss : {color:'#0000FF', 'font-size':'2em'}
+	    blocks: {nTrialsPerPrimeTargetPair:15, nBlocks : 3,
 	    },
-	    blocks: {nBlocks:3, nTrialsPerPrimeTargetPair:10, randomCategoryLocation: true, randomAttributeLocation : false},
 	    text: {
-	        firstBlock : 
-	        '<div><p style="font-size:18px; text-align:left; margin-left:10px; font-family:arial"><color="000000"><br/>' + 
-	        'Put your left middle and index finger on the <b>keyTopLeft</b> and <b>keyBottomLeft</b> keys. ' + 
-	        'Put your right middle and index finger on the <b>keyTopRight</b> and <b>keyBottomRight</b> keys. ' + 
-	        'Pairs of stimuli will appear in the middle of the screen. '  + 
-	        'Four pairs of categories will appear in the corners of the screen. ' + 
-	        'Sort each pair of items to the corner in which their two categories appear. ' + 
-	        'If you make an error, an <font color="#FF0000"><b>X</b></font> will appear until you hit the correct key. ' + 
+	        firstBlock: '<div><p style="font-size:1.3em; text-align:left; margin-left:10px; font-family:arial"><color="000000"><br/>' + 
+	        'Put your middle or index fingers on the <b>E</b> and <b>I</b> keys of your keyboard. ' + 
+	        'Pairs of items (words and images) will appear one after another. ' + 
+	        'For each pair of items, ignore the first item and categorize the second item as posAttribute'  + 
+	        ' or negAttribute.<br/><br/>' + 
+	        'When the second item you see belongs to the category "negAttribute", press <b>E</b>; ' + 
+	        'when the item belongs to the category "posAttribute", press <b>I</b>. ' + 
+	        'If you make an error, an </color> <font color="#ff0000"><b>X</b></font> will appear.<br/><br/>' + 
 	        'This is a timed sorting task. <b>GO AS FAST AS YOU CAN</b> while making as few mistakes as possible.' + 
-	        '</color></p><p style="font-size:16px; text-align:center; font-family:arial"><color="000000"><br/><br/>' + 
-	        'press SPACE to begin</p><p style="font-size:14px; text-align:center; font-family:arial">' + 
-	        '<color="000000">[Round 1 of 3]</p></div>', 
-	        middleBlock : 
-	        '<div><p style="font-size:18px; text-align:left; margin-left:10px; font-family:arial"><color="000000"><br/>' + 
+	        '</color></p><p style="font-size:14px; text-align:center; font-family:arial"><color="000000"><br/><br/>' + 
+	        'press SPACE to begin</p><p style="font-size:12px; text-align:center; font-family:arial">' + 
+	        '<color="000000">[Round 1 of nBlocks]</p></div>', 
+	        middleBlock : '<div><p style="font-size:1.3em; text-align:left; margin-left:10px; font-family:arial"><color="000000"><br/>' + 
 	        'Press SPACE to continue with the same task.<br/><br/>' + 
-	        'Sort each pair of items to the corner in which their two categories appear. ' + 
-	        'If you make an error, an <font color="#FF0000"><b>X</b></font> will appear until you hit the correct key. ' + 
-	        'This is a timed sorting task. <b>GO AS FAST AS YOU CAN</b> while making as few mistakes as possible.</p>' + 
-	        '<p style="font-size:14px; text-align:center; font-family:arial">' + 
-	        '<color="000000">[Round 2 of 3]</p></div>', 
-	        lastBlock : 
-	        '<div><p style="font-size:18px; text-align:left; margin-left:10px; font-family:arial"><color="000000"><br/>' + 
+	        'Ignore the first item and categorize the second item.<br/><br/>' + 
+	        'Press <b>E</b> if the second item is negAttribute.<br/>' + 
+	        'Press <b>I</b> if the second item is posAttribute.</p><br/><br/>' + 
+	        '<p style="font-size:12px; text-align:center; font-family:arial">' + 
+	        '<color="000000">[Round blockNum of nBlocks]</p></div>', 
+	        lastBlock : '<div><p style="font-size:1.3em; text-align:left; margin-left:10px; font-family:arial"><color="000000"><br/>' + 
 	        'This task can be a little exhausting. ' + 
 	        'Try to challenge yourself to respond as quickly as you can without making mistakes.<br/><br/>' + 
 	        'Press SPACE for the final round.</p><br/><br/>' + 
-	        '<p style="font-size:14px; text-align:center; font-family:arial">' + 
-	        '<color="000000">[Round 3 of 3]</p></div>'
+	        '<p style="font-size:12px; text-align:center; font-family:arial">' + 
+	        '<color="000000">[Round nBlocks of nBlocks]</p></div>'
 	    }
 	};
 
 	function clone(obj){
 	    return JSON.parse(JSON.stringify(obj));
+	}
+
+	function checkPrime(element, name_to_display, error_msg){
+	    let containsImage = false;
+	    //check for missing titles and names
+	    if(element.name.length == 0)
+	        error_msg.push(name_to_display+'\'s\ name is missing');
+
+	    let mediaArray = element.mediaArray;
+	    
+	    //if there an empty stimulli list
+	    if (mediaArray.length === 0) 
+	        error_msg.push(name_to_display+'\'s stimuli list is empty, please enter at least one stimulus.');
+	    
+	    //check if the stimuli contains images
+	    for(let i = 0; i < mediaArray.length ;i++)
+	        if(mediaArray[i].image) containsImage = true;
+	    
+	    return containsImage
 	}
 
 	function checkMissingElementName(element, name_to_display, error_msg){
@@ -322,20 +392,21 @@
 	    view:view$1
 	};
 
-	function controller$1(settings, defaultSettings, blocksObject){
+	function controller$1(settings){
 	    let error_msg = [];
 
 	    validityCheck(settings);
+	    settings = updateMediaSettings();
 
 	    return {printToPage, createFile, error_msg};
 
 	    function validityCheck(settings){
 	        let containsImage = false;
 
-	        let temp1 = checkMissingElementName(settings.objectCat1, 'First Category', error_msg);
-	        let temp2 = checkMissingElementName(settings.objectCat2, 'Second Category', error_msg);
-	        let temp3 = checkMissingElementName(settings.attribute1, 'First Attribute', error_msg);
-	        let temp4 = checkMissingElementName(settings.attribute2, 'Second Attribute', error_msg);
+	        let temp1 = checkPrime(settings.prime1, 'First Prime Category', error_msg);
+	        let temp2 = checkPrime(settings.prime2, 'Second Prime Category', error_msg);
+	        let temp3 = checkMissingElementName(settings.rightAttTargets, 'First Target Category', error_msg);
+	        let temp4 = checkMissingElementName(settings.leftAttTargets, 'Second Target Category', error_msg);
 
 	        containsImage = temp1 || temp2 || temp3 || temp4;
 
@@ -343,31 +414,29 @@
 	            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
 	        
 	        //check for blocks problems
-	        let currBlocks = clone(settings.blocks);
-	        let clearBlocks = blocksObject.slice(-1)[0]; //blocks parameters with zeros as the values, used to check if the current parameters are also zeros.
-	   
-	        ['randomCategoryLocation', 'randomAttributeLocation'].forEach(function(key){
-	            delete currBlocks[key];
-	            delete clearBlocks[key];
-	        });
-	        
-	        if(JSON.stringify(currBlocks) === JSON.stringify(clearBlocks))
-	            error_msg.push('All the block\'s parameters equals to 0, that will result in not showing the task at all');    
+	        if(!settings.blocks.nTrialsPerPrimeTargetPair)
+	            error_msg.push('Number of trials in a block, per prime-target combination equals to zero, this will result in not showing the trials.');
+	        if(!settings.blocks.nBlocks)
+	            error_msg.push('Number of blocks equals to zero, this will result in skipping the task.');
+	             
 	    }
 
 	    function createFile(settings, fileType){
 	        return function(){
 	            let output,textFileAsBlob;
 	            let downloadLink = document.createElement('a');
-	            if (fileType === 'JS') {
-	                output = toString(settings);
+	            if (fileType === 'JS'){
+	                output = toString();
 	                textFileAsBlob = new Blob([output], {type:'text/plain'});
-	                downloadLink.download = 'SPF.js'; }
+	                downloadLink.download = 'EP.js';
+	            }
 	            else {
-	                output = updateSettings(settings);
+	                output = updateSettings();
 	                textFileAsBlob = new Blob([JSON.stringify(output,null,4)], {type : 'application/json'});
-	                downloadLink.download = 'SPF.json'; }
-	            if (window.webkitURL != null) {downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);}
+	                downloadLink.download = 'EP.json';
+	            }
+	            if (window.webkitURL != null) 
+	                downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
 	            else {
 	                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
 	                downloadLink.style.display = 'none';
@@ -377,27 +446,51 @@
 	        };
 	    }
 
-	    
-	    function printToPage(settings){
-	        return function() {
+	    function printToPage(){
+	        return function(){
 	            let para = document.getElementById('textDiv');
 	            para.style.visibility = 'visible';
 	            let text_area = document.getElementById('textArea');
-	            text_area.value = toString(settings);
+	            text_area.value = toString();
 	        };
 	    }
 	    
-	    function toString(settings){
-	        return toScript(updateSettings(settings));
+	    function toString(){
+	        return toScript(updateSettings());
+	    }
+
+	    function updateMediaSettings(){
+	        //update attributes names to be compatible to EP
+	        let settings_output = clone(settings);
+	        settings_output.targetCats = {};
+	        settings_output.targetCats.rightAttTargets = settings_output.rightAttTargets;
+	        settings_output.targetCats.rightAttTargets.mediaArray = settings_output.rightAttTargets.stimulusMedia;
+	        delete settings_output.rightAttTargets.stimulusMedia;
+	        settings_output.targetCats.leftAttTargets = settings_output.leftAttTargets;
+	        settings_output.targetCats.leftAttTargets.mediaArray = settings_output.leftAttTargets.stimulusMedia;
+	        delete settings_output.leftAttTargets.stimulusMedia;
+
+	        settings_output.targetCats.rightAttTargets.stimulusCSS = settings_output.rightAttTargets.stimulusCss;
+	        settings_output.targetCats.leftAttTargets.stimulusCSS = settings_output.leftAttTargets.stimulusCss;
+	        delete settings_output.rightAttTargets.stimulusCss;
+	        delete settings_output.leftAttTargets.stimulusCss;
+	        delete settings_output.rightAttTargets;
+	        delete settings_output.leftAttTargets;
+
+	        return settings_output;
 	    }
 	    
-	    function updateSettings(settings){
+	    function updateSettings(){
 	        let output={
-	            objectCat1: settings.objectCat1,
-	            objectCat2: settings.objectCat2,
-	            attribute1: settings.attribute1,
-	            attribute2: settings.attribute2,
+	            primeStimulusCSS: settings.primeStimulusCSS,
+	            prime1: settings.prime1,
+	            prime2: settings.prime2,
+	            targetCats: settings.targetCats
 	        };
+	        if(settings.parameters.isQualtrics){
+	            output.isQualtrics = settings.parameters.isQualtrics;
+	        }
+	        delete settings.parameters.isQualtrics; 
 	        Object.assign(output, settings.parameters);
 	        Object.assign(output, settings.blocks);
 	        Object.assign(output, settings.text); 
@@ -405,7 +498,7 @@
 	    }
 	    
 	    function toScript(output){
-	        return `define(['pipAPI' ,'${'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/spf/spf4.js'}'], function(APIConstructor, spfExtension) {var API = new APIConstructor(); return spfExtension(${JSON.stringify(output,null,4)})});`;
+	        return `define(['pipAPI' ,'${output.isQualtrics ? 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/ep/qualtrics/quep5.js': 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/ep/ep5.js'}'], function(APIConstructor, epExtension) {var API = new APIConstructor(); return epExtension(${JSON.stringify(output,null,4)});});`;
 	    }
 	}
 
@@ -1335,39 +1428,63 @@
 	    return viewImport(ctrl)
 	}
 
-	function controller$9(settings){
+	function controller$9(settings) {
 	    let fileInput = m.prop('');
-	    return {fileInput:fileInput, handleFile:handleFile, updateSettings:updateSettings};
+	    return {fileInput, handleFile, updateSettings};
 
 	    function handleFile(){
 	        let importedFile = document.getElementById('uploadFile').files[0];
 	        let reader = new FileReader();
 	        reader.readAsText(importedFile); 
-	        reader.onload = function(){
+	        reader.onload = function() {
 	            let fileContent = JSON.parse(reader.result);
 	            updateSettings(fileContent);
 	        };
 	    }
-	    function updateSettings(input){
-	        settings.objectCat1 = input.objectCat1;
-	        settings.objectCat2 = input.objectCat2;
-	        settings.attribute1 = input.attribute1;
-	        settings.attribute2 = input.attribute2;
-	        settings.parameters.base_url = input.base_url;
+	    function updateMediaSettings(input){
+	        //update attributes to be compatible to IAT so that elementComponent can be used.
+	        settings.rightAttTargets = input.targetCats.rightAttTargets;
+	        settings.rightAttTargets.stimulusMedia = input.targetCats.rightAttTargets.mediaArray;
+	        delete settings.targetCats.rightAttTargets.mediaArray;
 	        
-	        settings.parameters.keyTopLeft = input.keyTopLeft;
-	        settings.parameters.keyTopRight = input.keyTopRight;
-	        settings.parameters.keyBottomLeft = input.keyBottomLeft;
-	        settings.parameters.keyBottomRight = input.keyBottomRight;
+	        settings.leftAttTargets = input.targetCats.leftAttTargets;
+	        settings.leftAttTargets.stimulusMedia = input.targetCats.leftAttTargets.mediaArray;
+	        delete settings.targetCats.leftAttTargets.mediaArray;
 
-	        settings.blocks.nBlocks = input.nBlocks;
-	        settings.blocks.nTrialsPerPrimeTargetPair = input.nTrialsPerPrimeTargetPair;
-	        settings.blocks.randomCategoryLocation = input.randomCategoryLocation;
-	        settings.blocks.randomAttributeLocation = input.randomAttributeLocation;
+	        settings.rightAttTargets.stimulusCss = input.targetCats.rightAttTargets.stimulusCSS;
+	        settings.leftAttTargets.stimulusCss = input.targetCats.leftAttTargets.stimulusCSS;
+	        delete settings.rightAttTargets.stimulusCSS;
+	        delete settings.leftAttTargets.stimulusCSS;
+	        delete settings.targetCats.rightAttTargets;
+	        delete settings.targetCats.leftAttTargets;
+	        delete settings.targetCats;
+	    }
+	    function updateSettings(input) {
+
+	        settings.primeStimulusCSS = input.primeStimulusCSS;
+	        settings.prime1 = input.prime1;
+	        settings.prime2 = input.prime2;
+	        settings.targetCats = input.targetCats;
+	        settings.parameters.base_url = input.base_url;
+	        settings.parameters.isQualtrics = input.isQualtrics;
+	        settings.parameters.separateStimulusSelection = input.separateStimulusSelection;
+	        settings.parameters.primeDuration = input.primeDuration;
+	        settings.parameters.fixationDuration = input.fixationDuration;
+	        settings.parameters.deadlineDuration = input.deadlineDuration;
+	        settings.parameters.deadlineMsgDuration = input.deadlineMsgDuration;
+	        settings.parameters.fixationStimulus = input.fixationStimulus;
+	        settings.parameters.deadlineStimulus = input.deadlineStimulus;
 
 	        settings.text.firstBlock = input.firstBlock;
 	        settings.text.middleBlock = input.middleBlock;
 	        settings.text.lastBlock = input.lastBlock;
+
+	        settings.blocks.nTrialsPerPrimeTargetPair = input.nTrialsPerPrimeTargetPair;
+	        settings.blocks.nBlocks = input.nBlocks;
+
+	        updateMediaSettings(input); 
+
+	        
 	    }
 	}
 
@@ -1399,11 +1516,14 @@
 	};
 
 	let parametersDesc = [
-	    {name: 'keyTopLeft', label:'Top left key', desc: 'Set top left key'},
-	    {name: 'keyTopRight', label:'Top right key', desc: 'Set top right key'},
-	    {name: 'keyBottomLeft', label:'Bottom left key', desc: 'Set bottom left key'},
-	    {name: 'keyBottomRight', label:'Bottom right key', desc: 'Set top left key'},
-	    {keyTopLeft: '', keyTopRight: '', keyBottomLeft: '', keyBottomRight: '', base_url:''}
+	    {name: 'isQualtrics',options:['Regular','Qualtrics'], label:'Regular script or Qualtrics?', desc: ['If you want this IAT to run from Qualtrics, read ', m('a',{href: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/'}, 'this blog post '),'to see how.']},
+	    {name: 'separateStimulusSelection', label: 'Seperate Stimulus Selection', desc: 'Whether to select the prime and targe stimuli randomly without repetition for each prime-target combination until exhuastion or to select the stimuli randomly without repetition for the whole task.'},
+	    {name: 'primeDuration', label: 'Prime Duration', desc: 'Default prime duration'},
+	    {name: 'fixationDuration', label: 'Fixation Duration', desc: 'No fixation by default'},
+	    {name: 'fixationStimulus', label: 'Fixation Stimulus', desc: 'Change the fixation stimulus here'},
+	    {name: 'deadlineDuration', label: 'Deadline Duration', desc: '0 means no response deadline: we wait until response.'},
+	    {name: 'deadlineStimulus', label: 'Deadline Stimulus', desc: 'Change the deadline message stimulus here'},
+	    {isTouch:false, separateStimulusSelection:0, primeDuration:0, fixationDuration:0 ,deadlineDuration:0, deadlineMsgDuration:0, base_url:''}
 	];
 
 	let textDesc=[
@@ -1418,9 +1538,7 @@
 	let blocksDesc = [
 	    {name: 'nBlocks', label: 'Number of blocks', desc: 'Set the number of blocks in the task'},
 	    {name: 'nTrialsPerPrimeTargetPair', label: 'Number of trials in a block, per prime-target combination', desc: 'How many trials in a block, per prime-target combination (always three blocks).'},
-	    {name: 'randomCategoryLocation', label: 'Randomly choose categories location', desc: 'Whether to randomly select which category is on top. If false, then the first category is on top.', options: ['true','false']},
-	    {name: 'randomAttributeLocation', label: 'Randomly choose attributes location', desc: 'Whether to randomly select which attribute is on the left. If false, the first attribute is on the left.', options: ['true','false']},
-	    {nBlocks: 0, nTrialsPerPrimeTargetPair: 0, randomCategoryLocation : 'false', randomAttributeLocation: 'false'}
+	    {nBlocks: 0, nTrialsPerPrimeTargetPair: 0}
 	];
 
 	let categoryClear = [{
@@ -1431,39 +1549,46 @@
 	    stimulusCss : {color:'#000000', 'font-size':'1em'}
 	}];
 
+	let primeClear = [{
+	    name : '',  //Will be used in the logging
+	    mediaArray : []
+
+	}];
+
 	let categoriesTabs = [
-	    {value: 'objectCat1', text: 'First Category'},
-	    {value: 'objectCat2', text: 'Second Category'},
+	    {value: 'rightAttTargets', text: 'First Category'},
+	    {value: 'leftAttTargets', text: 'Second Category'},
 	];
 
-	let attributesTabs = [
-	    {value: 'attribute1', text: 'First Attribute'},
-	    {value: 'attribute2', text: 'Second Attribute'},
+	let primesTabs = [
+	    {value: 'prime1', text: 'First Category'},
+	    {value: 'prime2', text: 'Second Category'},
+	    {value:'primeStimulusCSS', text:'Prime Design'}
 	];
 
 	let tabs = [
 	    {value: 'parameters', text: 'General parameters', component: parametersComponent, rowsDesc: parametersDesc },
 	    {value: 'blocks', text: 'Blocks', component: blocksComponent, rowsDesc: blocksDesc},
-	    {value: 'categories', text: 'Categories', component: categoriesComponent, rowsDesc: categoryClear, subTabs:categoriesTabs},
-	    {value: 'attributes', text: 'Attributes', component: categoriesComponent, rowsDesc: categoryClear, subTabs:attributesTabs},
+	    {value: 'prime', text: 'Prime Categories', component: categoriesComponent, rowsDesc: primeClear, subTabs:primesTabs, type: 'EP'},
+	    {value: 'categories', text: 'Target Categories', component: categoriesComponent, rowsDesc: categoryClear, subTabs:categoriesTabs},
 	    {value: 'text', text: 'Texts', component: textComponent, rowsDesc: textDesc},
-	    {value: 'output', text: 'Complete', component: outputComponent, rowsDesc: blocksDesc},
+	    {value: 'output', text: 'Complete', component: outputComponent},
 	    {value: 'import', text: 'Import', component: importComponent},
-	    {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'SPF'}
+	    {value: 'help', text: 'Help', component: helpComponent, rowsDesc:'EP'}
 	];
 
-	let spf = {
+	let ep = {
 	    controller: function(settings$1){ return {settings: settings$1 ? settings$1 : clone(settings)};},
 	    view: function(ctrl){
 	        return m('.container', 
 	            m('.header.p-3 mb-2 bg-info text-white',
-	                m('h1.display-4', 'Create my SPF script')),
+	                m('h1.display-4', 'Create my EP script')),
 	            m.component(tabsComponent, tabs, ctrl.settings, settings)
 	        );
 	    }
 	};
 
-	m.mount(document.getElementById('dashboard'), spf);
+	m.mount(document.getElementById('dashboard'), ep);
 
 }());
-//# sourceMappingURL=spf_index.js.map
+//# sourceMappingURL=ep_index.js.map

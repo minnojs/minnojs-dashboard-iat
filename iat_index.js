@@ -27,7 +27,7 @@
 						}},tab.text);
 				})),
 				m('.div',{key:tabs[ctrl.index].value}, 
-					m.component(tabs[ctrl.index].component, settings, defaultSettings, tabs[ctrl.index].rowsDesc, tabs[ctrl.index].subTabs, tabs[ctrl.index].biat))
+					m.component(tabs[ctrl.index].component, settings, defaultSettings, tabs[ctrl.index].rowsDesc, tabs[ctrl.index].subTabs, tabs[ctrl.index].type))
 			]);
 		}
 	};
@@ -169,19 +169,7 @@
 	                            m('i.fas fa-file-download'), ' Download JSON'),
 	                    m('button.btn btn btn-primary.subOutput', {onclick: ctrl.printToPage(settings)}, 'Print to Browser')
 	                ])
-	            ]),
-	            // m('.col-auto',{style:{'padding':'0.9em 0em 5em 1em',float:'left'}},[
-	            //     m('row',[
-	            //         m('i.fa.fa-info-circle'),
-	            //         m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
-	            //     ]),
-	            //     m('.row',[
-	            //         m('.col-auto',{style:{'padding-top':'1.8em'}},[
-	            //             m('i.fa.fa-info-circle'),
-	            //             m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
-	            //         ])
-	            //     ])
-	            // ]),
+	            ])
 	        ]),
 	        m('div.space',{id: 'textDiv', style: {visibility: 'hidden'}},
 	            m('textarea.form-control', {id:'textArea', value:'', style: {width : '60rem', height: '25rem', 'margin-left':'3em'}}))
@@ -215,23 +203,42 @@
 	    
 	    function reset(){showClearOrReset(parameters, defaultSettings.parameters, 'reset');}
 	    function clear(){showClearOrReset(parameters, rows.slice(-1)[0],'clear');}    
-	    function get(name){
+	    function get(name, object, parameter){
 	        if (name == 'isTouch')
 	            if(parameters[name] == true) return 'Touch' 
 	            else return 'Keyboard';
 	        if (name == 'isQualtrics')
 	            if (parameters[name] == true){return 'Qualtrics'}
 	            else return 'Regular';
+	        if(object && parameter){
+	            if (parameter == 'font-size'){
+	                return parseFloat((parameters[name][object][parameter].replace("em","")));
+	            }
+	          return parameters[name][object][parameter]
+	        }
 	        return parameters[name];
 	    }
-	    function set(name){return function(value){ 
-	        if (name == 'isTouch')
-	            if(value == 'Keyboard') return parameters[name] = false;
-	            else return parameters[name] = true;
-	        if (name == 'isQualtrics')
-	            if (value == 'Regular') return parameters[name] = false;
-	            else return parameters[name] = true;
-	        return parameters[name] = value; 
+	    function set(name, object, parameter){
+	        return function(value){ 
+	            if (name == 'isTouch')
+	                if(value == 'Keyboard') return parameters[name] = false;
+	                else return parameters[name] = true;
+	            if (name == 'isQualtrics')
+	                if (value == 'Regular') return parameters[name] = false;
+	                else return parameters[name] = true;
+	            if(name.includes('Duration')) return parameters[name] = Math.abs(value)
+	            if(object && parameter) {
+	                if (parameter === 'font-size'){
+	                    value = Math.abs(value);
+	                    if (value === 0){ 
+	                        showRestrictions('Font\'s size must be bigger than 0.', 'error');
+	                        return parameters[name][object][parameter]; 
+	                    }
+	                    return parameters[name][object][parameter] = value + "em";
+	                }
+	                return parameters[name][object][parameter] = value
+	            }
+	            return parameters[name] = value; 
 	    }}
 	}
 
@@ -249,17 +256,39 @@
 	                    m('.col-3.space', row.label),
 	                    row.name.toLowerCase().includes('key') ? //case of keys parameters
 	                        m('.col-8.space',
-	                            m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
-	                        )                    
+	                            m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))}))                    
 	                    : row.options ? //case of isTouch and isQualtrics
 	                        m('.col-8.space',
 	                            m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
 	                                row.options.map(function(option){return m('option', option);})
 	                        ]))
-	                    :
+	                    : row.name.includes('Duration') ? //case of duration parameter
 	                        m('.col-8.space',
+	                            m('input[type=number].form-control',{min:0, style: {width:'5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})) 
+	                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus') ?
+	                        m('.col-8.space',[
+	                            m('.row',[
+	                                m('.col',[
+	                                    m('span', 'Font\'s color: '),
+	                                    m('input[type=color]', {style: {'border-radius':'3px', 'margin-left':'0.3rem'}, value: ctrl.get(row.name,'css','color'), onchange:m.withAttr('value', ctrl.set(row.name,'css','color'))})
+	                                ])
+	                            ]),m('br'),
+	                            m('.row',[
+	                                m('.col',[
+	                                    m('span', 'Font\'s size: '),
+	                                    m('input[type=number]', {style: {'border-radius':'4px','border':'1px solid #E2E3E2', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'css','font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set(row.name,'css','font-size'))})
+	                                ])
+	                            ]),m('br'),
+	                            m('.row',[
+	                                m('.col',[
+	                                    m('span', 'Text: '),
+	                                    m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+	                                ])
+	                            ])
+	                        ]) 
+	                    : m('.col-8.space',
 	                            m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
-	                        ])
+	                    ])
 	        }),
 	        m('.row.space.line', [
 	            m('.col-xs-1.space',[
@@ -321,7 +350,7 @@
 	            error_msg.push('All the block\'s parameters equals to 0, that will result in not showing the task at all');    
 	        blocksObject.slice(0,-1).map(function(block){
 	            if(settings.blocks[block.numTrialBlocks] !== 0 && settings.blocks[block.numMiniBlocks] === 0) 
-	                error_msg.push(block.label+'\'s number of trials is '+settings.blocks[block.numTrialBlocks]+' and the number of mini blocks is set as 0. If you wish to skip this block, set both of those parametrs to 0.');
+	                error_msg.push(block.label+'\'s number of trials is '+settings.blocks[block.numTrialBlocks]+' and the number of mini blocks is set as 0. If you wish to skip this block, set both of those parameters to 0.');
 	            });
 	    }
 
@@ -372,12 +401,12 @@
 	            isTouch: settings.parameters.isTouch
 	        };
 	        if(settings.parameters.isQualtrics){
-	            output.isQualtrics=settings.parameters.isQualtrics;
-	            output.showDebriefing=settings.parameters.showDebriefing;
-	            output.fullscreen=settings.parameters.fullscreen;
-	            if(!input.isTouch){
-	                output.leftKey=settings.parameters.leftKey;
-	                output.rightKey=settings.parameters.rightKey;
+	            output.isQualtrics = settings.parameters.isQualtrics;
+	            output.showDebriefing = settings.parameters.showDebriefing;
+	            output.fullscreen = settings.parameters.fullscreen;
+	            if(!settings.parameters.isTouch){
+	                output.leftKey = settings.parameters.leftKey;
+	                output.rightKey = settings.parameters.rightKey;
 	            }
 
 	        }
@@ -1048,32 +1077,223 @@
 	    ]);
 	}
 
-	let categoriesComponent = {
+	let elementComponent$2 = {
 	    controller:controller$6,
-	    view:view$6
+	    view:view$6,
+	};
+
+	function controller$6(object, settings, stimuliList){
+	    let element = settings[object.key];
+	    let fields = {
+	        newStimulus : m.prop(''),
+	        elementType: m.prop(object.key.includes('attribute') ? 'Attribute' : 'Category'),
+	        selectedStimuli: m.prop(''),
+	        stimuliHidden: m.prop('')
+	    }; 
+
+	    return {fields, set, get, addStimulus, updateSelectedStimuli, removeChosenStimuli, removeAllStimuli, 
+	        resetStimuliList};
+
+	    function get(name, media, type){
+	        // if (name == 'title' && media == null && type == null){ //special case - return the title's value (word/image)
+	        //     if (element.title.media.word == undefined) return element.title.media.image;
+	        //     return element.title.media.word;
+	        // }
+	        if (media != null && type != null){
+	            if (type == 'font-size'){
+	                return parseFloat((element[name][media][type].replace("em","")));
+	            }
+	            return element[name][media][type];
+	        }
+	        else if (media == 'color') return element[name][media]; //case of stimulusCss
+	        else if (media == 'font-size') return parseFloat((element[name][media]).substring(0,3));
+	        return element[name]; 
+	    }
+	    function set(name, media, type){ 
+	        return function(value){ 
+	            if (media != null && type != null){
+	                if (type == 'font-size'){
+	                    value = Math.abs(value);
+	                    if (value == 0){ 
+	                        showRestrictions('Font\'s size must be bigger than 0.', 'error');
+	                        return element[name][media][type]; 
+	                    }
+	                    return element[name][media][type] = value + "em";
+	                }
+	                return element[name][media][type] = value;
+	            }
+	            else if (media == 'color') return element[name][media] = value;
+	            else if (media == 'font-size'){
+	                value = Math.abs(value);
+	                if (value == 0){ 
+	                    showRestrictions('Font\'s size must be bigger than 0.', 'error');
+	                    return element[name][media]; 
+	                }
+	                return element[name][media] = value + "em";
+	            }
+	            return element[name] = value; 
+	        }
+	    }
+	    function addStimulus(event){
+	        let new_stimuli = fields.newStimulus();
+	        event = event.path[0].id; //button name, to know the kind of the stimulus added
+	        element.mediaArray.push( (event === 'addWord') ? {word : new_stimuli} : {image : new_stimuli});
+	        fields.newStimulus(''); //reset the field               
+	    }
+	    function updateSelectedStimuli(select){
+	        let list = element.mediaArray.filter((val,i) => select.target.options[i].selected);
+	        fields.selectedStimuli(list);
+	    }
+
+	    function removeChosenStimuli(){
+	        element.mediaArray = element.mediaArray.filter((element)=>!fields.selectedStimuli().includes(element));
+	        fields.selectedStimuli([]);
+	    }
+
+	    function removeAllStimuli(){element.mediaArray.length = 0;}
+	    function resetStimuliList(){element.mediaArray = clone(stimuliList);}
+	}
+
+	function view$6(ctrl) {
+	    return m('.container', [
+	        m('.row.space.line', [
+	            m('.col-xs-1.space',[
+	                m('i.fa.fa-info-circle'),
+	                m('.card.info-box.card-header', ['Will appear in the data and in the default feedback message'])
+	            ]),
+	            m('.col-3.space', ctrl.fields.elementType()+' name as will appear in the data:'),
+	            m('.col-6.space', [
+	                m('input[type=text].form-control',{style: {width: '18rem'}, value:ctrl.get('name'), onchange:m.withAttr('value', ctrl.set('name'))})
+	            ])
+	        ]),
+	        m('.row',[
+	            m('.col-xs-1.space',{style:{'padding-top': '1.6em'}},[
+	                m('i.fa.fa-info-circle'),
+	                m('.card.info-box.card-header', ['Enter text (word) or image name (image). Set the path to the folder of images in the General Parameters page'])
+	            ]),
+	            m('.col',[
+	                m('br'),
+	                m('input[type=text].form-control', {style:{width:'15em'},placeholder:'Enter Stimulus content here', 'aria-label':'Enter Stimulus content', 'aria-describedby':'basic-addon2', value: ctrl.fields.newStimulus(), oninput: m.withAttr('value', ctrl.fields.newStimulus)}),
+	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
+	                    m('button[type=button].btn btn-outline-secondary',{disabled:ctrl.fields.newStimulus().length===0, id:'addWord', onclick:ctrl.addStimulus},[
+	                        m('i.fas fa-plus'), 'Add Word'
+	                    ]),
+	                    m('button[type=button].btn btn-outline-secondary', {disabled:ctrl.fields.newStimulus().length===0, id:'addImage', onclick: ctrl.addStimulus},[
+	                        m('i.fas fa-plus'), 'Add Image'
+	                    ])
+	                ])
+	            ]),
+	        ]),
+	        m('.row',[
+	            m('.col-xs-1.space',{style:{'padding-top': '1.6em'}},[
+	                m('i.fa.fa-info-circle'),
+	                m('.card.info-box.card-header', ['To select multiple stimuli, please press the ctrl key while selecting the desired stimuli'])
+	            ]),
+	            m('.col',[
+	                m('.form-group',[
+	                    m('br'),
+	                    m('span',{style:{'font-size': '20px'}},'Stimuli: '),
+	                    m('select.form-control', {multiple : 'multiple', size : '8' ,style: {width: '15rem'}, onchange:(e) => ctrl.updateSelectedStimuli(e)},[
+	                        ctrl.get('mediaArray').some(object => object.word) ? ctrl.fields.stimuliHidden('visible') : ctrl.fields.stimuliHidden('hidden'),
+	                        ctrl.get('mediaArray').map(function(object){
+	                            let value = object.word ? object.word : object.image;
+	                            let option = value + (object.word ? ' [Word]' : ' [Image]');
+	                            return m('option', {value:value, selected : ctrl.fields.selectedStimuli().includes(object)}, option);
+	                        })
+	                    ]),
+	                    m('br'),
+	                    m('.btn-group-vertical', {style:{'data-toggle':'buttons'}},[
+	                        m('button.btn btn btn-warning', {disabled: ctrl.fields.selectedStimuli().length===0, onclick:ctrl.removeChosenStimuli},'Remove Chosen Stimuli'),
+	                        m('button.btn btn btn-warning', {onclick:ctrl.removeAllStimuli},'Remove All Stimuli'),
+	                        m('button.btn btn btn-warning', {onclick: ctrl.resetStimuliList},'Reset Stimuli List'),
+	                    ])
+	                ]),
+	                m('.row.space.line')
+	            ])
+	        ])
+	    ]);
+	}
+
+	var parametersComponent$1 = {
+	    controller:controller$7,
+	    view:view$7
+	};
+
+	function controller$7(settings){
+	    var primeCss = settings.primeStimulusCSS;
+	    return {set, get};
+	        
+	    function get(parameter){
+	        if (parameter === 'font-size') return parseFloat((primeCss[parameter]).substring(0,3));
+	        return primeCss[parameter]
+	    }
+	    function set(parameter){
+	        return function(value){ 
+	            if (parameter == 'font-size'){
+	                value = Math.abs(value);
+	                if (value == 0){ 
+	                    showRestrictions('Font\'s size must be bigger than 0.', 'error');
+	                    return primeCss[parameter]; 
+	                }
+	                return primeCss[parameter] = value + "em";
+	            }
+	            return primeCss[parameter] = value;    
+	        }
+	    }
+	}
+
+	function view$7(ctrl){
+	    return m('.container' , [
+	        m('.row',[
+	            m('.col.space',[
+	                m('.row.space.line',[
+	                    m('.col',[
+	                        m('span', 'Font\'s color: '),
+	                        m('input[type=color]', {style: {'border-radius':'3px', 'margin-left':'0.3rem'}, value: ctrl.get('color'), onchange:m.withAttr('value', ctrl.set('color'))})
+	                    ])
+	                ]),m('br'),
+	                m('.row.space.line',[
+	                    m('.col',[
+	                        m('span', 'Font\'s size: '),
+	                        m('input[type=number]', {style: {'border-radius':'4px','border':'1px solid #E2E3E2', 'margin-left':'0.3rem'}, value:ctrl.get('font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set('font-size'))})
+	                    ])
+	                ])
+	        ])
+	    ])
+	])  
+	}
+
+	let categoriesComponent = {
+	    controller:controller$8,
+	    view:view$8
 	};
 
 	let btnWidthTypes = {
 	    attribute: '19.5em',
 	    category:'20.4em',
 	    practiceCategory:'29.65em',
-	    single:'7em' //for SPF    
+	    single:'7em', //for SPF
+	    ep: '29.1em'    
 	};
 
-	function controller$6(settings, defaultSettings, clearElement, subTabs){
+	function controller$8(settings, defaultSettings, clearElement, subTabs, taskType){
 	    let curr_tab = subTabs[0].value; // set default tab
 	    let buttonWidth = curr_tab.toLowerCase().includes('attribute') ? btnWidthTypes.attribute: 
 	        curr_tab.toLowerCase().includes('practice') ? btnWidthTypes.practiceCategory : btnWidthTypes.category;
 
 	    subTabs.length == 1 ? buttonWidth = btnWidthTypes.single : ''; //for SPF which have one category
+	    taskType === 'EP' ? buttonWidth = btnWidthTypes.ep : ''; //for EP which have addtional subtab (primeDesignCss)
 
 	    return {reset, clear, subTabs, curr_tab, buttonWidth};
 
 	    function reset(){showClearOrReset(settings[this.curr_tab], defaultSettings[this.curr_tab],'reset');}
-	    function clear(){showClearOrReset(settings[this.curr_tab],clearElement[0],'clear');}
+	    function clear(){
+	        this.curr_tab === 'primeStimulusCSS' ? showClearOrReset(settings[this.curr_tab], {color:'#000000','font-size':'0em'}, 'clear')
+	        : showClearOrReset(settings[this.curr_tab], clearElement[0], 'clear');
+	    }
 	}
 
-	function view$6(ctrl, settings, defaultSettings, clearElement, subTabs, isBiat) {
+	function view$8(ctrl, settings, defaultSettings, clearElement, subTabs, taskType) {
 	    return m('.container.space', [
 	        m('.subtab',{style:{width: ctrl.buttonWidth}}, ctrl.subTabs.map(function(tab){
 	            return m('button',{
@@ -1083,9 +1303,13 @@
 	                }},tab.text);
 	        })),
 	        m('.div', 
-	            isBiat ?
+	            taskType === 'BIAT' ?
 	            m.component(elementComponent$1,{key:ctrl.curr_tab}, settings,
 	                defaultSettings[ctrl.curr_tab].stimulusMedia, defaultSettings[ctrl.curr_tab].title.startStimulus) 
+	            : ctrl.curr_tab === 'primeStimulusCSS' ? //in EP there is additional subtab called Prime Design, it needs differnet component.
+	            m.component(parametersComponent$1, settings)
+	            : taskType === 'EP' ?
+	            m.component(elementComponent$2, {key:ctrl.curr_tab}, settings, defaultSettings[ctrl.curr_tab].mediaArray)
 	            :
 	            m.component(elementComponent, {key:ctrl.curr_tab}, settings, defaultSettings[ctrl.curr_tab].stimulusMedia),
 	        ),
@@ -1105,15 +1329,15 @@
 	}
 
 	let importComponent = {
-	    controller:controller$7,
-	    view:view$7
+	    controller:controller$9,
+	    view:view$9
 	};
 
-	function view$7(ctrl){
+	function view$9(ctrl){
 	    return viewImport(ctrl)
 	}
 
-	function controller$7(settings) {
+	function controller$9(settings) {
 	    return {handleFile, updateSettings};
 
 	    function handleFile(){
@@ -1185,7 +1409,8 @@
 	let links = {IAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/', 
 		BIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-biat/',
 		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/',
-		SPF: '#'
+		SPF: '#',
+		EP: 'https://minnojs.github.io/minnojs-blog/qualtrics-priming/'
 	};
 
 	let helpComponent = {

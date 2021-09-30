@@ -26,6 +26,12 @@ const bannerSPF = `/**
 */
 `;
 
+const bannerEP = `/**
+* @preserve minnojs-ep-dashboard v${version}
+* @license Apache-2.0 (${(new Date()).getFullYear()})
+*/
+`;
+
 
 const configIAT = {
     input: 'src/IAT/iat.index.standalone.js',
@@ -71,5 +77,16 @@ const configSPF = {
     }
 };
 
+const configEP = {
+    input: 'src/ep/ep.index.standalone.js',
+    output: {
+        file: 'ep_index.js',
+        format: 'iife', 
+        name: 'spfDashboard',
+        sourcemap:true,
+        banner: bannerEP
+    }
+};
+
 // at some time we might want to outputs, one as a standalone, one as a plugin
-export default [ configIAT, configBIAT, configSTIAT, configSPF ];
+export default [configIAT, configBIAT, configSTIAT, configSPF, configEP];

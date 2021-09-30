@@ -1,4 +1,4 @@
-import {showClearOrReset} from '../resources/utilities.js';
+import {showClearOrReset, showRestrictions} from '../resources/utilities.js';
 
 var parametersComponent = {
     controller:controller,
@@ -13,23 +13,42 @@ function controller(settings, defaultSettings, rows){
     function reset(){showClearOrReset(parameters, defaultSettings.parameters, 'reset')}
     function clear(){showClearOrReset(parameters, rows.slice(-1)[0],'clear')};
     
-    function get(name){
+    function get(name, object, parameter){
         if (name == 'isTouch')
             if(parameters[name] == true) return 'Touch' 
             else return 'Keyboard';
         if (name == 'isQualtrics')
             if (parameters[name] == true){return 'Qualtrics'}
             else return 'Regular';
+        if(object && parameter){
+            if (parameter == 'font-size'){
+                return parseFloat((parameters[name][object][parameter].replace("em","")));
+            }
+          return parameters[name][object][parameter]
+        }
         return parameters[name];
     }
-    function set(name){return function(value){ 
-        if (name == 'isTouch')
-            if(value == 'Keyboard') return parameters[name] = false;
-            else return parameters[name] = true;
-        if (name == 'isQualtrics')
-            if (value == 'Regular') return parameters[name] = false;
-            else return parameters[name] = true;
-        return parameters[name] = value; 
+    function set(name, object, parameter){
+        return function(value){ 
+            if (name == 'isTouch')
+                if(value == 'Keyboard') return parameters[name] = false;
+                else return parameters[name] = true;
+            if (name == 'isQualtrics')
+                if (value == 'Regular') return parameters[name] = false;
+                else return parameters[name] = true;
+            if(name.includes('Duration')) return parameters[name] = Math.abs(value)
+            if(object && parameter) {
+                if (parameter === 'font-size'){
+                    value = Math.abs(value);
+                    if (value === 0){ 
+                        showRestrictions('Font\'s size must be bigger than 0.', 'error')
+                        return parameters[name][object][parameter]; 
+                    }
+                    return parameters[name][object][parameter] = value + "em";
+                }
+                return parameters[name][object][parameter] = value
+            }
+            return parameters[name] = value; 
     }}
 }
 
@@ -47,17 +66,39 @@ function view(ctrl, settings){
                     m('.col-3.space', row.label),
                     row.name.toLowerCase().includes('key') ? //case of keys parameters
                         m('.col-8.space',
-                            m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})
-                        )                    
+                            m('input[type=text].form-control',{style: {width:'3rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))}))                    
                     : row.options ? //case of isTouch and isQualtrics
                         m('.col-8.space',
                             m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem', height:'2.8rem'}},[
                                 row.options.map(function(option){return m('option', option);})
                         ]))
-                    :
+                    : row.name.includes('Duration') ? //case of duration parameter
                         m('.col-8.space',
+                            m('input[type=number].form-control',{min:0, style: {width:'5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})) 
+                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus') ?
+                        m('.col-8.space',[
+                            m('.row',[
+                                m('.col',[
+                                    m('span', 'Font\'s color: '),
+                                    m('input[type=color]', {style: {'border-radius':'3px', 'margin-left':'0.3rem'}, value: ctrl.get(row.name,'css','color'), onchange:m.withAttr('value', ctrl.set(row.name,'css','color'))})
+                                ])
+                            ]),m('br'),
+                            m('.row',[
+                                m('.col',[
+                                    m('span', 'Font\'s size: '),
+                                    m('input[type=number]', {style: {'border-radius':'4px','border':'1px solid #E2E3E2', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'css','font-size') ,min: '0' ,onchange:m.withAttr('value', ctrl.set(row.name,'css','font-size'))})
+                                ])
+                            ]),m('br'),
+                            m('.row',[
+                                m('.col',[
+                                    m('span', 'Text: '),
+                                    m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+                                ])
+                            ])
+                        ]) 
+                    : m('.col-8.space',
                             m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
-                        ])
+                    ])
         }),
         m('.row.space.line', [
             m('.col-xs-1.space',[

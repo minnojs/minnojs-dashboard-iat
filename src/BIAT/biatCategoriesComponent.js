@@ -110,11 +110,12 @@ function view(ctrl,settings) {
         })),
         m('.row.space.line.space justify-content-md-center',[
             m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons'}},[
-                m('button.btn btn btn-info',{title:'You can add up to 8 categories',onclick: ctrl.addCategory, style:{'padding-right':'60px','padding-left':'60px' ,visibility: ctrl.addFlag()}}, [m('i.fas fa-plus')],' Add Category'),
-                m('button.btn btn btn-warning',{onclick: ctrl.chooseCategories},[
-                    m('i.fas fa-check'), ' Choose Blocks to Remove']),
-                m('button.btn btn btn-danger',{onclick: ctrl.showRemoveCategories, disabled: ctrl.choosenCategoriesList().length === 0},[
-                    m('i.far fa-minus-square'), ' Remove Choosen Blocks']),
+                m('button.btn btn btn-info',{title:'You can add up to 8 categories',onclick: ctrl.addCategory, style:{'padding-right':'60px','padding-left':'60px' ,visibility: ctrl.addFlag()}}, 
+                    m('i.fas fa-plus'),' Add Category'),
+                m('button.btn btn btn-warning',{onclick: ctrl.chooseCategories},
+                    m('i.fas fa-check'), ' Choose Categories to Remove'),
+                m('button.btn btn btn-danger',{onclick: ctrl.showRemoveCategories, disabled: ctrl.choosenCategoriesList().length === 0},
+                    m('i.far fa-minus-square'), ' Remove Categories Blocks'),
             ])
         ]),
         m('.div',{key:ctrl.categories[ctrl.curr_tab()].key},

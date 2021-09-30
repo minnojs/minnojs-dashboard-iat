@@ -20,7 +20,7 @@ var tabsComponent = {
 					}},tab.text);
 			})),
 			m('.div',{key:tabs[ctrl.index].value}, 
-				m.component(tabs[ctrl.index].component, settings, defaultSettings, tabs[ctrl.index].rowsDesc, tabs[ctrl.index].subTabs, tabs[ctrl.index].biat))
+				m.component(tabs[ctrl.index].component, settings, defaultSettings, tabs[ctrl.index].rowsDesc, tabs[ctrl.index].subTabs, tabs[ctrl.index].type))
 		]);
 	}
 }

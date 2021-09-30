@@ -2,6 +2,25 @@ export function clone(obj){
     return JSON.parse(JSON.stringify(obj));
 }
 
+export function checkPrime(element, name_to_display, error_msg){
+    let containsImage = false
+    //check for missing titles and names
+    if(element.name.length == 0)
+        error_msg.push(name_to_display+'\'s\ name is missing');
+
+    let mediaArray = element.mediaArray
+    
+    //if there an empty stimulli list
+    if (mediaArray.length === 0) 
+        error_msg.push(name_to_display+'\'s stimuli list is empty, please enter at least one stimulus.')
+    
+    //check if the stimuli contains images
+    for(let i = 0; i < mediaArray.length ;i++)
+        if(mediaArray[i].image) containsImage = true
+    
+    return containsImage
+}
+
 export function checkMissingElementName(element, name_to_display, error_msg){
     let containsImage = false
     //check for missing titles and names
@@ -88,19 +107,7 @@ export function viewOutput(ctrl, settings){
                             m('i.fas fa-file-download'), ' Download JSON'),
                     m('button.btn btn btn-primary.subOutput', {onclick: ctrl.printToPage(settings)}, 'Print to Browser')
                 ])
-            ]),
-            // m('.col-auto',{style:{'padding':'0.9em 0em 5em 1em',float:'left'}},[
-            //     m('row',[
-            //         m('i.fa.fa-info-circle'),
-            //         m('.card.info-box.card-header', ['Download the JavaScript file. For more details how to use it, see the “Help” page.']),
-            //     ]),
-            //     m('.row',[
-            //         m('.col-auto',{style:{'padding-top':'1.8em'}},[
-            //             m('i.fa.fa-info-circle'),
-            //             m('.card.info-box.card-header', ['Importing this file to this tool, will load all your parameters to this tool.']),
-            //         ])
-            //     ])
-            // ]),
+            ])
         ]),
         m('div.space',{id: 'textDiv', style: {visibility: 'hidden'}},
             m('textarea.form-control', {id:'textArea', value:'', style: {width : '60rem', height: '25rem', 'margin-left':'3em'}}))
