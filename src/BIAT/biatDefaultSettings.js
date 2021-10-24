@@ -1,6 +1,9 @@
 let settings = {
     parameters : {isTouch:false, isQualtrics:false, practiceBlock:true, 
-        showStimuliWithInst:true, remindError:true, base_url:''},
+        showStimuliWithInst:true, remindError:true,
+        base_url: {image: 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/docs/images/'}
+
+    },
     blocks: {nMiniBlocks: 1, nTrialsPerMiniBlock:16, nPracticeBlockTrials: 8, nCategoryAttributeBlocks: 4,
         focalAttribute: 'attribute1', firstFocalAttribute : 'random', focalCategoryOrder: 'random'},
     practiceCategory1 : {

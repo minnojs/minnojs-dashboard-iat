@@ -1,5 +1,5 @@
 let settings = {
-    parameters: {keyTopLeft: 'E', keyTopRight: 'I', keyBottomLeft: 'C', keyBottomRight: 'N',base_url:''},
+    parameters: {keyTopLeft: 'E', keyTopRight: 'I', keyBottomLeft: 'C', keyBottomRight: 'N',base_url:{image:'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/docs/images/'}},
     objectCat1: {name: 'Mammals', title: {media: { word : 'Mammals'}, css: {color: '#31b404', 'font-size': '2em'}, height: 8},
         stimulusMedia: [{word: 'Dogs'}, {word: 'Horses'},{word: 'Lions'},{word: 'Cows'}],
         stimulusCss : {color:'#31b404', 'font-size':'2em'}

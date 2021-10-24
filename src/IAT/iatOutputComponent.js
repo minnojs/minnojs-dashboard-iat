@@ -21,8 +21,8 @@ function controller(settings, defaultSettings, blocksObject){
                 
         containsImage = temp1 || temp2 || temp3 || temp4;
 
-        if(settings.parameters.base_url.length == 0 && containsImage)
-            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
+        if(settings.parameters.base_url.image.length === 0 && containsImage)
+            error_msg.push('Image\'s\ url is missing and there is an image in the study');      
         
         //check for blocks problems
         let currBlocks = clone(settings.blocks)
@@ -82,10 +82,10 @@ function controller(settings, defaultSettings, blocksObject){
             category2: settings.category2,
             attribute1: settings.attribute1,
             attribute2: settings.attribute2,
-            base_url: settings.parameters.base_url,
             remindError: settings.parameters.remindError,
             errorCorrection: settings.parameters.errorCorrection,
-            isTouch: settings.parameters.isTouch
+            isTouch: settings.parameters.isTouch,
+            base_url: settings.parameters.base_url
         };
         if(settings.parameters.isQualtrics){
             output.isQualtrics = settings.parameters.isQualtrics;
@@ -95,8 +95,8 @@ function controller(settings, defaultSettings, blocksObject){
                 output.leftKey = settings.parameters.leftKey;
                 output.rightKey = settings.parameters.rightKey;
             }
-
         }
+
         Object.assign(output, settings.blocks);
         settings.parameters.isTouch ? Object.assign(output, settings.touch_text) : Object.assign(output, settings.text); 
         return output;

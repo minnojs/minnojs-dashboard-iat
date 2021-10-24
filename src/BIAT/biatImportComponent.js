@@ -43,8 +43,8 @@ function controller(settings) {
         settings.blocks.firstFocalAttribute = input.firstFocalAttribute;
         settings.blocks.focalCategoryOrder = input.focalCategoryOrder;
 
-        input.isQualtrics ? settings.parameters.isQualtrics = input.isQualtrics : '';
-
+        if(input.isQualtrics) settings.parameters.isQualtrics = input.isQualtrics
+        
         if (input.isTouch){
             settings.touch_text.remindErrorText = input.remindErrorText;
             settings.touch_text.leftKeyText = input.leftKeyText;

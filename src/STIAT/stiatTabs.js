@@ -8,7 +8,7 @@ import helpComponent from '../resources/helpComponent.js';
 
 let parametersDesc = [
     {name: 'isQualtrics', options:['Regular','Qualtrics'],label:'Regular script or Qualtrics?', desc: ['If you want this IAT to run from Qualtrics, read ', m('a',{href: 'https://minnojs.github.io/minnojs-blog/qualtrics-iat/'}, 'this blog post '),'to see how.']},
-    {isQualtrics:false, base_url:''}
+    {isQualtrics:false, base_url:{regular:{image:''}, qualtrics:{image:''}}}
 ];
 
 let textDesc = [

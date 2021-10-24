@@ -34,7 +34,10 @@
 
 	let settings = {
 	    parameters : {isTouch:false, isQualtrics:false, practiceBlock:true, 
-	        showStimuliWithInst:true, remindError:true, base_url:''},
+	        showStimuliWithInst:true, remindError:true,
+	        base_url: {image: 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/docs/images/'}
+
+	    },
 	    blocks: {nMiniBlocks: 1, nTrialsPerMiniBlock:16, nPracticeBlockTrials: 8, nCategoryAttributeBlocks: 4,
 	        focalAttribute: 'attribute1', firstFocalAttribute : 'random', focalCategoryOrder: 'random'},
 	    practiceCategory1 : {
@@ -330,6 +333,8 @@
 	    function reset(){showClearOrReset(parameters, defaultSettings.parameters, 'reset');}
 	    function clear(){showClearOrReset(parameters, rows.slice(-1)[0],'clear');}    
 	    function get(name, object, parameter){
+	        if(name == 'base_url') 
+	            return parameters[name][object]
 	        if (name == 'isTouch')
 	            if(parameters[name] == true) return 'Touch' 
 	            else return 'Keyboard';
@@ -337,15 +342,16 @@
 	            if (parameters[name] == true){return 'Qualtrics'}
 	            else return 'Regular';
 	        if(object && parameter){
-	            if (parameter == 'font-size'){
+	            if (parameter == 'font-size')
 	                return parseFloat((parameters[name][object][parameter].replace("em","")));
-	            }
-	          return parameters[name][object][parameter]
+	            return parameters[name][object][parameter]
 	        }
 	        return parameters[name];
 	    }
 	    function set(name, object, parameter){
 	        return function(value){ 
+	            if(name === 'base_url')
+	                return parameters[name][object] = value
 	            if (name == 'isTouch')
 	                if(value == 'Keyboard') return parameters[name] = false;
 	                else return parameters[name] = true;
@@ -371,8 +377,11 @@
 	function view(ctrl, settings){
 	    return m('.container' , [
 	        ctrl.rows.slice(0,-1).map((row) => {
-	            if ((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
+
+	            if(!ctrl.get('responses')) //check if the mesuare is AMP which has keys parametes on both regular and qualtrics versions
+	                if((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
 	            if(settings.parameters.isTouch && row.name.toLowerCase().includes('key')) return;
+	            if(ctrl.get('responses') === 2 && row.name ==='showRatingDuration') return; //amp, show this only if responses is 7.
 	            
 	            return m('.row.space.line', [
 	                    m('.col-xs-1.space',[
@@ -391,7 +400,7 @@
 	                    : row.name.includes('Duration') ? //case of duration parameter
 	                        m('.col-8.space',
 	                            m('input[type=number].form-control',{min:0, style: {width:'5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})) 
-	                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus') ?
+	                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus' || row.name === 'maskStimulus') ?
 	                        m('.col-8.space',[
 	                            m('.row',[
 	                                m('.col',[
@@ -408,10 +417,14 @@
 	                            m('.row',[
 	                                m('.col',[
 	                                    m('span', 'Text: '),
-	                                    m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+	                                    row.name !== 'maskStimulus' ? m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+	                                    : m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','image') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','image'))})
 	                                ])
 	                            ])
-	                        ]) 
+	                        ])
+	                    : (row.name === 'sortingLabel1' || row.name === 'sortingLabel2' || row.name === 'targetCat') ?
+	                        m('.col-8.space',
+	                            m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem'}, value:ctrl.get(row.name) ,onchange:m.withAttr('value', ctrl.set(row.name))}))
 	                    : m('.col-8.space',
 	                            m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
 	                    ])
@@ -423,8 +436,9 @@
 	            ]),
 	            m('.col-3.space', 'Image\'s URL'),
 	            m('.col-8 param-buffer',
-	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
-	        ]),
+	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url','image'), onchange:m.withAttr('value', ctrl.set('base_url','image'))})
+	            )
+	            ]),
 	        m('.row.space',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
@@ -491,20 +505,6 @@
 	                ]);
 	            }
 	        }),
-	        //create select inputs
-	        // ctrl.rows.slice(4,-1).map(function(row){
-	        //     return m('.row.space.line', [
-	        //         m('.col-xs-1.space',[
-	        //             m('i.fa.fa-info-circle'),
-	        //             m('.card.info-box.card-header', [row.desc])
-	        //         ]),
-	        //         m('.col-3.space', row.label),
-	        //         m('.col-8.space',
-	        //             m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem'}},[
-	        //                 row.options.map(function(option){return m('option', option);})
-	        //             ]))
-	        //     ]);
-	        // }),
 	        m('.row.space',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
@@ -1518,7 +1518,7 @@
 
 	        containsImage = temp1 || temp2 || temp3 || temp4 || temp5;
 
-	        if(settings.parameters.base_url.length === 0 && containsImage)
+	        if(settings.parameters.base_url.image.length === 0 && containsImage)
 	            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
 	        
 	        //check for blocks problems
@@ -1584,14 +1584,12 @@
 	        output.categories = settings.categories;
 	        output.attribute1 = settings.attribute1;
 	        output.attribute2 = settings.attribute2;
-	        output.base_url = settings.parameters.base_url;
-	        output.remindError =  settings.parameters.remindError;
-	        output.showStimuliWithInst = settings.parameters.showStimuliWithInst;
-	        output.isTouch = settings.parameters.isTouch;
-	        output.practiceBlock = settings.parameters.practiceBlock;
 
-	        settings.parameters.isQualtrics ? output.isQualtrics = settings.parameters.isQualtrics : ''; 
-
+	        if(settings.parameters.isQualtrics) //put the isQualtrics only the in the Qualtrics version
+	            output.isQualtrics = settings.parameters.isQualtrics;
+	        delete settings.parameters.isQualtrics;
+	        
+	        Object.assign(output, settings.parameters);
 	        Object.assign(output, settings.blocks);
 	        settings.parameters.isTouch ? Object.assign(output, settings.touch_text) : Object.assign(output, settings.text); 
 	        return output;
@@ -1649,8 +1647,8 @@
 	        settings.blocks.firstFocalAttribute = input.firstFocalAttribute;
 	        settings.blocks.focalCategoryOrder = input.focalCategoryOrder;
 
-	        input.isQualtrics ? settings.parameters.isQualtrics = input.isQualtrics : '';
-
+	        if(input.isQualtrics) settings.parameters.isQualtrics = input.isQualtrics;
+	        
 	        if (input.isTouch){
 	            settings.touch_text.remindErrorText = input.remindErrorText;
 	            settings.touch_text.leftKeyText = input.leftKeyText;
@@ -1674,7 +1672,8 @@
 		BIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-biat/',
 		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/',
 		SPF: '#',
-		EP: 'https://minnojs.github.io/minnojs-blog/qualtrics-priming/'
+		EP: 'https://minnojs.github.io/minnojs-blog/qualtrics-priming/',
+		AMP:'https://minnojs.github.io/minnojs-blog/qualtrics-amp/'
 	};
 
 	let helpComponent = {
@@ -1703,7 +1702,7 @@
 	    {name: 'practiceBlock', label: 'Practice Block', desc: 'Should the task start with a practice block?'},
 	    {name: 'remindError', label: 'Error feedback on incorrect responses', desc: 'It is recommended to show participants an error feedback on error responses'},
 	    {name: 'showStimuliWithInst', label: 'Show Stimuli with Instructions', desc: 'Whether to show the stimuli of the IN categories at the beginning of the block.'},
-	    {istouch:false, isQualtrics:false, practiceBlock:false, showStimuliWithInst:false, remindError:false, base_url:''}
+	    {istouch:false, isQualtrics:false, practiceBlock:false, showStimuliWithInst:false, remindError:false, base_url:{regular:{image:''}, qualtrics:{image:''}}}
 	];
 
 	let blocksDesc = [
@@ -1779,7 +1778,6 @@
 	    }
 	};
 
-	//m.mount(document.documentElement, Main);
 	m.mount(document.getElementById('dashboard'), biat);
 
 }());

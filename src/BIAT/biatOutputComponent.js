@@ -30,7 +30,7 @@ function controller(settings, defaultSettings, blocksObject){
 
         containsImage = temp1 || temp2 || temp3 || temp4 || temp5;
 
-        if(settings.parameters.base_url.length === 0 && containsImage)
+        if(settings.parameters.base_url.image.length === 0 && containsImage)
             error_msg.push('Image\'s\ url is missing and there is an image in the study');    
         
         //check for blocks problems
@@ -96,14 +96,12 @@ function controller(settings, defaultSettings, blocksObject){
         output.categories = settings.categories;
         output.attribute1 = settings.attribute1;
         output.attribute2 = settings.attribute2;
-        output.base_url = settings.parameters.base_url;
-        output.remindError =  settings.parameters.remindError;
-        output.showStimuliWithInst = settings.parameters.showStimuliWithInst;
-        output.isTouch = settings.parameters.isTouch;
-        output.practiceBlock = settings.parameters.practiceBlock;
 
-        settings.parameters.isQualtrics ? output.isQualtrics = settings.parameters.isQualtrics : ''; 
-
+        if(settings.parameters.isQualtrics) //put the isQualtrics only the in the Qualtrics version
+            output.isQualtrics = settings.parameters.isQualtrics;
+        delete settings.parameters.isQualtrics;
+        
+        Object.assign(output, settings.parameters);
         Object.assign(output, settings.blocks);
         settings.parameters.isTouch ? Object.assign(output, settings.touch_text) : Object.assign(output, settings.text); 
         return output;

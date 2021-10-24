@@ -8,7 +8,7 @@ let stiat = {
     view: function(ctrl){
         return m('.container', 
             m('.header.p-3 mb-2 bg-info text-white',
-                m('h1.display-4', 'Create my STIAT script')),
+                m('h1.display-4', 'Create my STIAT script?')),
             m.component(tabsComponent, tabs, ctrl.settings, defaultSettings)
         );
     }

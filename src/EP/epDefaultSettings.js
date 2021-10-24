@@ -1,5 +1,5 @@
 let settings = {
-    parameters : {isQualtrics:false, base_url:'', separateStimulusSelection : true,primeDuration: 200, fixationDuration:0, deadlineDuration:0, deadlineMsgDuration: 750, 
+    parameters : {isQualtrics:false, separateStimulusSelection : true,primeDuration: 200, fixationDuration:0, deadlineDuration:0, deadlineMsgDuration: 750, 
     fixationStimulus : {
         css : {color:'#000000', 'font-size':'3em'}, 
         media : {word:'+'}
@@ -8,7 +8,8 @@ let settings = {
         css : {color:'#FF0000', 'font-size':'2.5em'}, 
         media : {word:'!!!PLEASE RESPOND FASTER!!!'}, 
         location: {bottom:10}
-    }
+    },
+    base_url:{image: 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/docs/images/'}
     },
     primeStimulusCSS : {color:'#0000FF','font-size':'2.3em'}, //The CSS for all the prime stimuli.
     prime1 : {

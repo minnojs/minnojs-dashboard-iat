@@ -11,7 +11,7 @@ let parametersDesc = [
     {name: 'keyTopRight', label:'Top right key', desc: 'Set top right key'},
     {name: 'keyBottomLeft', label:'Bottom left key', desc: 'Set bottom left key'},
     {name: 'keyBottomRight', label:'Bottom right key', desc: 'Set top left key'},
-    {keyTopLeft: '', keyTopRight: '', keyBottomLeft: '', keyBottomRight: '', base_url:''}
+    {keyTopLeft: '', keyTopRight: '', keyBottomLeft: '', keyBottomRight: '', base_url:{image:''}}
 ];
 
 let textDesc=[

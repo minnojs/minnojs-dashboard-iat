@@ -1,5 +1,7 @@
 let settings = {
-    parameters : {isQualtrics:false, base_url:''},
+    parameters : {isQualtrics:false, 
+        base_url:{image: 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/docs/images/'}
+    },
     category: {name: 'Black people', title: {media: { word : 'Black people'}, css: {color: '#31b404', 'font-size': '2em'}, height: 4},
         stimulusMedia: [{word: 'Tayron'}, {word: 'Malik'},{word: 'Terrell'},{word: 'Jazamin'},{word: 'Tiara'},{word: 'Shanice'}],
         stimulusCss : {color:'#31b404', 'font-size':'2em'}

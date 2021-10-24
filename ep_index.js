@@ -33,7 +33,7 @@
 	};
 
 	let settings = {
-	    parameters : {isQualtrics:false, base_url:'', separateStimulusSelection : true,primeDuration: 200, fixationDuration:0, deadlineDuration:0, deadlineMsgDuration: 750, 
+	    parameters : {isQualtrics:false, separateStimulusSelection : true,primeDuration: 200, fixationDuration:0, deadlineDuration:0, deadlineMsgDuration: 750, 
 	    fixationStimulus : {
 	        css : {color:'#000000', 'font-size':'3em'}, 
 	        media : {word:'+'}
@@ -42,7 +42,8 @@
 	        css : {color:'#FF0000', 'font-size':'2.5em'}, 
 	        media : {word:'!!!PLEASE RESPOND FASTER!!!'}, 
 	        location: {bottom:10}
-	    }
+	    },
+	    base_url:{image: 'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/docs/images/'}
 	    },
 	    primeStimulusCSS : {color:'#0000FF','font-size':'2.3em'}, //The CSS for all the prime stimuli.
 	    prime1 : {
@@ -277,6 +278,8 @@
 	    function reset(){showClearOrReset(parameters, defaultSettings.parameters, 'reset');}
 	    function clear(){showClearOrReset(parameters, rows.slice(-1)[0],'clear');}    
 	    function get(name, object, parameter){
+	        if(name == 'base_url') 
+	            return parameters[name][object]
 	        if (name == 'isTouch')
 	            if(parameters[name] == true) return 'Touch' 
 	            else return 'Keyboard';
@@ -284,15 +287,16 @@
 	            if (parameters[name] == true){return 'Qualtrics'}
 	            else return 'Regular';
 	        if(object && parameter){
-	            if (parameter == 'font-size'){
+	            if (parameter == 'font-size')
 	                return parseFloat((parameters[name][object][parameter].replace("em","")));
-	            }
-	          return parameters[name][object][parameter]
+	            return parameters[name][object][parameter]
 	        }
 	        return parameters[name];
 	    }
 	    function set(name, object, parameter){
 	        return function(value){ 
+	            if(name === 'base_url')
+	                return parameters[name][object] = value
 	            if (name == 'isTouch')
 	                if(value == 'Keyboard') return parameters[name] = false;
 	                else return parameters[name] = true;
@@ -318,8 +322,11 @@
 	function view(ctrl, settings){
 	    return m('.container' , [
 	        ctrl.rows.slice(0,-1).map((row) => {
-	            if ((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
+
+	            if(!ctrl.get('responses')) //check if the mesuare is AMP which has keys parametes on both regular and qualtrics versions
+	                if((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
 	            if(settings.parameters.isTouch && row.name.toLowerCase().includes('key')) return;
+	            if(ctrl.get('responses') === 2 && row.name ==='showRatingDuration') return; //amp, show this only if responses is 7.
 	            
 	            return m('.row.space.line', [
 	                    m('.col-xs-1.space',[
@@ -338,7 +345,7 @@
 	                    : row.name.includes('Duration') ? //case of duration parameter
 	                        m('.col-8.space',
 	                            m('input[type=number].form-control',{min:0, style: {width:'5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})) 
-	                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus') ?
+	                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus' || row.name === 'maskStimulus') ?
 	                        m('.col-8.space',[
 	                            m('.row',[
 	                                m('.col',[
@@ -355,10 +362,14 @@
 	                            m('.row',[
 	                                m('.col',[
 	                                    m('span', 'Text: '),
-	                                    m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+	                                    row.name !== 'maskStimulus' ? m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+	                                    : m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','image') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','image'))})
 	                                ])
 	                            ])
-	                        ]) 
+	                        ])
+	                    : (row.name === 'sortingLabel1' || row.name === 'sortingLabel2' || row.name === 'targetCat') ?
+	                        m('.col-8.space',
+	                            m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem'}, value:ctrl.get(row.name) ,onchange:m.withAttr('value', ctrl.set(row.name))}))
 	                    : m('.col-8.space',
 	                            m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
 	                    ])
@@ -370,8 +381,9 @@
 	            ]),
 	            m('.col-3.space', 'Image\'s URL'),
 	            m('.col-8 param-buffer',
-	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
-	        ]),
+	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url','image'), onchange:m.withAttr('value', ctrl.set('base_url','image'))})
+	            )
+	            ]),
 	        m('.row.space',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
@@ -410,8 +422,8 @@
 
 	        containsImage = temp1 || temp2 || temp3 || temp4;
 
-	        if(settings.parameters.base_url.length === 0 && containsImage)
-	            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
+	        if(settings.parameters.base_url.image.length === 0 && containsImage)
+	            error_msg.push('Image\'s\ url is missing and there is an image in the study');  
 	        
 	        //check for blocks problems
 	        if(!settings.blocks.nTrialsPerPrimeTargetPair)
@@ -487,10 +499,10 @@
 	            prime2: settings.prime2,
 	            targetCats: settings.targetCats
 	        };
-	        if(settings.parameters.isQualtrics){
+	        if(settings.parameters.isQualtrics)
 	            output.isQualtrics = settings.parameters.isQualtrics;
-	        }
-	        delete settings.parameters.isQualtrics; 
+	        delete settings.parameters.isQualtrics;
+	        
 	        Object.assign(output, settings.parameters);
 	        Object.assign(output, settings.blocks);
 	        Object.assign(output, settings.text); 
@@ -615,20 +627,6 @@
 	                ]);
 	            }
 	        }),
-	        //create select inputs
-	        // ctrl.rows.slice(4,-1).map(function(row){
-	        //     return m('.row.space.line', [
-	        //         m('.col-xs-1.space',[
-	        //             m('i.fa.fa-info-circle'),
-	        //             m('.card.info-box.card-header', [row.desc])
-	        //         ]),
-	        //         m('.col-3.space', row.label),
-	        //         m('.col-8.space',
-	        //             m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem'}},[
-	        //                 row.options.map(function(option){return m('option', option);})
-	        //             ]))
-	        //     ]);
-	        // }),
 	        m('.row.space',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
@@ -1460,13 +1458,11 @@
 	        delete settings.targetCats;
 	    }
 	    function updateSettings(input) {
-
 	        settings.primeStimulusCSS = input.primeStimulusCSS;
 	        settings.prime1 = input.prime1;
 	        settings.prime2 = input.prime2;
 	        settings.targetCats = input.targetCats;
 	        settings.parameters.base_url = input.base_url;
-	        settings.parameters.isQualtrics = input.isQualtrics;
 	        settings.parameters.separateStimulusSelection = input.separateStimulusSelection;
 	        settings.parameters.primeDuration = input.primeDuration;
 	        settings.parameters.fixationDuration = input.fixationDuration;
@@ -1475,6 +1471,9 @@
 	        settings.parameters.fixationStimulus = input.fixationStimulus;
 	        settings.parameters.deadlineStimulus = input.deadlineStimulus;
 
+	        if(input.isQualtrics) 
+	            settings.parameters.isQualtrics = input.isQualtrics;
+	        
 	        settings.text.firstBlock = input.firstBlock;
 	        settings.text.middleBlock = input.middleBlock;
 	        settings.text.lastBlock = input.lastBlock;
@@ -1483,8 +1482,6 @@
 	        settings.blocks.nBlocks = input.nBlocks;
 
 	        updateMediaSettings(input); 
-
-	        
 	    }
 	}
 
@@ -1492,7 +1489,8 @@
 		BIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-biat/',
 		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/',
 		SPF: '#',
-		EP: 'https://minnojs.github.io/minnojs-blog/qualtrics-priming/'
+		EP: 'https://minnojs.github.io/minnojs-blog/qualtrics-priming/',
+		AMP:'https://minnojs.github.io/minnojs-blog/qualtrics-amp/'
 	};
 
 	let helpComponent = {
@@ -1523,7 +1521,7 @@
 	    {name: 'fixationStimulus', label: 'Fixation Stimulus', desc: 'Change the fixation stimulus here'},
 	    {name: 'deadlineDuration', label: 'Deadline Duration', desc: '0 means no response deadline: we wait until response.'},
 	    {name: 'deadlineStimulus', label: 'Deadline Stimulus', desc: 'Change the deadline message stimulus here'},
-	    {isTouch:false, separateStimulusSelection:0, primeDuration:0, fixationDuration:0 ,deadlineDuration:0, deadlineMsgDuration:0, base_url:''}
+	    {isTouch:false, separateStimulusSelection:0, primeDuration:0, fixationDuration:0 ,deadlineDuration:0, deadlineMsgDuration:0, base_url:{regular:{image:''}, qualtrics:{image:''}}}
 	];
 
 	let textDesc=[

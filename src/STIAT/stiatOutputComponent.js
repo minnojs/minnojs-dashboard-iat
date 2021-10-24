@@ -11,7 +11,7 @@ function controller(settings, defaultSettings, clearBlock){
     validityCheck(settings)
     settings = updateMediaSettings(settings);
 
-    return{error_msg, createFile, printToPage};
+    return {error_msg, createFile, printToPage};
 
     function validityCheck(settings){
         let containsImage = false
@@ -22,7 +22,7 @@ function controller(settings, defaultSettings, clearBlock){
 
         containsImage = temp1 || temp2 || temp3
 
-        if(settings.parameters.base_url.length == 0 && containsImage)
+        if(settings.parameters.base_url.image.length === 0 && containsImage)
             error_msg.push('Image\'s\ url is missing and there is an image in the study');    
         
         //check for blocks problems
@@ -104,15 +104,15 @@ function controller(settings, defaultSettings, clearBlock){
             category: settings.category,
             attribute1: settings.attribute1,
             attribute2: settings.attribute2,
-            base_url: settings.parameters.base_url,
-            remindError: settings.parameters.remindError,
+            base_url: settings.parameters.base_url.image,
             trialsByBlock: settings.trialsByBlock,
             blockOrder: settings.blockOrder,
             switchSideBlock: settings.switchSideBlock
         };
-        if(settings.parameters.isQualtrics){
-            output.isQualtrics=settings.parameters.isQualtrics;
-        }
+
+        if(settings.parameters.isQualtrics) //put the isQualtrics only the in the Qualtrics version
+            output.isQualtrics = settings.parameters.isQualtrics;
+        
         Object.assign(output, settings.text); 
         return output;
     }

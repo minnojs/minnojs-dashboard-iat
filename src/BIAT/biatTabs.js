@@ -13,7 +13,7 @@ let parametersDesc = [
     {name: 'practiceBlock', label: 'Practice Block', desc: 'Should the task start with a practice block?'},
     {name: 'remindError', label: 'Error feedback on incorrect responses', desc: 'It is recommended to show participants an error feedback on error responses'},
     {name: 'showStimuliWithInst', label: 'Show Stimuli with Instructions', desc: 'Whether to show the stimuli of the IN categories at the beginning of the block.'},
-    {istouch:false, isQualtrics:false, practiceBlock:false, showStimuliWithInst:false, remindError:false, base_url:''}
+    {istouch:false, isQualtrics:false, practiceBlock:false, showStimuliWithInst:false, remindError:false, base_url:{regular:{image:''}, qualtrics:{image:''}}}
 ];
 
 let blocksDesc = [

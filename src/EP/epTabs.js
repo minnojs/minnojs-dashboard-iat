@@ -14,7 +14,7 @@ let parametersDesc = [
     {name: 'fixationStimulus', label: 'Fixation Stimulus', desc: 'Change the fixation stimulus here'},
     {name: 'deadlineDuration', label: 'Deadline Duration', desc: '0 means no response deadline: we wait until response.'},
     {name: 'deadlineStimulus', label: 'Deadline Stimulus', desc: 'Change the deadline message stimulus here'},
-    {isTouch:false, separateStimulusSelection:0, primeDuration:0, fixationDuration:0 ,deadlineDuration:0, deadlineMsgDuration:0, base_url:''}
+    {isTouch:false, separateStimulusSelection:0, primeDuration:0, fixationDuration:0 ,deadlineDuration:0, deadlineMsgDuration:0, base_url:{regular:{image:''}, qualtrics:{image:''}}}
 ];
 
 let textDesc=[

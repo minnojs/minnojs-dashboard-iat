@@ -51,20 +51,6 @@ function view(ctrl, settings){
                 ]);
             }
         }),
-        //create select inputs
-        // ctrl.rows.slice(4,-1).map(function(row){
-        //     return m('.row.space.line', [
-        //         m('.col-xs-1.space',[
-        //             m('i.fa.fa-info-circle'),
-        //             m('.card.info-box.card-header', [row.desc])
-        //         ]),
-        //         m('.col-3.space', row.label),
-        //         m('.col-8.space',
-        //             m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem'}},[
-        //                 row.options.map(function(option){return m('option', option);})
-        //             ]))
-        //     ]);
-        // }),
         m('.row.space',[
             m('.col',{style:{'margin-bottom':'7px'}},[
                 m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[

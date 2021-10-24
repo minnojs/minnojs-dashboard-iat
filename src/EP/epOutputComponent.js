@@ -23,8 +23,8 @@ function controller(settings){
 
         containsImage = temp1 || temp2 || temp3 || temp4;
 
-        if(settings.parameters.base_url.length === 0 && containsImage)
-            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
+        if(settings.parameters.base_url.image.length === 0 && containsImage)
+            error_msg.push('Image\'s\ url is missing and there is an image in the study');  
         
         //check for blocks problems
         if(!settings.blocks.nTrialsPerPrimeTargetPair)
@@ -100,10 +100,10 @@ function controller(settings){
             prime2: settings.prime2,
             targetCats: settings.targetCats
         };
-        if(settings.parameters.isQualtrics){
+        if(settings.parameters.isQualtrics)
             output.isQualtrics = settings.parameters.isQualtrics;
-        }
-        delete settings.parameters.isQualtrics; 
+        delete settings.parameters.isQualtrics;
+        
         Object.assign(output, settings.parameters);
         Object.assign(output, settings.blocks);
         Object.assign(output, settings.text); 

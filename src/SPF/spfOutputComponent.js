@@ -22,7 +22,7 @@ function controller(settings, defaultSettings, blocksObject){
 
         containsImage = temp1 || temp2 || temp3 || temp4;
 
-        if(settings.parameters.base_url.length === 0 && containsImage)
+        if(settings.parameters.base_url.image.length === 0 && containsImage)
             error_msg.push('Image\'s\ url is missing and there is an image in the study');    
         
         //check for blocks problems

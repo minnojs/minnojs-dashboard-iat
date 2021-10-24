@@ -38,13 +38,13 @@ function controller(settings) {
         settings.attribute2.stimulusCss = input.attribute2.css
         delete settings.attribute2.css
     }
-    function updateSettings(input) {
-
+    function updateSettings(input){
         settings.category = input.category;
         settings.attribute1 = input.attribute1;
         settings.attribute2 = input.attribute2;
-        settings.parameters.base_url = input.base_url;
-        settings.parameters.isQualtrics = input.isQualtrics;
+        if(input.isQualtrics)
+            settings.parameters.isQualtrics = input.isQualtrics;
+        
         settings.text.leftKeyText = input.leftKeyText;
         settings.text.rightKeyText = input.rightKeyText;
         settings.text.orKeyText = input.orKeyText;
@@ -56,10 +56,10 @@ function controller(settings) {
         settings.trialsByBlock = input.trialsByBlock
         settings.blockOrder = input.blockOrder;
         settings.switchSideBlock = input.switchSideBlock;
+        settings.parameters.base_url = input.base_url;
+
 
         updateMediaSettings(input); 
-
-        
     }
 }
 

@@ -41,13 +41,11 @@ function controller(settings) {
         delete settings.targetCats
     }
     function updateSettings(input) {
-
         settings.primeStimulusCSS = input.primeStimulusCSS;
         settings.prime1 = input.prime1;
         settings.prime2 = input.prime2;
         settings.targetCats = input.targetCats;
         settings.parameters.base_url = input.base_url;
-        settings.parameters.isQualtrics = input.isQualtrics;
         settings.parameters.separateStimulusSelection = input.separateStimulusSelection;
         settings.parameters.primeDuration = input.primeDuration;
         settings.parameters.fixationDuration = input.fixationDuration;
@@ -56,6 +54,9 @@ function controller(settings) {
         settings.parameters.fixationStimulus = input.fixationStimulus;
         settings.parameters.deadlineStimulus = input.deadlineStimulus;
 
+        if(input.isQualtrics) 
+            settings.parameters.isQualtrics = input.isQualtrics;
+        
         settings.text.firstBlock = input.firstBlock;
         settings.text.middleBlock = input.middleBlock;
         settings.text.lastBlock = input.lastBlock;
@@ -64,8 +65,6 @@ function controller(settings) {
         settings.blocks.nBlocks = input.nBlocks;
 
         updateMediaSettings(input); 
-
-        
     }
 }
 

@@ -32,6 +32,12 @@ const bannerEP = `/**
 */
 `;
 
+const bannerAMP = `/**
+* @preserve minnojs-amp-dashboard v${version}
+* @license Apache-2.0 (${(new Date()).getFullYear()})
+*/
+`;
+
 
 const configIAT = {
     input: 'src/IAT/iat.index.standalone.js',
@@ -67,7 +73,7 @@ const configSTIAT = {
 };
 
 const configSPF = {
-    input: 'src/spf/spf.index.standalone.js',
+    input: 'src/SPF/spf.index.standalone.js',
     output: {
         file: 'spf_index.js',
         format: 'iife', 
@@ -78,15 +84,26 @@ const configSPF = {
 };
 
 const configEP = {
-    input: 'src/ep/ep.index.standalone.js',
+    input: 'src/EP/ep.index.standalone.js',
     output: {
         file: 'ep_index.js',
         format: 'iife', 
-        name: 'spfDashboard',
+        name: 'epDashboard',
         sourcemap:true,
         banner: bannerEP
     }
 };
 
+const configAMP = {
+    input: 'src/AMP/amp.index.standalone.js',
+    output: {
+        file: 'amp_index.js',
+        format: 'iife', 
+        name: 'ampDashboard',
+        sourcemap:true,
+        banner: bannerAMP
+    }
+};
+
 // at some time we might want to outputs, one as a standalone, one as a plugin
-export default [configIAT, configBIAT, configSTIAT, configSPF, configEP];
+export default [configIAT, configBIAT, configSTIAT, configSPF, configEP, configAMP];

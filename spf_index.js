@@ -33,7 +33,7 @@
 	};
 
 	let settings = {
-	    parameters: {keyTopLeft: 'E', keyTopRight: 'I', keyBottomLeft: 'C', keyBottomRight: 'N',base_url:''},
+	    parameters: {keyTopLeft: 'E', keyTopRight: 'I', keyBottomLeft: 'C', keyBottomRight: 'N',base_url:{image:'https://cdn.jsdelivr.net/gh/baranan/minno-tasks@0.*/docs/images/'}},
 	    objectCat1: {name: 'Mammals', title: {media: { word : 'Mammals'}, css: {color: '#31b404', 'font-size': '2em'}, height: 8},
 	        stimulusMedia: [{word: 'Dogs'}, {word: 'Horses'},{word: 'Lions'},{word: 'Cows'}],
 	        stimulusCss : {color:'#31b404', 'font-size':'2em'}
@@ -207,6 +207,8 @@
 	    function reset(){showClearOrReset(parameters, defaultSettings.parameters, 'reset');}
 	    function clear(){showClearOrReset(parameters, rows.slice(-1)[0],'clear');}    
 	    function get(name, object, parameter){
+	        if(name == 'base_url') 
+	            return parameters[name][object]
 	        if (name == 'isTouch')
 	            if(parameters[name] == true) return 'Touch' 
 	            else return 'Keyboard';
@@ -214,15 +216,16 @@
 	            if (parameters[name] == true){return 'Qualtrics'}
 	            else return 'Regular';
 	        if(object && parameter){
-	            if (parameter == 'font-size'){
+	            if (parameter == 'font-size')
 	                return parseFloat((parameters[name][object][parameter].replace("em","")));
-	            }
-	          return parameters[name][object][parameter]
+	            return parameters[name][object][parameter]
 	        }
 	        return parameters[name];
 	    }
 	    function set(name, object, parameter){
 	        return function(value){ 
+	            if(name === 'base_url')
+	                return parameters[name][object] = value
 	            if (name == 'isTouch')
 	                if(value == 'Keyboard') return parameters[name] = false;
 	                else return parameters[name] = true;
@@ -248,8 +251,11 @@
 	function view(ctrl, settings){
 	    return m('.container' , [
 	        ctrl.rows.slice(0,-1).map((row) => {
-	            if ((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
+
+	            if(!ctrl.get('responses')) //check if the mesuare is AMP which has keys parametes on both regular and qualtrics versions
+	                if((ctrl.qualtricsParameters.includes(row.name)) && ctrl.get('isQualtrics') === 'Regular') return;
 	            if(settings.parameters.isTouch && row.name.toLowerCase().includes('key')) return;
+	            if(ctrl.get('responses') === 2 && row.name ==='showRatingDuration') return; //amp, show this only if responses is 7.
 	            
 	            return m('.row.space.line', [
 	                    m('.col-xs-1.space',[
@@ -268,7 +274,7 @@
 	                    : row.name.includes('Duration') ? //case of duration parameter
 	                        m('.col-8.space',
 	                            m('input[type=number].form-control',{min:0, style: {width:'5rem'}, value:ctrl.get(row.name), onchange:m.withAttr('value', ctrl.set(row.name))})) 
-	                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus') ?
+	                    : (row.name === 'fixationStimulus') ||  (row.name === 'deadlineStimulus' || row.name === 'maskStimulus') ?
 	                        m('.col-8.space',[
 	                            m('.row',[
 	                                m('.col',[
@@ -285,10 +291,14 @@
 	                            m('.row',[
 	                                m('.col',[
 	                                    m('span', 'Text: '),
-	                                    m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+	                                    row.name !== 'maskStimulus' ? m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','word') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','word'))})
+	                                    : m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem', 'margin-left':'0.3rem'}, value:ctrl.get(row.name,'media','image') ,onchange:m.withAttr('value', ctrl.set(row.name,'media','image'))})
 	                                ])
 	                            ])
-	                        ]) 
+	                        ])
+	                    : (row.name === 'sortingLabel1' || row.name === 'sortingLabel2' || row.name === 'targetCat') ?
+	                        m('.col-8.space',
+	                            m('input[type=text]', {style: {'border-radius':'3px','border':'1px solid #E2E3E2',height:'2.5rem',width:'15rem'}, value:ctrl.get(row.name) ,onchange:m.withAttr('value', ctrl.set(row.name))}))
 	                    : m('.col-8.space',
 	                            m('input[type=checkbox]', {onclick: m.withAttr('checked', ctrl.set(row.name)), checked: ctrl.get(row.name)}))
 	                    ])
@@ -300,8 +310,9 @@
 	            ]),
 	            m('.col-3.space', 'Image\'s URL'),
 	            m('.col-8 param-buffer',
-	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url'), onchange:m.withAttr('value', ctrl.set('base_url'))}))
-	        ]),
+	                m('input[type=text].form-control',{style: {width: '30rem'}, value:ctrl.get('base_url','image'), onchange:m.withAttr('value', ctrl.set('base_url','image'))})
+	            )
+	            ]),
 	        m('.row.space',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
@@ -339,7 +350,7 @@
 
 	        containsImage = temp1 || temp2 || temp3 || temp4;
 
-	        if(settings.parameters.base_url.length === 0 && containsImage)
+	        if(settings.parameters.base_url.image.length === 0 && containsImage)
 	            error_msg.push('Image\'s\ url is missing and there is an image in the study');    
 	        
 	        //check for blocks problems
@@ -522,20 +533,6 @@
 	                ]);
 	            }
 	        }),
-	        //create select inputs
-	        // ctrl.rows.slice(4,-1).map(function(row){
-	        //     return m('.row.space.line', [
-	        //         m('.col-xs-1.space',[
-	        //             m('i.fa.fa-info-circle'),
-	        //             m('.card.info-box.card-header', [row.desc])
-	        //         ]),
-	        //         m('.col-3.space', row.label),
-	        //         m('.col-8.space',
-	        //             m('select.form-control',{value: ctrl.get(row.name), onchange:m.withAttr('value',ctrl.set(row.name)), style: {width: '8.3rem'}},[
-	        //                 row.options.map(function(option){return m('option', option);})
-	        //             ]))
-	        //     ]);
-	        // }),
 	        m('.row.space',[
 	            m('.col',{style:{'margin-bottom':'7px'}},[
 	                m('.btn-group btn-group-toggle', {style:{'data-toggle':'buttons', float: 'right'}},[
@@ -1375,7 +1372,8 @@
 		BIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-biat/',
 		STIAT: 'https://minnojs.github.io/minnojs-blog/qualtrics-stiat/',
 		SPF: '#',
-		EP: 'https://minnojs.github.io/minnojs-blog/qualtrics-priming/'
+		EP: 'https://minnojs.github.io/minnojs-blog/qualtrics-priming/',
+		AMP:'https://minnojs.github.io/minnojs-blog/qualtrics-amp/'
 	};
 
 	let helpComponent = {
@@ -1403,7 +1401,7 @@
 	    {name: 'keyTopRight', label:'Top right key', desc: 'Set top right key'},
 	    {name: 'keyBottomLeft', label:'Bottom left key', desc: 'Set bottom left key'},
 	    {name: 'keyBottomRight', label:'Bottom right key', desc: 'Set top left key'},
-	    {keyTopLeft: '', keyTopRight: '', keyBottomLeft: '', keyBottomRight: '', base_url:''}
+	    {keyTopLeft: '', keyTopRight: '', keyBottomLeft: '', keyBottomRight: '', base_url:{image:''}}
 	];
 
 	let textDesc=[

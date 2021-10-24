@@ -26,10 +26,11 @@ function controller(settings) {
         settings.category2 = input.category2;
         settings.attribute1 = input.attribute1;
         settings.attribute2 = input.attribute2;
-        settings.parameters.base_url = input.base_url;
         settings.parameters.remindError = input.remindError;
         settings.parameters.errorCorrection = input.errorCorrection;
         settings.parameters.isTouch = input.isTouch;
+        settings.parameters.base_url = input.base_url;
+
         if(input.isQualtrics){
             settings.parameters.isQualtrics = input.isQualtrics;
             settings.parameters.showDebriefing = input.showDebriefing;
